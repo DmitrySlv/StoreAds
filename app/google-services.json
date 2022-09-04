@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1008896903598",
+    "project_id": "storeads-276cf",
+    "storage_bucket": "storeads-276cf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1008896903598:android:33508ce54977bf2867e03f",
+        "android_client_info": {
+          "package_name": "com.ds_create.storeads"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1008896903598-2fjv6kqeduaij0rgtakvg7npaua0mrhn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD_lAt17_DqFwXrkawXZU2pyBjgIS4c2vg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1008896903598-2fjv6kqeduaij0rgtakvg7npaua0mrhn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
