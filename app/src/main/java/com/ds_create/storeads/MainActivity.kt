@@ -8,7 +8,6 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import com.ds_create.storeads.databinding.ActivityMainBinding
 import com.google.android.material.navigation.NavigationView
-import kotlinx.android.synthetic.main.main_content.*
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -23,8 +22,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun init() = with(binding) {
-        val toggle = ActionBarDrawerToggle(this@MainActivity,
-           drawerLayout, toolbar, R.string.open, R.string.close)
+        val toggle = ActionBarDrawerToggle(
+            this@MainActivity,
+           drawerLayout, mainContent.toolbar, R.string.open, R.string.close
+        )
         drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
         navView.setNavigationItemSelectedListener(this@MainActivity)
