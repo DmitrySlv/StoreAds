@@ -14,5 +14,16 @@
     <string name="aс_sign_out">Выход</string>
     <string name="open">Открыть</string>
     <string name="close">Закрыть</string>
+    <!-- Sign Dialog -->
+    <string name="email_hint">Email</string>
+    <string name="password_hint">Password</string>
+    <string name="sign_up_action">Зарегистрироваться</string>
+    <string name="sign_in_action">Войти</string>
+    <string name="forget_password">Забыли пароль?</string>
+    <string name="sign_up_error">Не удалось зарегистрироваться</string>
+    <string name="send_verification_email_error">Ошибка отправки email для подверждения почты!
+        Пожалуйста, попробуйте еще раз позднее</string>
+    <string name="send_verification_done">На вашу почту была отправлена ссылка для подверждения
+        аккаунта. Пожалуйста, подтвердите ваш аккаунт!</string>
 
 </resources>
