@@ -27,5 +27,8 @@
         Пожалуйста, попробуйте еще раз позднее</string>
     <string name="send_verification_done">На вашу почту была отправлена ссылка для подверждения
         аккаунта. Пожалуйста, подтвердите ваш аккаунт!</string>
+    <string name="email_reset_password_was_sent">Ваш email адрес был успешно сброшен!</string>
+    <string name="dialog_reset_email_message">Для восстановления пароля, пожалуйста, введите ваш
+    email адрес</string>
 
 </resources>
