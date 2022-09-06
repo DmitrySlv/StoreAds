@@ -1,14 +1,19 @@
 package com.ds_create.storeads
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import com.ds_create.storeads.databinding.ActivityMainBinding
 import com.ds_create.storeads.dialoghelper.DialogHelper
+import com.ds_create.storeads.dialoghelper.GoogleAccConst
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.common.api.ApiException
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -24,6 +29,23 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         init()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == GoogleAccConst.GOOGLE_SIGN_IN_REQUEST_CODE) {
+//            Log.d("MyLog", "Sign in result")
+            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+            try {
+                val account = task.getResult(ApiException::class.java)
+                account?.let {
+                    Log.d("MyLog", "Api 0")
+                    dialogHelper.accHelper.signInFirebaseWithGoogle(account.idToken.toString())
+                }
+            } catch (e: ApiException) {
+                Log.d("MyLog", "Api error: ${e.message}")
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data)
     }
 
     private fun init() = with(binding) {

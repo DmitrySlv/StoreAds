@@ -10,7 +10,7 @@ import com.ds_create.storeads.databinding.SignDialogBinding
 
 class DialogHelper(private val act: MainActivity) {
 
-    private val accHelper = AccountHelper(act)
+    val accHelper = AccountHelper(act)
 
     fun createSignDialog(index: Int) {
         val dialogBuilder = AlertDialog.Builder(act)
@@ -24,6 +24,9 @@ class DialogHelper(private val act: MainActivity) {
         }
         rootDialogElement.btForgetP.setOnClickListener {
             setOnClickResetPassword(rootDialogElement, dialog)
+        }
+        rootDialogElement.btGoogleSignIn.setOnClickListener {
+           accHelper.signInWithGoogle()
         }
         dialog.show()
     }

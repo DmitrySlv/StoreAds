@@ -18,8 +18,8 @@
     <!-- Sign Dialog -->
     <string name="email_hint">Email</string>
     <string name="password_hint">Password</string>
-    <string name="sign_up_action">Зарегистрироваться</string>
-    <string name="sign_in_action">Войти</string>
+    <string name="sign_up_action">Регистрация</string>
+    <string name="sign_in_action">Вход по email</string>
     <string name="forget_password">Забыли пароль?</string>
     <string name="sign_up_error">Не удалось зарегистрироваться</string>
     <string name="sign_in_error">Не удалось войти в аккаунт</string>
@@ -30,5 +30,6 @@
     <string name="email_reset_password_was_sent">Ваш email адрес был успешно сброшен!</string>
     <string name="dialog_reset_email_message">Для восстановления пароля, пожалуйста, введите ваш
     email адрес</string>
+    <string name="sign_in_done">Вы успешно вошли по Google аккаунту!</string>
 
 </resources>
