@@ -61,15 +61,23 @@ class AccountHelper(private val act: MainActivity) {
                 if (task.isSuccessful) {
                     act.uiUpdate(task.result.user)
                 } else {
+//                    Log.d("MyLog", "Exception: ${task.exception}")
                     if (task.exception is FirebaseAuthInvalidCredentialsException) {
-//                        Log.d("MyLog", "Exception: ${task.exception}")
                         val exception = task.exception as FirebaseAuthInvalidCredentialsException
+//                        Log.d("MyLog", "Exception2: ${exception.errorCode}")
                         if (exception.errorCode == FirebaseAuthConstants.ERROR_INVALID_EMAIL) {
                             Toast.makeText(act, FirebaseAuthConstants.ERROR_INVALID_EMAIL,
                                 Toast.LENGTH_LONG).show()
                         }
                         if (exception.errorCode == FirebaseAuthConstants.ERROR_WRONG_PASSWORD) {
                             Toast.makeText(act, FirebaseAuthConstants.ERROR_WRONG_PASSWORD,
+                                Toast.LENGTH_LONG).show()
+                        }
+                    }
+                    if (task.exception is FirebaseAuthInvalidUserException) {
+                        val exception = task.exception as FirebaseAuthInvalidUserException
+                        if (exception.errorCode == FirebaseAuthConstants.ERROR_USER_NOT_FOUND){
+                            Toast.makeText(act, FirebaseAuthConstants.ERROR_USER_NOT_FOUND,
                                 Toast.LENGTH_LONG).show()
                         }
                     }
@@ -109,6 +117,11 @@ class AccountHelper(private val act: MainActivity) {
         signInClient = getSignInClient()
         val intent = signInClient.signInIntent
         act.startActivityForResult(intent, GoogleAccConst.GOOGLE_SIGN_IN_REQUEST_CODE)
+    }
+
+    fun signOutGoogle() {
+        getSignInClient().signOut()
+        Toast.makeText(act, act.resources.getString(R.string.exit_from_account), Toast.LENGTH_LONG).show()
     }
 
     private fun getSignInClient(): GoogleSignInClient {

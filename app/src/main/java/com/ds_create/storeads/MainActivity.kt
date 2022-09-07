@@ -3,12 +3,14 @@ package com.ds_create.storeads
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
+import com.ds_create.storeads.activities.EditAdsActivity
 import com.ds_create.storeads.databinding.ActivityMainBinding
 import com.ds_create.storeads.dialoghelper.DialogHelper
 import com.ds_create.storeads.dialoghelper.GoogleAccConst
@@ -31,6 +33,19 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         init()
     }
 
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.main_menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.id_new_ads) {
+            val intent = Intent(this, EditAdsActivity::class.java)
+            startActivity(intent)
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == GoogleAccConst.GOOGLE_SIGN_IN_REQUEST_CODE) {
 //            Log.d("MyLog", "Sign in result")
@@ -49,6 +64,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun init() = with(binding) {
+        setSupportActionBar(mainContent.toolbar)
         val toggle = ActionBarDrawerToggle(
             this@MainActivity,
            drawerLayout, mainContent.toolbar, R.string.open, R.string.close
@@ -84,6 +100,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
            R.id.id_sign_out -> {
                uiUpdate(null)
                mAuth.signOut()
+               dialogHelper.accHelper.signOutGoogle()
            }
        }
         binding.drawerLayout.closeDrawer(GravityCompat.START)

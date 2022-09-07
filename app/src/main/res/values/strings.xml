@@ -31,8 +31,12 @@
     <string name="dialog_reset_email_message">Для восстановления пароля, пожалуйста, введите ваш
     email адрес</string>
     <string name="sign_in_done">Вы успешно вошли по Google аккаунту!</string>
+    <string name="exit_from_account">Вы вышли из аккаунта!</string>
     <string name="link_done">Ваш email успешно связан с Google аккаунтом</string>
     <string name="enter_to_google">Аккаунт с таким email адресом уже существует.
         Пожалуйста, войдите по Google аккаунту и зарегистрируйте ваш email.</string>
+    <!-- Account Helper Toast errors & exceptions -->
+    <string name="error_invalid_email_or_password">Введен некорректный email или пароль! Пожалуйста,
+    проверьте корректность email или пароля. Пароль должен содежать от 3 до 9 символов.</string>
 
 </resources>
