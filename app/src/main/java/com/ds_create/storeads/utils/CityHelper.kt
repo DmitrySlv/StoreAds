@@ -1,9 +1,12 @@
 package com.ds_create.storeads.utils
 
 import android.app.Application
+import com.ds_create.storeads.R
 import org.json.JSONObject
 import java.io.IOException
 import java.io.InputStream
+import java.util.*
+import kotlin.collections.ArrayList
 
 object CityHelper {
 
@@ -27,4 +30,22 @@ object CityHelper {
         }
         return tempArray
     }
+
+    fun filterListData(
+        list: ArrayList<String>, searchText: String?, application: Application
+    ): ArrayList<String> {
+        val tempList = ArrayList<String>()
+        tempList.clear()
+        if (searchText == null) {
+            tempList.add(application.getString(R.string.no_result))
+            return tempList
+        }
+        for (selection: String in list) {
+            if (selection.lowercase(Locale.ROOT).startsWith(searchText.lowercase(Locale.ROOT)))
+                tempList.add(selection)
+        }
+        if (tempList.size == 0) tempList.add(application.getString(R.string.no_result))
+        return tempList
+    }
+
 }

@@ -1,10 +1,9 @@
 package com.ds_create.storeads.activities
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.ArrayAdapter
-import com.ds_create.storeads.R
+import androidx.appcompat.app.AppCompatActivity
 import com.ds_create.storeads.databinding.ActivityEditAdsBinding
+import com.ds_create.storeads.dialogs.DialogSpinnerHelper
 import com.ds_create.storeads.utils.CityHelper
 
 class EditAdsActivity : AppCompatActivity() {
@@ -14,13 +13,8 @@ class EditAdsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-
-        val adapter = ArrayAdapter(
-            this,
-            android.R.layout.simple_spinner_item,
-            CityHelper.getAllCountries(application)
-        )
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        binding.spCountry.adapter = adapter
+        val listCountry = CityHelper.getAllCountries(application)
+        val dialog = DialogSpinnerHelper()
+        dialog.showSpinnerDialog(this, listCountry, application)
     }
 }
