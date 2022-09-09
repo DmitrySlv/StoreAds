@@ -20,7 +20,6 @@ class DialogSpinnerHelper {
         val adapter = RcViewDialogSpinnerAdapter(tvSelection, dialog)
         val rcView = rootView.findViewById<RecyclerView>(R.id.rcSpView)
         val searchView = rootView.findViewById<SearchView>(R.id.svSpinner)
-        rcView.layoutManager = LinearLayoutManager(context)
         rcView.adapter = adapter
         dialog.setView(rootView)
         adapter.updateAdapter(list)

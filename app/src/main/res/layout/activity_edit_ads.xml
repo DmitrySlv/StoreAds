@@ -19,13 +19,34 @@
             android:layout_height="wrap_content"
             android:orientation="vertical" >
 
-            <androidx.viewpager2.widget.ViewPager2
-                android:id="@+id/vpImages"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layout_marginStart="5dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginEnd="5dp" />
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp">
+
+                <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/vpImages"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:background="@android:drawable/editbox_background_normal"
+                    android:padding="10dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageButton
+                    android:id="@+id/imageButton3"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:onClick="onClickGetImages"
+                    android:src="@drawable/ic_edit_ads"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
                 android:id="@+id/tvCountry"

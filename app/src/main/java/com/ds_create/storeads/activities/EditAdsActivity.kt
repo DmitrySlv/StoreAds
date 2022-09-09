@@ -1,6 +1,9 @@
 package com.ds_create.storeads.activities
 
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -8,6 +11,9 @@ import com.ds_create.storeads.R
 import com.ds_create.storeads.databinding.ActivityEditAdsBinding
 import com.ds_create.storeads.dialogs.DialogSpinnerHelper
 import com.ds_create.storeads.utils.CityHelper
+import com.ds_create.storeads.utils.ImagePicker
+import com.fxn.pix.Pix
+import com.fxn.utility.PermUtil
 
 class EditAdsActivity : AppCompatActivity() {
 
@@ -18,6 +24,40 @@ class EditAdsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         init()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == RESULT_OK && requestCode == ImagePicker.REQUEST_CODE_GET_IMAGES) { //заменить RequestCode на свою константу
+            if (data != null) {
+                val returnValue = data.getStringArrayListExtra(Pix.IMAGE_RESULTS)
+                Log.d("MyLog", "Image :${returnValue?.get(0)}")
+                Log.d("MyLog", "Image :${returnValue?.get(1)}")
+                Log.d("MyLog", "Image :${returnValue?.get(2)}")
+            }
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            PermUtil.REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS -> {
+
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    ImagePicker.getImages(this)
+                } else {
+                    Toast.makeText(this,
+                        "Approve permissions to open Pix ImagePicker",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+                return
+            }
+        }
     }
 
     private fun init() {
@@ -41,5 +81,9 @@ class EditAdsActivity : AppCompatActivity() {
             Toast.makeText(this,
                 getString(R.string.no_country_selected), Toast.LENGTH_LONG).show()
         }
+    }
+
+    fun onClickGetImages(view: View) {
+        ImagePicker.getImages(this)
     }
 }
