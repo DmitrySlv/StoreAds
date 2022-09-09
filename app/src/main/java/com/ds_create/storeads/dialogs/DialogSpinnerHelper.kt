@@ -5,6 +5,7 @@ import android.app.Application
 import android.content.Context
 import android.view.LayoutInflater
 import android.widget.SearchView
+import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ds_create.storeads.R
@@ -12,11 +13,11 @@ import com.ds_create.storeads.utils.CityHelper
 
 class DialogSpinnerHelper {
 
-    fun showSpinnerDialog(context: Context, list: ArrayList<String>) {
+    fun showSpinnerDialog(context: Context, list: ArrayList<String>, tvSelection: TextView) {
         val builder = AlertDialog.Builder(context)
         val dialog = builder.create()
         val rootView = LayoutInflater.from(context).inflate(R.layout.spinner_layout, null)
-        val adapter = RcViewDialogSpinnerAdapter(context, dialog)
+        val adapter = RcViewDialogSpinnerAdapter(tvSelection, dialog)
         val rcView = rootView.findViewById<RecyclerView>(R.id.rcSpView)
         val searchView = rootView.findViewById<SearchView>(R.id.svSpinner)
         rcView.layoutManager = LinearLayoutManager(context)

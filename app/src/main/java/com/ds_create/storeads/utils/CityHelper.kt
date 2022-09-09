@@ -1,18 +1,16 @@
 package com.ds_create.storeads.utils
 
-import android.app.Application
 import android.content.Context
 import com.ds_create.storeads.R
 import org.json.JSONObject
 import java.io.IOException
 import java.io.InputStream
 import java.util.*
-import kotlin.collections.ArrayList
 
 object CityHelper {
 
     fun getAllCountries(context: Context): ArrayList<String> {
-        var tempArray = ArrayList<String>()
+        val tempArray = ArrayList<String>()
         try {
             val inputStream: InputStream = context.assets.open("countriesToCities.json")
             val size: Int = inputStream.available()
@@ -25,6 +23,25 @@ object CityHelper {
                 for (n in 0 until countriesNames.length()) {
                     tempArray.add(countriesNames.getString(n))
                 }
+            }
+        } catch (e: IOException) {
+
+        }
+        return tempArray
+    }
+
+    fun getAllCities(context: Context, country: String): ArrayList<String> {
+        val tempArray = ArrayList<String>()
+        try {
+            val inputStream: InputStream = context.assets.open("countriesToCities.json")
+            val size: Int = inputStream.available()
+            val bytesArray = ByteArray(size)
+            inputStream.read(bytesArray)
+            val jsonFile = String(bytesArray)
+            val jsonObject = JSONObject(jsonFile)
+            val cityNames = jsonObject.getJSONArray(country)
+                for (n in 0 until cityNames.length()) {
+                    tempArray.add(cityNames.getString(n))
             }
         } catch (e: IOException) {
 

@@ -11,7 +11,7 @@ import com.ds_create.storeads.R
 import com.ds_create.storeads.activities.EditAdsActivity
 
 class RcViewDialogSpinnerAdapter(
-   private val context: Context,
+   private val tvSelection: TextView,
    private val dialog: AlertDialog
 ): RecyclerView.Adapter<RcViewDialogSpinnerAdapter.SpViewHolder>() {
 
@@ -20,7 +20,7 @@ class RcViewDialogSpinnerAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SpViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.sp_list_item, parent, false)
-       return SpViewHolder(view, context, dialog)
+       return SpViewHolder(view, tvSelection, dialog)
     }
 
     override fun onBindViewHolder(holder: SpViewHolder, position: Int) {
@@ -32,7 +32,7 @@ class RcViewDialogSpinnerAdapter(
     }
 
     class SpViewHolder(
-        itemView: View, private val context: Context, private val dialog: AlertDialog
+        itemView: View, private val tvSelection: TextView, private val dialog: AlertDialog
     ): RecyclerView.ViewHolder(itemView), View.OnClickListener {
         private var itemtext = ""
 
@@ -44,7 +44,7 @@ class RcViewDialogSpinnerAdapter(
         }
 
         override fun onClick(v: View?) {
-            (context as EditAdsActivity).binding.tvCountry.text = itemtext
+            tvSelection.text = itemtext
             dialog.dismiss()
         }
     }
