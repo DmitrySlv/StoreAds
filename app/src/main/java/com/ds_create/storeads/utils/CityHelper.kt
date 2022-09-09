@@ -1,6 +1,7 @@
 package com.ds_create.storeads.utils
 
 import android.app.Application
+import android.content.Context
 import com.ds_create.storeads.R
 import org.json.JSONObject
 import java.io.IOException
@@ -10,10 +11,10 @@ import kotlin.collections.ArrayList
 
 object CityHelper {
 
-    fun getAllCountries(application: Application): ArrayList<String> {
+    fun getAllCountries(context: Context): ArrayList<String> {
         var tempArray = ArrayList<String>()
         try {
-            val inputStream: InputStream = application.assets.open("countriesToCities.json")
+            val inputStream: InputStream = context.assets.open("countriesToCities.json")
             val size: Int = inputStream.available()
             val bytesArray = ByteArray(size)
             inputStream.read(bytesArray)
@@ -32,19 +33,19 @@ object CityHelper {
     }
 
     fun filterListData(
-        list: ArrayList<String>, searchText: String?, application: Application
+        list: ArrayList<String>, searchText: String?, context: Context
     ): ArrayList<String> {
         val tempList = ArrayList<String>()
         tempList.clear()
         if (searchText == null) {
-            tempList.add(application.getString(R.string.no_result))
+            tempList.add(context.getString(R.string.no_result))
             return tempList
         }
         for (selection: String in list) {
             if (selection.lowercase(Locale.ROOT).startsWith(searchText.lowercase(Locale.ROOT)))
                 tempList.add(selection)
         }
-        if (tempList.size == 0) tempList.add(application.getString(R.string.no_result))
+        if (tempList.size == 0) tempList.add(context.getString(R.string.no_result))
         return tempList
     }
 
