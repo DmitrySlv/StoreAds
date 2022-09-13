@@ -2,7 +2,7 @@ package com.ds_create.storeads.accounthelper
 
 import android.util.Log
 import android.widget.Toast
-import com.ds_create.storeads.MainActivity
+import com.ds_create.storeads.activities.MainActivity
 import com.ds_create.storeads.R
 import com.ds_create.storeads.constants.FirebaseAuthConstants
 import com.ds_create.storeads.dialoghelper.GoogleAccConst

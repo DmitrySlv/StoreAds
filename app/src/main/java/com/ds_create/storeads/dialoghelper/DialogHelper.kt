@@ -3,7 +3,7 @@ package com.ds_create.storeads.dialoghelper
 import android.app.AlertDialog
 import android.view.View
 import android.widget.Toast
-import com.ds_create.storeads.MainActivity
+import com.ds_create.storeads.activities.MainActivity
 import com.ds_create.storeads.R
 import com.ds_create.storeads.accounthelper.AccountHelper
 import com.ds_create.storeads.databinding.SignDialogBinding

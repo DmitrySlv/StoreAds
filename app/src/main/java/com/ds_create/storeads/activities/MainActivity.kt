@@ -1,4 +1,4 @@
-package com.ds_create.storeads
+package com.ds_create.storeads.activities
 
 import android.content.Intent
 import android.os.Bundle
@@ -10,7 +10,7 @@ import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
-import com.ds_create.storeads.activities.EditAdsActivity
+import com.ds_create.storeads.R
 import com.ds_create.storeads.databinding.ActivityMainBinding
 import com.ds_create.storeads.dialoghelper.DialogHelper
 import com.ds_create.storeads.dialoghelper.GoogleAccConst
