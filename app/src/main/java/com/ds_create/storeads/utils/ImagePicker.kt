@@ -8,10 +8,10 @@ object ImagePicker {
 
     const val REQUEST_CODE_GET_IMAGES = 999
 
-    fun getImages(context: AppCompatActivity) {
+    fun getImages(context: AppCompatActivity, imageCounter: Int) {
         val options = Options.init()
             .setRequestCode(REQUEST_CODE_GET_IMAGES)
-            .setCount(3)
+            .setCount(imageCounter)
             .setFrontfacing(false)
             .setMode(Options.Mode.Picture)
             .setScreenOrientation(Options.SCREEN_ORIENTATION_PORTRAIT)

@@ -10,12 +10,14 @@ import androidx.appcompat.app.AppCompatActivity
 import com.ds_create.storeads.R
 import com.ds_create.storeads.databinding.ActivityEditAdsBinding
 import com.ds_create.storeads.dialogs.DialogSpinnerHelper
+import com.ds_create.storeads.fragments.FragmentCloseInterface
+import com.ds_create.storeads.fragments.ImageListFrag
 import com.ds_create.storeads.utils.CityHelper
 import com.ds_create.storeads.utils.ImagePicker
 import com.fxn.pix.Pix
 import com.fxn.utility.PermUtil
 
-class EditAdsActivity : AppCompatActivity() {
+class EditAdsActivity : AppCompatActivity(), FragmentCloseInterface {
 
     val binding by lazy { ActivityEditAdsBinding.inflate(layoutInflater) }
     private val dialog = DialogSpinnerHelper()
@@ -48,7 +50,7 @@ class EditAdsActivity : AppCompatActivity() {
             PermUtil.REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS -> {
 
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    ImagePicker.getImages(this)
+                    ImagePicker.getImages(this, 3)
                 } else {
                     Toast.makeText(this,
                         "Approve permissions to open Pix ImagePicker",
@@ -84,6 +86,13 @@ class EditAdsActivity : AppCompatActivity() {
     }
 
     fun onClickGetImages(view: View) {
-        ImagePicker.getImages(this)
+        binding.scrollViewMain.visibility = View.GONE
+        val fm = supportFragmentManager.beginTransaction()
+        fm.replace(R.id.placeHolder, ImageListFrag(this))
+        fm.commit()
+    }
+
+    override fun onFragClose() {
+        binding.scrollViewMain.visibility = View.VISIBLE
     }
 }
