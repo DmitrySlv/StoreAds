@@ -8,6 +8,8 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.ds_create.storeads.R
+import com.ds_create.storeads.adapters.ImageAdapter
+import com.ds_create.storeads.adapters.SelectImageItem
 import com.ds_create.storeads.databinding.ActivityEditAdsBinding
 import com.ds_create.storeads.dialogs.DialogSpinnerHelper
 import com.ds_create.storeads.fragments.FragmentCloseInterface
@@ -21,11 +23,17 @@ class EditAdsActivity : AppCompatActivity(), FragmentCloseInterface {
 
     val binding by lazy { ActivityEditAdsBinding.inflate(layoutInflater) }
     private val dialog = DialogSpinnerHelper()
+    private lateinit var imageAdapter: ImageAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         init()
+    }
+
+    private fun init() {
+        imageAdapter = ImageAdapter()
+        binding.vpImages.adapter = imageAdapter
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -65,9 +73,6 @@ class EditAdsActivity : AppCompatActivity(), FragmentCloseInterface {
         }
     }
 
-    private fun init() {
-    }
-
     //OnClicks
     fun onClickSelectCountry(view: View) {
         val listCountry = CityHelper.getAllCountries(this)
@@ -92,7 +97,8 @@ class EditAdsActivity : AppCompatActivity(), FragmentCloseInterface {
         ImagePicker.getImages(this, 3)
     }
 
-    override fun onFragClose() {
+    override fun onFragClose(list: ArrayList<SelectImageItem>) {
         binding.scrollViewMain.visibility = View.VISIBLE
+        imageAdapter.update(list)
     }
 }

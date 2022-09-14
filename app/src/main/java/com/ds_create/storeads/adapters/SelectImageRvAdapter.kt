@@ -32,8 +32,15 @@ ItemTouchMoveCallback.ItemTouchAdapter{
     override fun onMove(startPosition: Int, targetPosition: Int) {
         val targetItem = mainArray[targetPosition]
         mainArray[targetPosition] = mainArray[startPosition]
+        val titleStart =  mainArray[targetPosition].title
+        mainArray[targetPosition].title = targetItem.title
         mainArray[startPosition] = targetItem
+        mainArray[startPosition].title = titleStart
         notifyItemMoved(startPosition, targetPosition)
+    }
+
+    override fun onClear() {
+        notifyDataSetChanged()
     }
 
     class ImageHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

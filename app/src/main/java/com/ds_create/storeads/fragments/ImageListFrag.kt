@@ -53,7 +53,7 @@ class ImageListFrag(
 
     override fun onDetach() {
         super.onDetach()
-        fragCloseInterface.onFragClose()
+        fragCloseInterface.onFragClose(adapter.mainArray)
         Log.d("MyLog", "Title 0: ${adapter.mainArray[0].title}")
         Log.d("MyLog", "Title 1: ${adapter.mainArray[1].title}")
         Log.d("MyLog", "Title 2: ${adapter.mainArray[2].title}")
