@@ -8,10 +8,12 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.ds_create.storeads.R
+import com.ds_create.storeads.utils.ItemTouchMoveCallback
 
-class SelectImageRvAdapter : RecyclerView.Adapter<SelectImageRvAdapter.ImageHolder>() {
+class SelectImageRvAdapter : RecyclerView.Adapter<SelectImageRvAdapter.ImageHolder>(),
+ItemTouchMoveCallback.ItemTouchAdapter{
 
-    private val mainArray = ArrayList<SelectImageItem>()
+    val mainArray = ArrayList<SelectImageItem>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageHolder {
         val view = LayoutInflater.from(parent.context)
@@ -25,6 +27,13 @@ class SelectImageRvAdapter : RecyclerView.Adapter<SelectImageRvAdapter.ImageHold
 
     override fun getItemCount(): Int {
         return mainArray.size
+    }
+
+    override fun onMove(startPosition: Int, targetPosition: Int) {
+        val targetItem = mainArray[targetPosition]
+        mainArray[targetPosition] = mainArray[startPosition]
+        mainArray[startPosition] = targetItem
+        notifyItemMoved(startPosition, targetPosition)
     }
 
     class ImageHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
