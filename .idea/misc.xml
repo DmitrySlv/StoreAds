@@ -8,6 +8,7 @@
         <entry key="..\:/AndroidStudioProjects/StoreAds/app/src/main/res/layout/activity_edit_ads.xml" value="0.22" />
         <entry key="..\:/AndroidStudioProjects/StoreAds/app/src/main/res/layout/activity_main.xml" value="0.19444444444444445" />
         <entry key="..\:/AndroidStudioProjects/StoreAds/app/src/main/res/layout/image_adapter_item.xml" value="0.22" />
+        <entry key="..\:/AndroidStudioProjects/StoreAds/app/src/main/res/layout/list_image_fragment.xml" value="0.22" />
         <entry key="..\:/AndroidStudioProjects/StoreAds/app/src/main/res/layout/list_mage_frag.xml" value="0.2" />
         <entry key="..\:/AndroidStudioProjects/StoreAds/app/src/main/res/layout/main_content.xml" value="0.22" />
         <entry key="..\:/AndroidStudioProjects/StoreAds/app/src/main/res/layout/nav_header_main.xml" value="0.22" />
@@ -17,6 +18,7 @@
         <entry key="..\:/AndroidStudioProjects/StoreAds/app/src/main/res/layout/spinner_layout.xml" value="0.25" />
         <entry key="..\:/AndroidStudioProjects/StoreAds/app/src/main/res/menu/drawer_main_menu.xml" value="0.22" />
         <entry key="..\:/AndroidStudioProjects/StoreAds/app/src/main/res/menu/main_menu.xml" value="0.1" />
+        <entry key="..\:/AndroidStudioProjects/StoreAds/app/src/main/res/menu/menu_choose_image.xml" value="0.22" />
       </map>
     </option>
   </component>

@@ -25,6 +25,8 @@ class EditAdsActivity : AppCompatActivity(), FragmentCloseInterface {
     private val dialog = DialogSpinnerHelper()
     private lateinit var imageAdapter: ImageAdapter
 
+    private var chooseImageFrag: ImageListFrag? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -41,12 +43,16 @@ class EditAdsActivity : AppCompatActivity(), FragmentCloseInterface {
         if (resultCode == RESULT_OK && requestCode == ImagePicker.REQUEST_CODE_GET_IMAGES) { //заменить RequestCode на свою константу
             if (data != null) {
                 val returnValues = data.getStringArrayListExtra(Pix.IMAGE_RESULTS)
-                if (returnValues?.size!! > 1) {
-                binding.scrollViewMain.visibility = View.GONE
-                val fm = supportFragmentManager.beginTransaction()
-                fm.replace(R.id.placeHolder, ImageListFrag(this, returnValues))
-                fm.commit()
-            }
+                if (returnValues?.size!! > 1 && chooseImageFrag == null) {
+
+                    chooseImageFrag = ImageListFrag(this, returnValues)
+                    binding.scrollViewMain.visibility = View.GONE
+                    val fm = supportFragmentManager.beginTransaction()
+                    fm.replace(R.id.placeHolder, chooseImageFrag!!)
+                    fm.commit()
+                } else if (chooseImageFrag != null) {
+                    chooseImageFrag?.updateAdapter(returnValues)
+                }
             }
         }
     }
@@ -100,5 +106,6 @@ class EditAdsActivity : AppCompatActivity(), FragmentCloseInterface {
     override fun onFragClose(list: ArrayList<SelectImageItem>) {
         binding.scrollViewMain.visibility = View.VISIBLE
         imageAdapter.update(list)
+        chooseImageFrag = null
     }
 }
