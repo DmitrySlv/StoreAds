@@ -22,8 +22,8 @@ class EditAdsActivity : AppCompatActivity(), FragmentCloseInterface {
     val binding by lazy { ActivityEditAdsBinding.inflate(layoutInflater) }
     private val dialog = DialogSpinnerHelper()
     private lateinit var imageAdapter: ImageAdapter
-
     private var chooseImageFrag: ImageListFrag? = null
+    var editImagePos = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +39,7 @@ class EditAdsActivity : AppCompatActivity(), FragmentCloseInterface {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == RESULT_OK && requestCode == ImagePicker.REQUEST_CODE_GET_IMAGES) { //заменить RequestCode на свою константу
+
             if (data != null) {
                 val returnValues = data.getStringArrayListExtra(Pix.IMAGE_RESULTS)
                 if (returnValues?.size!! > 1 && chooseImageFrag == null) {
@@ -46,6 +47,11 @@ class EditAdsActivity : AppCompatActivity(), FragmentCloseInterface {
                 } else if (chooseImageFrag != null) {
                     chooseImageFrag?.updateAdapter(returnValues)
                 }
+            }
+        } else if(resultCode == RESULT_OK && requestCode == ImagePicker.REQUEST_CODE_GET_SINGLE_IMAGE) {
+            if (data != null) {
+                val uris = data.getStringArrayListExtra(Pix.IMAGE_RESULTS)
+                chooseImageFrag?.setSingleImage(uris?.get(0)!!, editImagePos)
             }
         }
     }
@@ -60,7 +66,7 @@ class EditAdsActivity : AppCompatActivity(), FragmentCloseInterface {
             PermUtil.REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS -> {
 
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    ImagePicker.getImages(this, 3)
+                    ImagePicker.getImages(this, 3, ImagePicker.REQUEST_CODE_GET_IMAGES)
                 } else {
                     Toast.makeText(this,
                         "Approve permissions to open Pix ImagePicker",
@@ -94,7 +100,7 @@ class EditAdsActivity : AppCompatActivity(), FragmentCloseInterface {
 
     fun onClickGetImages(view: View) {
         if (imageAdapter.mainArray.size == 0) {
-        ImagePicker.getImages(this, 3)
+        ImagePicker.getImages(this, 3, ImagePicker.REQUEST_CODE_GET_IMAGES)
     } else {
         openChooseImageFrag(imageAdapter.mainArray)
         }

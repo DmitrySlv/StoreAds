@@ -5,10 +5,13 @@ import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.ds_create.storeads.R
+import com.ds_create.storeads.activities.EditAdsActivity
+import com.ds_create.storeads.utils.ImagePicker
 import com.ds_create.storeads.utils.ItemTouchMoveCallback
 
 class SelectImageRvAdapter : RecyclerView.Adapter<SelectImageRvAdapter.ImageHolder>(),
@@ -41,13 +44,24 @@ ItemTouchMoveCallback.ItemTouchAdapter{
         notifyDataSetChanged()
     }
 
-    class ImageHolder(itemView: View, private val context: Context) : RecyclerView.ViewHolder(itemView) {
+    class ImageHolder(itemView: View, private val context: Context):
+        RecyclerView.ViewHolder(itemView) {
         lateinit var tvTitle: TextView
         lateinit var image: ImageView
+        lateinit var imEditImage: ImageButton
 
         fun setData(item: String) {
             tvTitle = itemView.findViewById(R.id.tvTitle)
             image = itemView.findViewById(R.id.imageContent)
+            imEditImage = itemView.findViewById(R.id.imEditImage)
+            imEditImage.setOnClickListener {
+                ImagePicker.getImages(
+                    context as EditAdsActivity, 1,
+                    ImagePicker.REQUEST_CODE_GET_SINGLE_IMAGE
+                )
+                context.editImagePos = adapterPosition
+            }
+
             tvTitle.text = context.resources.getStringArray(R.array.title_array)[adapterPosition]
             image.setImageURI(Uri.parse(item))
         }

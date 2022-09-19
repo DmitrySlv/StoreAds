@@ -73,7 +73,7 @@ class ImageListFrag(
         }
         addImageItem.setOnMenuItemClickListener {
             val imageCount = ImagePicker.MAX_IMAGE_COUNT - adapter.mainArray.size
-            ImagePicker.getImages(activity as AppCompatActivity, imageCount)
+            ImagePicker.getImages(activity as AppCompatActivity, imageCount, ImagePicker.REQUEST_CODE_GET_IMAGES)
             true
         }
     }
@@ -81,5 +81,10 @@ class ImageListFrag(
     fun updateAdapter(newList: ArrayList<String>) {
 
         adapter.updateAdapter(newList, false)
+    }
+
+    fun setSingleImage(uri: String, position: Int) {
+        adapter.mainArray[position] = uri
+        adapter.notifyDataSetChanged()
     }
 }
