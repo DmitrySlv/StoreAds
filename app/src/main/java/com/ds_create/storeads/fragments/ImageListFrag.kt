@@ -1,18 +1,14 @@
 package com.ds_create.storeads.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.ds_create.storeads.R
-import com.ds_create.storeads.adapters.SelectImageItem
 import com.ds_create.storeads.adapters.SelectImageRvAdapter
 import com.ds_create.storeads.databinding.ListImageFragmentBinding
 import com.ds_create.storeads.utils.ImagePicker
@@ -47,13 +43,8 @@ class ImageListFrag(
             touchHelper.attachToRecyclerView(rcViewSelectImage)
             rcViewSelectImage.layoutManager = LinearLayoutManager(activity)
             rcViewSelectImage.adapter = adapter
-            val updateList = ArrayList<SelectImageItem>()
-            for (n in 0 until newList.size) {
-                updateList.add(SelectImageItem(n.toString(), newList[n]))
             }
-            adapter.updateAdapter(updateList, true)
-
-        }
+            adapter.updateAdapter(newList, true)
     }
 
     override fun onDestroy() {
@@ -88,10 +79,7 @@ class ImageListFrag(
     }
 
     fun updateAdapter(newList: ArrayList<String>) {
-        val updateList = ArrayList<SelectImageItem>()
-        for (n in adapter.mainArray.size until newList.size + adapter.mainArray.size) {
-            updateList.add(SelectImageItem(n.toString(), newList[n - adapter.mainArray.size]))
-        }
-        adapter.updateAdapter(updateList, false)
+
+        adapter.updateAdapter(newList, false)
     }
 }

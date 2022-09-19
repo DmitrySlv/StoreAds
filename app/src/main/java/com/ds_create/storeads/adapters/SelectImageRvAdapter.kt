@@ -1,5 +1,6 @@
 package com.ds_create.storeads.adapters
 
+import android.content.Context
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
@@ -13,12 +14,12 @@ import com.ds_create.storeads.utils.ItemTouchMoveCallback
 class SelectImageRvAdapter : RecyclerView.Adapter<SelectImageRvAdapter.ImageHolder>(),
 ItemTouchMoveCallback.ItemTouchAdapter{
 
-    val mainArray = ArrayList<SelectImageItem>()
+    val mainArray = ArrayList<String>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.select_image_fragment_item, parent, false)
-        return ImageHolder(view)
+        return ImageHolder(view, parent.context)
     }
 
     override fun onBindViewHolder(holder: ImageHolder, position: Int) {
@@ -32,10 +33,7 @@ ItemTouchMoveCallback.ItemTouchAdapter{
     override fun onMove(startPosition: Int, targetPosition: Int) {
         val targetItem = mainArray[targetPosition]
         mainArray[targetPosition] = mainArray[startPosition]
-        val titleStart =  mainArray[targetPosition].title
-        mainArray[targetPosition].title = targetItem.title
         mainArray[startPosition] = targetItem
-        mainArray[startPosition].title = titleStart
         notifyItemMoved(startPosition, targetPosition)
     }
 
@@ -43,19 +41,19 @@ ItemTouchMoveCallback.ItemTouchAdapter{
         notifyDataSetChanged()
     }
 
-    class ImageHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class ImageHolder(itemView: View, private val context: Context) : RecyclerView.ViewHolder(itemView) {
         lateinit var tvTitle: TextView
         lateinit var image: ImageView
 
-        fun setData(item: SelectImageItem) {
+        fun setData(item: String) {
             tvTitle = itemView.findViewById(R.id.tvTitle)
             image = itemView.findViewById(R.id.imageContent)
-            tvTitle.text = item.title
-            image.setImageURI(Uri.parse(item.imageUri))
+            tvTitle.text = context.resources.getStringArray(R.array.title_array)[adapterPosition]
+            image.setImageURI(Uri.parse(item))
         }
     }
 
-    fun updateAdapter(newList: List<SelectImageItem>, needClear: Boolean) {
+    fun updateAdapter(newList: List<String>, needClear: Boolean) {
         if (needClear) mainArray.clear()
         mainArray.addAll(newList)
         notifyDataSetChanged()
