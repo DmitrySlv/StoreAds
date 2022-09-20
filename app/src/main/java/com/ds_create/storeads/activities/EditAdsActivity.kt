@@ -3,6 +3,7 @@ package com.ds_create.storeads.activities
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -13,6 +14,7 @@ import com.ds_create.storeads.dialogs.DialogSpinnerHelper
 import com.ds_create.storeads.fragments.FragmentCloseInterface
 import com.ds_create.storeads.fragments.ImageListFrag
 import com.ds_create.storeads.utils.CityHelper
+import com.ds_create.storeads.utils.ImageManager
 import com.ds_create.storeads.utils.ImagePicker
 import com.fxn.pix.Pix
 import com.fxn.utility.PermUtil
@@ -47,7 +49,10 @@ class EditAdsActivity : AppCompatActivity(), FragmentCloseInterface {
                     openChooseImageFrag(returnValues)
 
                 } else if (returnValues.size == 1 && chooseImageFrag == null) {
-                    imageAdapter.update(returnValues)
+//                    imageAdapter.update(returnValues)
+                    val tempList = ImageManager.getImageSize(returnValues[0])
+                    Log.d("MyLog", "Image width: ${tempList[0]}")
+                    Log.d("MyLog", "Image height: ${tempList[1]}")
 
                 } else if (chooseImageFrag != null) {
                     chooseImageFrag?.updateAdapter(returnValues)
