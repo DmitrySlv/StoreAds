@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.ds_create.storeads.R
 import com.ds_create.storeads.adapters.SelectImageRvAdapter
 import com.ds_create.storeads.databinding.ListImageFragmentBinding
+import com.ds_create.storeads.utils.ImageManager
 import com.ds_create.storeads.utils.ImagePicker
 import com.ds_create.storeads.utils.ItemTouchMoveCallback
 
@@ -44,7 +45,8 @@ class ImageListFrag(
             rcViewSelectImage.layoutManager = LinearLayoutManager(activity)
             rcViewSelectImage.adapter = adapter
             }
-            adapter.updateAdapter(newList, true)
+        ImageManager.imageResize(newList)
+//            adapter.updateAdapter(newList, true)
     }
 
     override fun onDestroy() {
