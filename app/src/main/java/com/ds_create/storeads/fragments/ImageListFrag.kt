@@ -1,5 +1,6 @@
 package com.ds_create.storeads.fragments
 
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -22,13 +23,13 @@ import kotlinx.coroutines.launch
 
 class ImageListFrag(
     private val fragCloseInterface: FragmentCloseInterface,
-    private val newList: ArrayList<String>
+    private val newList: ArrayList<String>?
     ): Fragment() {
 
     private val adapter = SelectImageRvAdapter()
     private val dragCallback = ItemTouchMoveCallback(adapter)
     private val touchHelper = ItemTouchHelper(dragCallback)
-    private lateinit var job: Job
+    private var job: Job? = null
 
     private var _binding: ListImageFragmentBinding? = null
     private val binding: ListImageFragmentBinding
@@ -51,11 +52,12 @@ class ImageListFrag(
             rcViewSelectImage.layoutManager = LinearLayoutManager(activity)
             rcViewSelectImage.adapter = adapter
             }
-        job = CoroutineScope(Dispatchers.Main).launch {
-           val text = ImageManager.imageResize(newList)
-            Log.d("MyLog", "Result: $text")
+        if (newList != null) {
+            job = CoroutineScope(Dispatchers.Main).launch {
+                val bitmapList = ImageManager.imageResize(newList)
+                adapter.updateAdapter(bitmapList, true)
+            }
         }
-//            adapter.updateAdapter(newList, true)
     }
 
     override fun onDestroy() {
@@ -66,7 +68,7 @@ class ImageListFrag(
     override fun onDetach() {
         super.onDetach()
         fragCloseInterface.onFragClose(adapter.mainArray)
-        job.cancel()
+        job?.cancel()
     }
 
     private fun setUpToolBar() {
@@ -91,12 +93,21 @@ class ImageListFrag(
     }
 
     fun updateAdapter(newList: ArrayList<String>) {
+        job = CoroutineScope(Dispatchers.Main).launch {
+            val bitmapList = ImageManager.imageResize(newList)
+            adapter.updateAdapter(bitmapList, false)
+        }
+    }
 
-        adapter.updateAdapter(newList, false)
+    fun updateAdapterFromEdit(bitmapList: List<Bitmap>) {
+        adapter.updateAdapter(bitmapList, true)
     }
 
     fun setSingleImage(uri: String, position: Int) {
-        adapter.mainArray[position] = uri
-        adapter.notifyDataSetChanged()
+        job = CoroutineScope(Dispatchers.Main).launch {
+            val bitmapList = ImageManager.imageResize(listOf(uri))
+            adapter.mainArray[position] = bitmapList[0]
+            adapter.notifyDataSetChanged()
+        }
     }
 }

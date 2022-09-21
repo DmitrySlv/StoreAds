@@ -1,6 +1,7 @@
 package com.ds_create.storeads.adapters
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
@@ -17,7 +18,7 @@ import com.ds_create.storeads.utils.ItemTouchMoveCallback
 class SelectImageRvAdapter : RecyclerView.Adapter<SelectImageRvAdapter.ImageHolder>(),
 ItemTouchMoveCallback.ItemTouchAdapter{
 
-    val mainArray = ArrayList<String>()
+    val mainArray = ArrayList<Bitmap>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageHolder {
         val view = LayoutInflater.from(parent.context)
@@ -52,7 +53,7 @@ ItemTouchMoveCallback.ItemTouchAdapter{
         lateinit var imEditImage: ImageButton
         lateinit var imDeleteImage: ImageButton
 
-        fun setData(item: String) {
+        fun setData(bitmap: Bitmap) {
             tvTitle = itemView.findViewById(R.id.tvTitle)
             image = itemView.findViewById(R.id.imageContent)
             imEditImage = itemView.findViewById(R.id.imEditImage)
@@ -75,11 +76,11 @@ ItemTouchMoveCallback.ItemTouchAdapter{
             }
 
             tvTitle.text = context.resources.getStringArray(R.array.title_array)[adapterPosition]
-            image.setImageURI(Uri.parse(item))
+            image.setImageBitmap(bitmap)
         }
     }
 
-    fun updateAdapter(newList: List<String>, needClear: Boolean) {
+    fun updateAdapter(newList: List<Bitmap>, needClear: Boolean) {
         if (needClear) mainArray.clear()
         mainArray.addAll(newList)
         notifyDataSetChanged()
