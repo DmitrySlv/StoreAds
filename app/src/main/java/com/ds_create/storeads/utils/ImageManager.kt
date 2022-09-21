@@ -3,6 +3,9 @@ package com.ds_create.storeads.utils
 import android.graphics.BitmapFactory
 import android.util.Log
 import androidx.exifinterface.media.ExifInterface
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 import java.io.File
 
 object ImageManager {
@@ -36,12 +39,11 @@ object ImageManager {
        return rotation
    }
 
-    fun imageResize(uris: List<String>) {
+   suspend fun imageResize(uris: List<String>): String = withContext(Dispatchers.IO) {
         val tempList = ArrayList<List<Int>>()
         for (n in uris.indices) {
-            val size = getImageSize(uris[n])
-            Log.d("MyLog", "Width: ${size[WIDTH_IMAGE]} Height: ${size[HEIGHT_IMAGE]}")
 
+            val size = getImageSize(uris[n])
             val imageRatio = size[WIDTH_IMAGE].toFloat() / size[HEIGHT_IMAGE].toFloat()
             if (imageRatio > 1) {
                 if (size[WIDTH_IMAGE] > MAX_IMAGE_SIZE) {
@@ -56,8 +58,9 @@ object ImageManager {
                     tempList.add(listOf(size[WIDTH_IMAGE], size[HEIGHT_IMAGE]))
                 }
             }
-            Log.d("MyLog", "Width: ${tempList[n][WIDTH_IMAGE]} Height: ${tempList[n][HEIGHT_IMAGE]}")
         }
+        delay(10000)
+       return@withContext "Done"
     }
 
    private const val MAX_IMAGE_SIZE = 1000

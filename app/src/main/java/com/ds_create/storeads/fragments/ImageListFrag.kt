@@ -1,6 +1,7 @@
 package com.ds_create.storeads.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +15,10 @@ import com.ds_create.storeads.databinding.ListImageFragmentBinding
 import com.ds_create.storeads.utils.ImageManager
 import com.ds_create.storeads.utils.ImagePicker
 import com.ds_create.storeads.utils.ItemTouchMoveCallback
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
 class ImageListFrag(
     private val fragCloseInterface: FragmentCloseInterface,
@@ -23,6 +28,7 @@ class ImageListFrag(
     private val adapter = SelectImageRvAdapter()
     private val dragCallback = ItemTouchMoveCallback(adapter)
     private val touchHelper = ItemTouchHelper(dragCallback)
+    private lateinit var job: Job
 
     private var _binding: ListImageFragmentBinding? = null
     private val binding: ListImageFragmentBinding
@@ -45,7 +51,10 @@ class ImageListFrag(
             rcViewSelectImage.layoutManager = LinearLayoutManager(activity)
             rcViewSelectImage.adapter = adapter
             }
-        ImageManager.imageResize(newList)
+        job = CoroutineScope(Dispatchers.Main).launch {
+           val text = ImageManager.imageResize(newList)
+            Log.d("MyLog", "Result: $text")
+        }
 //            adapter.updateAdapter(newList, true)
     }
 
@@ -57,6 +66,7 @@ class ImageListFrag(
     override fun onDetach() {
         super.onDetach()
         fragCloseInterface.onFragClose(adapter.mainArray)
+        job.cancel()
     }
 
     private fun setUpToolBar() {
