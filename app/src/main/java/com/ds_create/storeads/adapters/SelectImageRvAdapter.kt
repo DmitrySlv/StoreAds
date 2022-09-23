@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.ds_create.storeads.R
@@ -52,12 +53,14 @@ ItemTouchMoveCallback.ItemTouchAdapter{
         lateinit var image: ImageView
         lateinit var imEditImage: ImageButton
         lateinit var imDeleteImage: ImageButton
+        lateinit var pBar: ProgressBar
 
         fun setData(bitmap: Bitmap) {
             tvTitle = itemView.findViewById(R.id.tvTitle)
             image = itemView.findViewById(R.id.imageContent)
             imEditImage = itemView.findViewById(R.id.imEditImage)
             imDeleteImage = itemView.findViewById(R.id.imDeleteImage)
+            pBar = itemView.findViewById(R.id.pBar)
 
             imEditImage.setOnClickListener {
                 ImagePicker.getImages(
