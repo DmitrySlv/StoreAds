@@ -2,9 +2,7 @@ package com.ds_create.storeads.adapters
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.net.Uri
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -13,18 +11,21 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.ds_create.storeads.R
 import com.ds_create.storeads.activities.EditAdsActivity
+import com.ds_create.storeads.databinding.SelectImageFragmentItemBinding
+import com.ds_create.storeads.utils.ImageManager
 import com.ds_create.storeads.utils.ImagePicker
 import com.ds_create.storeads.utils.ItemTouchMoveCallback
 
-class SelectImageRvAdapter : RecyclerView.Adapter<SelectImageRvAdapter.ImageHolder>(),
-ItemTouchMoveCallback.ItemTouchAdapter{
+class SelectImageRvAdapter(private val adapterCallback: AdapterCallback):
+    RecyclerView.Adapter<SelectImageRvAdapter.ImageHolder>(),
+ItemTouchMoveCallback.ItemTouchAdapter {
 
     val mainArray = ArrayList<Bitmap>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.select_image_fragment_item, parent, false)
-        return ImageHolder(view, parent.context, this)
+        val binding = SelectImageFragmentItemBinding.inflate(LayoutInflater.from(parent.context),
+            parent, false)
+        return ImageHolder(binding, parent.context, this)
     }
 
     override fun onBindViewHolder(holder: ImageHolder, position: Int) {
@@ -47,20 +48,11 @@ ItemTouchMoveCallback.ItemTouchAdapter{
     }
 
     class ImageHolder(
-        itemView: View, private val context: Context, private val adapter: SelectImageRvAdapter
-        ): RecyclerView.ViewHolder(itemView) {
-        lateinit var tvTitle: TextView
-        lateinit var image: ImageView
-        lateinit var imEditImage: ImageButton
-        lateinit var imDeleteImage: ImageButton
-        lateinit var pBar: ProgressBar
+       private val binding: SelectImageFragmentItemBinding,
+        private val context: Context, private val adapter: SelectImageRvAdapter):
+        RecyclerView.ViewHolder(binding.root) {
 
-        fun setData(bitmap: Bitmap) {
-            tvTitle = itemView.findViewById(R.id.tvTitle)
-            image = itemView.findViewById(R.id.imageContent)
-            imEditImage = itemView.findViewById(R.id.imEditImage)
-            imDeleteImage = itemView.findViewById(R.id.imDeleteImage)
-            pBar = itemView.findViewById(R.id.pBar)
+        fun setData(bitmap: Bitmap) = with(binding) {
 
             imEditImage.setOnClickListener {
                 ImagePicker.getImages(
@@ -76,10 +68,12 @@ ItemTouchMoveCallback.ItemTouchAdapter{
                 for (n in 0 until adapter.mainArray.size) {
                     adapter.notifyItemChanged(n)
                 }
+                adapter.adapterCallback.onItemDelete()
             }
 
             tvTitle.text = context.resources.getStringArray(R.array.title_array)[adapterPosition]
-            image.setImageBitmap(bitmap)
+            ImageManager.chooseScaleType(imageContent, bitmap)
+            imageContent.setImageBitmap(bitmap)
         }
     }
 
