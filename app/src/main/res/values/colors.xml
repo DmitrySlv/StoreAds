@@ -11,4 +11,7 @@
     <color name="color_red">#CF0F01</color>
     <color name="color_btn_as_google">#656565</color>
     <color name="green">#08B60B</color>
+    <color name="green_main">#30AA31</color>
+    <color name="gray">#E6E6E6</color>
+    <color name="gray_dark">#CDCDCD</color>
 </resources>

@@ -24,4 +24,9 @@
         <item name="windowNoTitle">true</item>
         <item name="android:windowFullscreen">true</item>
     </style>
+
+    <!-- Settings for action bar (для зелёной стрелочки назад при выборе фото)-->
+    <style name="ActionBarCustom">
+        <item name="android:textColorSecondary">@color/green_main</item>
+    </style>
 </resources>
