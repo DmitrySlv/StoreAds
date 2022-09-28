@@ -1,11 +1,11 @@
-package com.ds_create.storeads.accounthelper
+package com.ds_create.storeads.utils.accounthelper
 
 import android.util.Log
 import android.widget.Toast
 import com.ds_create.storeads.activities.MainActivity
 import com.ds_create.storeads.R
-import com.ds_create.storeads.constants.FirebaseAuthConstants
-import com.ds_create.storeads.dialoghelper.GoogleAccConst
+import com.ds_create.storeads.utils.constants.FirebaseAuthConstants
+import com.ds_create.storeads.utils.dialoghelper.GoogleAccConst
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions

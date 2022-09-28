@@ -1,14 +1,13 @@
-package com.ds_create.storeads.dialogs
+package com.ds_create.storeads.utils.dialogs
 
 import android.app.AlertDialog
-import android.app.Application
 import android.content.Context
 import android.view.LayoutInflater
 import android.widget.SearchView
 import android.widget.TextView
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ds_create.storeads.R
+import com.ds_create.storeads.adapters.RcViewDialogSpinnerAdapter
 import com.ds_create.storeads.utils.CityHelper
 
 class DialogSpinnerHelper {

@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.ds_create.storeads.R
 import com.ds_create.storeads.adapters.ImageAdapter
 import com.ds_create.storeads.databinding.ActivityEditAdsBinding
-import com.ds_create.storeads.dialogs.DialogSpinnerHelper
+import com.ds_create.storeads.utils.dialogs.DialogSpinnerHelper
 import com.ds_create.storeads.fragments.FragmentCloseInterface
 import com.ds_create.storeads.fragments.ImageListFrag
 import com.ds_create.storeads.utils.CityHelper

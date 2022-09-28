@@ -1,4 +1,4 @@
-package com.ds_create.storeads.constants
+package com.ds_create.storeads.utils.constants
 
 object FirebaseAuthConstants {
     const val ERROR_EMAIL_ALREADY_IN_USE = "ERROR_EMAIL_ALREADY_IN_USE"

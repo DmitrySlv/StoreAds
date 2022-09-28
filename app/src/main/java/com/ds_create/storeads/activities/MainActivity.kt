@@ -12,8 +12,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import com.ds_create.storeads.R
 import com.ds_create.storeads.databinding.ActivityMainBinding
-import com.ds_create.storeads.dialoghelper.DialogHelper
-import com.ds_create.storeads.dialoghelper.GoogleAccConst
+import com.ds_create.storeads.utils.dialoghelper.DialogHelper
+import com.ds_create.storeads.utils.dialoghelper.GoogleAccConst
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.common.api.ApiException
 import com.google.android.material.navigation.NavigationView

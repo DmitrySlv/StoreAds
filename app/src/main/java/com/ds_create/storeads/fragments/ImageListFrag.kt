@@ -17,7 +17,7 @@ import com.ds_create.storeads.R
 import com.ds_create.storeads.adapters.AdapterCallback
 import com.ds_create.storeads.adapters.SelectImageRvAdapter
 import com.ds_create.storeads.databinding.ListImageFragmentBinding
-import com.ds_create.storeads.dialoghelper.ProgressDialog
+import com.ds_create.storeads.utils.dialoghelper.ProgressDialog
 import com.ds_create.storeads.utils.ImageManager
 import com.ds_create.storeads.utils.ImagePicker
 import com.ds_create.storeads.utils.ItemTouchMoveCallback
@@ -29,26 +29,13 @@ import kotlinx.coroutines.launch
 class ImageListFrag(
     private val fragCloseInterface: FragmentCloseInterface,
     private val newList: ArrayList<String>?
-    ): Fragment(), AdapterCallback {
+    ): BaseSelectImageFrag(), AdapterCallback {
 
     private val adapter = SelectImageRvAdapter(this)
     private val dragCallback = ItemTouchMoveCallback(adapter)
     private val touchHelper = ItemTouchHelper(dragCallback)
     private var job: Job? = null
     private var addImageItem: MenuItem? = null
-
-    private var _binding: ListImageFragmentBinding? = null
-    private val binding: ListImageFragmentBinding
-        get() = _binding ?: throw RuntimeException("ListImageFragmentBinding is null")
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = ListImageFragmentBinding.inflate(inflater)
-        return binding.root
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -61,11 +48,6 @@ class ImageListFrag(
         if (newList != null) {
             resizeSelectedImages(newList, true)
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
     }
 
     override fun onDetach() {
@@ -90,12 +72,12 @@ class ImageListFrag(
         }
     }
 
-    private fun setUpToolBar() {
-        binding.toolbar.inflateMenu(R.menu.menu_choose_image)
-        val deleteItem = binding.toolbar.menu.findItem(R.id.id_delete_image)
-        addImageItem = binding.toolbar.menu.findItem(R.id.id_add_image)
+    private fun setUpToolBar() = with(binding) {
+        toolbar.inflateMenu(R.menu.menu_choose_image)
+        val deleteItem = toolbar.menu.findItem(R.id.id_delete_image)
+        addImageItem = toolbar.menu.findItem(R.id.id_add_image)
 
-        binding.toolbar.setNavigationOnClickListener {
+        toolbar.setNavigationOnClickListener {
             activity?.supportFragmentManager?.beginTransaction()
                 ?.remove(this@ImageListFrag)
                 ?.commit()

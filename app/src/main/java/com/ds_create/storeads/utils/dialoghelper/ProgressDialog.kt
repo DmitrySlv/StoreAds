@@ -1,4 +1,4 @@
-package com.ds_create.storeads.dialoghelper
+package com.ds_create.storeads.utils.dialoghelper
 
 import android.app.Activity
 import android.app.AlertDialog
