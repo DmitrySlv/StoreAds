@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">StoreAds</string>
     <string name="ad_id">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="ad_inter_id">ca-app-pub-3940256099942544/1033173712</string>
 
     <!-- Menu Drawer Strings -->
     <string name="ad_cat1">Объявления</string>

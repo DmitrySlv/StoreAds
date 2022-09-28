@@ -1,6 +1,5 @@
 package com.ds_create.storeads.fragments
 
-import android.app.Activity
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,17 +9,16 @@ import android.view.ViewGroup
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.get
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ds_create.storeads.R
 import com.ds_create.storeads.adapters.AdapterCallback
 import com.ds_create.storeads.adapters.SelectImageRvAdapter
 import com.ds_create.storeads.databinding.ListImageFragmentBinding
-import com.ds_create.storeads.utils.dialoghelper.ProgressDialog
 import com.ds_create.storeads.utils.ImageManager
 import com.ds_create.storeads.utils.ImagePicker
 import com.ds_create.storeads.utils.ItemTouchMoveCallback
+import com.ds_create.storeads.utils.dialoghelper.ProgressDialog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -29,13 +27,27 @@ import kotlinx.coroutines.launch
 class ImageListFrag(
     private val fragCloseInterface: FragmentCloseInterface,
     private val newList: ArrayList<String>?
-    ): BaseSelectImageFrag(), AdapterCallback {
+    ): BaseAdsFrag(), AdapterCallback {
 
     private val adapter = SelectImageRvAdapter(this)
     private val dragCallback = ItemTouchMoveCallback(adapter)
     private val touchHelper = ItemTouchHelper(dragCallback)
     private var job: Job? = null
     private var addImageItem: MenuItem? = null
+
+    private var _binding: ListImageFragmentBinding? = null
+    private val binding: ListImageFragmentBinding
+        get() = _binding ?: throw RuntimeException("ListImageFragmentBinding is null")
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = ListImageFragmentBinding.inflate(layoutInflater)
+        adView = binding.adView
+        return binding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -50,10 +62,22 @@ class ImageListFrag(
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+    }
+
     override fun onDetach() {
         super.onDetach()
         fragCloseInterface.onFragClose(adapter.mainArray)
         job?.cancel()
+    }
+
+    override fun onClose() {
+        super.onClose()
+        requireActivity().supportFragmentManager.beginTransaction()
+            .remove(this@ImageListFrag)
+            .commit()
     }
 
     override fun onItemDelete() {
@@ -62,7 +86,7 @@ class ImageListFrag(
 
     private fun resizeSelectedImages(newList: ArrayList<String>, needClear: Boolean) {
         job = CoroutineScope(Dispatchers.Main).launch {
-            val dialog =  ProgressDialog.createProgressDialog(activity as Activity)
+            val dialog =  ProgressDialog.createProgressDialog(requireActivity())
             val bitmapList = ImageManager.imageResize(newList)
             dialog.dismiss()
             adapter.updateAdapter(bitmapList, needClear)
@@ -78,15 +102,15 @@ class ImageListFrag(
         addImageItem = toolbar.menu.findItem(R.id.id_add_image)
 
         toolbar.setNavigationOnClickListener {
-            activity?.supportFragmentManager?.beginTransaction()
-                ?.remove(this@ImageListFrag)
-                ?.commit()
+            showInterAd()
         }
+
         deleteItem.setOnMenuItemClickListener {
             adapter.updateAdapter(ArrayList(), true)
             addImageItem?.isVisible = true
             true
         }
+
         addImageItem?.setOnMenuItemClickListener {
             val imageCount = ImagePicker.MAX_IMAGE_COUNT - adapter.mainArray.size
             ImagePicker.getImages(activity as AppCompatActivity, imageCount, ImagePicker.REQUEST_CODE_GET_IMAGES)
