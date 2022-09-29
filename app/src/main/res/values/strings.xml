@@ -45,5 +45,10 @@
     <!-- Edit Activity -->
     <string name="select_country">*Выберите страну</string>
     <string name="select_city">*Выберите город</string>
+    <string name="country">Страна</string>
+    <string name="city">Город</string>
+    <string name="index">Индекс</string>
+    <string name="phone">Телефон</string>
+    <string name="phone_number">Номер телефона</string>
     <string name="no_country_selected">Страна не выбрана! Пожалуйста, выберите страну.</string>
 </resources>

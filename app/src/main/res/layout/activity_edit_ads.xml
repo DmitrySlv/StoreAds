@@ -5,6 +5,7 @@
     android:id="@+id/placeHolder"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/gray_dark"
     tools:context=".activities.EditAdsActivity">
 
     <ScrollView
@@ -19,71 +20,200 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="5dp"
             android:orientation="vertical">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp">
+                android:layout_height="match_parent"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="5dp">
 
-                <androidx.viewpager2.widget.ViewPager2
-                    android:id="@+id/vpImages"
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    android:background="@android:drawable/editbox_background_normal"
-                    android:padding="10dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <ImageButton
-                    android:id="@+id/imageButton3"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:onClick="onClickGetImages"
-                    android:src="@drawable/ic_edit_ads"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <ProgressBar
-                    android:id="@+id/pBarLoad"
-                    style="?android:attr/progressBarStyle"
-                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:visibility="gone"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="@+id/vpImages"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/vpImages" />
+                    android:layout_margin="5dp">
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    <androidx.viewpager2.widget.ViewPager2
+                        android:id="@+id/vpImages"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:padding="5dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/tvCountry"
+                    <ImageButton
+                        android:id="@+id/imageButton3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:background="@drawable/edit_image_button_selector"
+                        android:onClick="onClickGetImages"
+                        android:padding="5dp"
+                        android:src="@drawable/ic_edit_ads"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ProgressBar
+                        android:id="@+id/pBarLoad"
+                        style="?android:attr/progressBarStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/vpImages"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/vpImages" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:background="@android:drawable/editbox_background_normal"
-                android:gravity="center"
-                android:onClick="onClickSelectCountry"
-                android:padding="10dp"
-                android:text="@string/select_country"
-                android:textColor="@color/black" />
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="5dp">
 
-            <TextView
-                android:id="@+id/tvCity"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:background="@android:drawable/editbox_background_normal"
-                android:gravity="center"
-                android:onClick="onClickSelectCity"
-                android:padding="10dp"
-                android:text="@string/select_city"
-                android:textColor="@color/black" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvTitleCountry"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:text="@string/country"
+                        android:textColor="@color/green_main"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvCountry"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:onClick="onClickSelectCountry"
+                        android:padding="10dp"
+                        android:text="@string/select_country"
+                        android:textColor="@color/black"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:id="@+id/divider1"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:background="@color/green_main"
+                        android:orientation="horizontal">
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/tvTitleCity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:text="@string/city"
+                        android:textColor="@color/green_main"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvCity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:onClick="onClickSelectCity"
+                        android:padding="10dp"
+                        android:text="@string/select_city"
+                        android:textColor="@color/black"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:id="@+id/divider2"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:background="@color/green_main"
+                        android:orientation="horizontal">
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/tvTitlePhone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:text="@string/phone"
+                        android:textColor="@color/green_main"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/edPhone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:ems="10"
+                        android:hint="@string/phone_number"
+                        android:inputType="number"
+                        android:padding="10dp"
+                        android:textColorHint="@color/gray_dark"
+                        android:textSize="18sp" />
+
+                    <LinearLayout
+                        android:id="@+id/divider3"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:background="@color/green_main"
+                        android:orientation="horizontal">
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/tvTitleIndex"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:text="@string/index"
+                        android:textColor="@color/green_main"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/edIndex"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:ems="10"
+                        android:hint="@string/index"
+                        android:inputType="number"
+                        android:padding="10dp"
+                        android:textColorHint="@color/gray_dark"
+                        android:textSize="18sp" />
+
+                    <LinearLayout
+                        android:id="@+id/divider4"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="5dp"
+                        android:background="@color/green_main"
+                        android:orientation="horizontal">
+
+                    </LinearLayout>
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
 
         </LinearLayout>
     </ScrollView>
