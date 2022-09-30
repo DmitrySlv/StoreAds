@@ -15,6 +15,7 @@ import com.ds_create.storeads.databinding.ActivityEditAdsBinding
 import com.ds_create.storeads.utils.dialogs.DialogSpinnerHelper
 import com.ds_create.storeads.fragments.FragmentCloseInterface
 import com.ds_create.storeads.fragments.ImageListFrag
+import com.ds_create.storeads.models.AdModel
 import com.ds_create.storeads.utils.CityHelper
 import com.ds_create.storeads.utils.ImageManager
 import com.ds_create.storeads.utils.ImagePicker
@@ -28,6 +29,7 @@ class EditAdsActivity : AppCompatActivity(), FragmentCloseInterface {
     lateinit var imageAdapter: ImageAdapter
     var chooseImageFrag: ImageListFrag? = null
     var editImagePos = 0
+    private val dbManager = DbManager()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -102,8 +104,26 @@ class EditAdsActivity : AppCompatActivity(), FragmentCloseInterface {
     }
 
     fun onClickPublish(view: View) {
-        val dbManager = DbManager()
-        dbManager.publishAd()
+
+        dbManager.publishAd(fillAd())
+    }
+
+    private fun fillAd(): AdModel {
+        val ad: AdModel
+        binding.apply {
+            ad = AdModel(
+                tvCountry.text.toString(),
+                tvCity.text.toString(),
+                edPhone.text.toString(),
+                edIndex.text.toString(),
+                checkBoxWithSend.isChecked.toString(),
+                tvCat.text.toString(),
+                edPrice.text.toString(),
+                edDescription.text.toString(),
+                dbManager.database.push().key
+            )
+        }
+        return ad
     }
 
     override fun onFragClose(list: ArrayList<Bitmap>) {
