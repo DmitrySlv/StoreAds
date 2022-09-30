@@ -11,6 +11,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import com.ds_create.storeads.R
+import com.ds_create.storeads.data.DbManager
 import com.ds_create.storeads.databinding.ActivityMainBinding
 import com.ds_create.storeads.utils.dialoghelper.DialogHelper
 import com.ds_create.storeads.utils.dialoghelper.GoogleAccConst
@@ -26,11 +27,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private val dialogHelper = DialogHelper(this)
     val mAuth = FirebaseAuth.getInstance()
     private lateinit var tvAccount: TextView
+    private val dbManager = DbManager()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         init()
+        dbManager.readDataFromDb()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
