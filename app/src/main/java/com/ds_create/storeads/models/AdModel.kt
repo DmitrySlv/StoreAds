@@ -1,4 +1,4 @@
-package com.ds_create.storeads.data
+package com.ds_create.storeads.models
 
 data class AdModel(
     val country: String? = null,

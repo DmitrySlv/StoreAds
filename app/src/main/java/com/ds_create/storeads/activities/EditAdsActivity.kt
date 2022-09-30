@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.ds_create.storeads.R
 import com.ds_create.storeads.adapters.ImageAdapter
+import com.ds_create.storeads.data.DbManager
 import com.ds_create.storeads.databinding.ActivityEditAdsBinding
 import com.ds_create.storeads.utils.dialogs.DialogSpinnerHelper
 import com.ds_create.storeads.fragments.FragmentCloseInterface
@@ -98,6 +99,11 @@ class EditAdsActivity : AppCompatActivity(), FragmentCloseInterface {
         openChooseImageFrag(null)
             chooseImageFrag?.updateAdapterFromEdit(imageAdapter.mainArray)
         }
+    }
+
+    fun onClickPublish(view: View) {
+        val dbManager = DbManager()
+        dbManager.publishAd()
     }
 
     override fun onFragClose(list: ArrayList<Bitmap>) {
