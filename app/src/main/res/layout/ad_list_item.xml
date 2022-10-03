@@ -25,16 +25,25 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center_horizontal"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingBottom="5dp">
 
             <TextView
                 android:id="@+id/tvTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
                 android:layout_marginTop="10dp"
+                android:background="@color/color_red"
+                android:fontFamily="sans-serif-condensed"
+                android:paddingStart="10dp"
+                android:paddingTop="5dp"
+                android:paddingEnd="10dp"
+                android:paddingBottom="5dp"
                 android:text="TextView"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -42,12 +51,13 @@
 
             <ImageView
                 android:id="@+id/mainImage"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="5dp"
-                tools:srcCompat="@tools:sample/backgrounds/scenic" />
+                android:background="@color/gray"
+                tools:srcCompat="@drawable/ic_def_image" />
 
             <TextView
                 android:id="@+id/tvDescription"
@@ -56,15 +66,79 @@
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="5dp"
+                android:fontFamily="sans-serif-condensed"
                 android:gravity="center_horizontal"
-                android:text="TextView" />
+                android:text="TextView"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/tvPrice"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:text="TextView" />
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginBottom="10dp"
+                android:gravity="right"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvPriceDescription"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:background="@color/yellow"
+                    android:fontFamily="sans-serif-condensed"
+                    android:paddingStart="10dp"
+                    android:paddingTop="5dp"
+                    android:paddingEnd="5dp"
+                    android:paddingBottom="5dp"
+                    android:text="@string/price_desc"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:background="@color/yellow"
+                    android:fontFamily="sans-serif-condensed"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:text="3200"
+                    android:textColor="@color/color_red"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvCurrency"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:background="@color/yellow"
+                    android:fontFamily="sans-serif-condensed"
+                    android:paddingStart="3dp"
+                    android:paddingTop="5dp"
+                    android:paddingEnd="10dp"
+                    android:paddingBottom="5dp"
+                    android:text="@string/currency_rub"
+                    android:textColor="@color/color_red"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/devider1"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:background="@color/gray_dark"
+                android:orientation="horizontal"></LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -83,18 +157,23 @@
                         android:id="@+id/imViewCounter"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
                         app:srcCompat="@drawable/ic_eye" />
 
                     <TextView
                         android:id="@+id/tvViewCounter"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="TextView" />
+                        android:layout_marginStart="5dp"
+                        android:fontFamily="sans-serif-condensed"
+                        android:text="1000"
+                        android:textColor="@color/black" />
 
                     <ImageButton
                         android:id="@+id/ibFav"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
                         android:background="@android:color/transparent"
                         app:srcCompat="@drawable/ic_fav_normal" />
 
@@ -102,7 +181,10 @@
                         android:id="@+id/tvFavCounter"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="TextView" />
+                        android:layout_marginStart="5dp"
+                        android:fontFamily="sans-serif-condensed"
+                        android:text="300"
+                        android:textColor="@color/black" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -124,6 +206,7 @@
                         android:id="@+id/ibDeleteAd"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginEnd="16dp"
                         android:background="@android:color/transparent"
                         app:srcCompat="@drawable/ic_delete_ad" />
                 </LinearLayout>

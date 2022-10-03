@@ -29,4 +29,10 @@
     <style name="ActionBarCustom">
         <item name="android:textColorSecondary">@color/green_main</item>
     </style>
+
+    <!-- Settings for tool bar (дает единый цвет для всех иконок в toolbar кроме векторных картинок и шрифт)-->
+    <style name="ToolbarMainStyle" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorControlNormal">@color/green_main</item>
+        <item name="fontFamily">sans-serif-condensed</item>
+    </style>
 </resources>

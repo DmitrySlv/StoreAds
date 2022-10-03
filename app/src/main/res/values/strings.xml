@@ -63,4 +63,7 @@
     <string name="with_send">С отправкой</string>
     <string name="send">Отправка</string>
     <string name="publish">Опубликовать</string>
+    <!-- Ad List Item -->
+    <string name="price_desc">Цена:</string>
+    <string name="currency_rub">руб</string>
 </resources>
