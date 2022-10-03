@@ -1,6 +1,5 @@
 package com.ds_create.storeads.data
 
-import android.util.Log
 import com.ds_create.storeads.models.AdModel
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
@@ -24,9 +23,14 @@ class DbManager {
         database.addListenerForSingleValueEvent(object: ValueEventListener {
 
             override fun onDataChange(snapshot: DataSnapshot) {
+                val adArray = ArrayList<AdModel>()
                 for (item in snapshot.children) {
-                    val ad = item.children.iterator().next().child("ad").getValue(AdModel::class.java)
-                    Log.d("MyLog", "Data: ${ad?.country}")
+                    val ad = item.children.iterator().next()
+                            .child("ad")
+                            .getValue(AdModel::class.java)
+                    if (ad != null) {
+                        adArray.add(ad)
+                    }
                 }
             }
 
