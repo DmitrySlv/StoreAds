@@ -53,6 +53,8 @@
     <string name="phone_number">Введите номер телефона</string>
     <string name="no_country_selected">Страна не выбрана! Пожалуйста, выберите страну.</string>
     <string name="category">*Категория</string>
+    <string name="title">*Заголовок объявления</string>
+    <string name="title_hint">Укажите заголовок</string>
     <string name="select_category">Выбирите категорию</string>
     <string name="price">*Цена</string>
     <string name="price_hint">Укажите цену</string>

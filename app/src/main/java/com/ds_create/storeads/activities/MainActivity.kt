@@ -10,9 +10,13 @@ import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.ds_create.storeads.R
+import com.ds_create.storeads.adapters.AdsRcAdapter
 import com.ds_create.storeads.data.DbManager
+import com.ds_create.storeads.data.ReadDataCallback
 import com.ds_create.storeads.databinding.ActivityMainBinding
+import com.ds_create.storeads.models.AdModel
 import com.ds_create.storeads.utils.dialoghelper.DialogHelper
 import com.ds_create.storeads.utils.dialoghelper.GoogleAccConst
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -21,18 +25,21 @@ import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 
-class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
+ReadDataCallback {
 
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
     private val dialogHelper = DialogHelper(this)
     val mAuth = FirebaseAuth.getInstance()
     private lateinit var tvAccount: TextView
-    private val dbManager = DbManager()
+    private val dbManager = DbManager(this)
+    private val adsRcAdapter = AdsRcAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         init()
+        initRcView()
         dbManager.readDataFromDb()
     }
 
@@ -78,6 +85,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         tvAccount = navView.getHeaderView(0).findViewById(R.id.tvAccountEmail)
     }
 
+    private fun initRcView() = with(binding) {
+        mainContent.rcViewItems.layoutManager = LinearLayoutManager(this@MainActivity)
+        mainContent.rcViewItems.adapter = adsRcAdapter
+    }
+
     override fun onStart() {
         super.onStart()
         uiUpdate(mAuth.currentUser)
@@ -116,5 +128,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         } else {
             user.email
         }
+    }
+
+    override fun readData(list: List<AdModel>) {
+        adsRcAdapter.updateAdapter(list)
     }
 }
