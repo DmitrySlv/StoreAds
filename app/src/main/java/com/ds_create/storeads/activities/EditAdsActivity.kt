@@ -4,9 +4,9 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
 import androidx.appcompat.app.AppCompatActivity
 import com.ds_create.storeads.R
 import com.ds_create.storeads.adapters.ImageAdapter
@@ -17,9 +17,7 @@ import com.ds_create.storeads.fragments.FragmentCloseInterface
 import com.ds_create.storeads.fragments.ImageListFrag
 import com.ds_create.storeads.models.AdModel
 import com.ds_create.storeads.utils.CityHelper
-import com.ds_create.storeads.utils.ImageManager
 import com.ds_create.storeads.utils.ImagePicker
-import com.fxn.pix.Pix
 import com.fxn.utility.PermUtil
 
 class EditAdsActivity : AppCompatActivity(), FragmentCloseInterface {
@@ -30,6 +28,8 @@ class EditAdsActivity : AppCompatActivity(), FragmentCloseInterface {
     var chooseImageFrag: ImageListFrag? = null
     var editImagePos = 0
     private val dbManager = DbManager(null)
+    var launcherMultiSelectImages: ActivityResultLauncher<Intent>? = null
+    var launcherSingleSelectImage: ActivityResultLauncher<Intent>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,11 +40,8 @@ class EditAdsActivity : AppCompatActivity(), FragmentCloseInterface {
     private fun init() {
         imageAdapter = ImageAdapter()
         binding.vpImages.adapter = imageAdapter
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        ImagePicker.showSelectedImages(resultCode, requestCode, data, this)
+        launcherMultiSelectImages = ImagePicker.getLauncherForMultiSelectImages(this)
+        launcherSingleSelectImage = ImagePicker.getLauncherForSingleImage(this)
     }
 
     override fun onRequestPermissionsResult(
@@ -57,7 +54,7 @@ class EditAdsActivity : AppCompatActivity(), FragmentCloseInterface {
             PermUtil.REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS -> {
 
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    ImagePicker.getImages(this, 3, ImagePicker.REQUEST_CODE_GET_IMAGES)
+                   // ImagePicker.getOptions(this, 3, ImagePicker.REQUEST_CODE_GET_IMAGES)
                 } else {
                     Toast.makeText(this,
                         "Approve permissions to open Pix ImagePicker",
@@ -96,7 +93,7 @@ class EditAdsActivity : AppCompatActivity(), FragmentCloseInterface {
 
     fun onClickGetImages(view: View) {
         if (imageAdapter.mainArray.size == 0) {
-        ImagePicker.getImages(this, 3, ImagePicker.REQUEST_CODE_GET_IMAGES)
+        ImagePicker.launcher(this, launcherMultiSelectImages, 3)
     } else {
         openChooseImageFrag(null)
             chooseImageFrag?.updateAdapterFromEdit(imageAdapter.mainArray)

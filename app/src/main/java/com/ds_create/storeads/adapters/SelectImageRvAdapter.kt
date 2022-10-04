@@ -4,10 +4,6 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.ProgressBar
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.ds_create.storeads.R
 import com.ds_create.storeads.activities.EditAdsActivity
@@ -55,9 +51,8 @@ ItemTouchMoveCallback.ItemTouchAdapter {
         fun setData(bitmap: Bitmap) = with(binding) {
 
             imEditImage.setOnClickListener {
-                ImagePicker.getImages(
-                    context as EditAdsActivity, 1,
-                    ImagePicker.REQUEST_CODE_GET_SINGLE_IMAGE
+                ImagePicker.launcher(
+                    context as EditAdsActivity, context.launcherSingleSelectImage, 1
                 )
                 context.editImagePos = adapterPosition
             }
