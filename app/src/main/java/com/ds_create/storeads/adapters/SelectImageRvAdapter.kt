@@ -52,7 +52,9 @@ ItemTouchMoveCallback.ItemTouchAdapter {
 
             imEditImage.setOnClickListener {
                 ImagePicker.launcher(
-                    context as EditAdsActivity, context.launcherSingleSelectImage, 1
+                    context as EditAdsActivity,
+                    context.launcherSingleSelectImage,
+                    ImagePicker.SINGLE_IMAGE_COUNTER
                 )
                 context.editImagePos = adapterPosition
             }

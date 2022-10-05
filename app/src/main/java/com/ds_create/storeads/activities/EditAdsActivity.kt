@@ -93,7 +93,7 @@ class EditAdsActivity : AppCompatActivity(), FragmentCloseInterface {
 
     fun onClickGetImages(view: View) {
         if (imageAdapter.mainArray.size == 0) {
-        ImagePicker.launcher(this, launcherMultiSelectImages, 3)
+        ImagePicker.launcher(this, launcherMultiSelectImages, ImagePicker.MULTI_IMAGE_COUNTER)
     } else {
         openChooseImageFrag(null)
             chooseImageFrag?.updateAdapterFromEdit(imageAdapter.mainArray)
@@ -118,7 +118,8 @@ class EditAdsActivity : AppCompatActivity(), FragmentCloseInterface {
                 edTitle.text.toString(),
                 edPrice.text.toString(),
                 edDescription.text.toString(),
-                dbManager.database.push().key
+                dbManager.database.push().key,
+                dbManager.auth.uid
             )
         }
         return ad
