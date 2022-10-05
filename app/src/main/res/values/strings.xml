@@ -66,4 +66,9 @@
     <!-- Ad List Item -->
     <string name="price_desc">Цена:</string>
     <string name="currency_rub">руб</string>
+    <!-- bottom_main_menu -->
+    <string name="new_ad">New Ad</string>
+    <string name="my_ads">My Ads</string>
+    <string name="favs">Favourites</string>
+    <string name="home">Home</string>
 </resources>

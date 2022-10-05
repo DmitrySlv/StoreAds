@@ -44,19 +44,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         initRcView()
         initViewModel()
         firebaseViewModel.loadAllAds()
+        bottomMenuOnClick()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.main_menu, menu)
-        return super.onCreateOptionsMenu(menu)
+    override fun onStart() {
+        super.onStart()
+        uiUpdate(mAuth.currentUser)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.id_new_ads) {
-            val intent = Intent(this, EditAdsActivity::class.java)
-            startActivity(intent)
-        }
-        return super.onOptionsItemSelected(item)
+    override fun onResume() {
+        super.onResume()
+        binding.mainContent.bNavView.selectedItemId = R.id.id_home
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -99,11 +97,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         mainContent.rcViewItems.adapter = adsRcAdapter
     }
 
-    override fun onStart() {
-        super.onStart()
-        uiUpdate(mAuth.currentUser)
-    }
-
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
        when (item.itemId) {
            R.id.my_ads -> {
@@ -136,6 +129,27 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             resources.getString(R.string.not_reg)
         } else {
             user.email
+        }
+    }
+
+    private fun bottomMenuOnClick() = with(binding) {
+        mainContent.bNavView.setOnNavigationItemSelectedListener { item->
+            when (item.itemId) {
+                R.id.id_new_ads -> {
+                    val intent = Intent(this@MainActivity, EditAdsActivity::class.java)
+                    startActivity(intent)
+                }
+                R.id.id_my_ads -> {
+                    Toast.makeText(this@MainActivity, "id_my_ads", Toast.LENGTH_LONG).show()
+                }
+                R.id.id_favs -> {
+                    Toast.makeText(this@MainActivity, "id_favs", Toast.LENGTH_LONG).show()
+                }
+                R.id.id_home -> {
+                    Toast.makeText(this@MainActivity, "id_home", Toast.LENGTH_LONG).show()
+                }
+            }
+            true
         }
     }
 }
