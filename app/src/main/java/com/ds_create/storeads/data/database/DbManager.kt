@@ -1,4 +1,4 @@
-package com.ds_create.storeads.data
+package com.ds_create.storeads.data.database
 
 import com.ds_create.storeads.models.AdModel
 import com.google.firebase.auth.ktx.auth
@@ -8,7 +8,7 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
-class DbManager(private val readCallback: ReadDataCallback?) {
+class DbManager {
     val database = Firebase.database.getReference("main")
     val auth = Firebase.auth
 
@@ -19,7 +19,7 @@ class DbManager(private val readCallback: ReadDataCallback?) {
         }
     }
 
-    fun readDataFromDb() {
+    fun readDataFromDb(readCallback: ReadDataCallback?) {
         database.addListenerForSingleValueEvent(object: ValueEventListener {
 
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -34,9 +34,12 @@ class DbManager(private val readCallback: ReadDataCallback?) {
                 }
                 readCallback?.readData(adArray)
             }
-
             override fun onCancelled(error: DatabaseError) {
             }
         })
+    }
+
+    interface ReadDataCallback {
+        fun readData(list: ArrayList<AdModel>)
     }
 }

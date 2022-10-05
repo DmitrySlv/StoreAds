@@ -10,7 +10,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.appcompat.app.AppCompatActivity
 import com.ds_create.storeads.R
 import com.ds_create.storeads.adapters.ImageAdapter
-import com.ds_create.storeads.data.DbManager
+import com.ds_create.storeads.data.database.DbManager
 import com.ds_create.storeads.databinding.ActivityEditAdsBinding
 import com.ds_create.storeads.utils.dialogs.DialogSpinnerHelper
 import com.ds_create.storeads.fragments.FragmentCloseInterface
@@ -27,7 +27,7 @@ class EditAdsActivity : AppCompatActivity(), FragmentCloseInterface {
     lateinit var imageAdapter: ImageAdapter
     var chooseImageFrag: ImageListFrag? = null
     var editImagePos = 0
-    private val dbManager = DbManager(null)
+    private val dbManager = DbManager()
     var launcherMultiSelectImages: ActivityResultLauncher<Intent>? = null
     var launcherSingleSelectImage: ActivityResultLauncher<Intent>? = null
 

@@ -10,15 +10,14 @@ import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ds_create.storeads.R
 import com.ds_create.storeads.adapters.AdsRcAdapter
-import com.ds_create.storeads.data.DbManager
-import com.ds_create.storeads.data.ReadDataCallback
 import com.ds_create.storeads.databinding.ActivityMainBinding
-import com.ds_create.storeads.models.AdModel
 import com.ds_create.storeads.utils.dialoghelper.DialogHelper
 import com.ds_create.storeads.utils.dialoghelper.GoogleAccConst
+import com.ds_create.storeads.viewModel.FirebaseViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.common.api.ApiException
 import com.google.android.material.navigation.NavigationView
@@ -26,14 +25,16 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
-class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
-ReadDataCallback {
+class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
+    private val firebaseViewModel by lazy {
+        ViewModelProvider(this)[FirebaseViewModel::class.java]
+    }
+
     private val dialogHelper = DialogHelper(this)
     val mAuth = Firebase.auth
     private lateinit var tvAccount: TextView
-    private val dbManager = DbManager(this)
     private val adsRcAdapter = AdsRcAdapter(mAuth)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,7 +42,8 @@ ReadDataCallback {
         setContentView(binding.root)
         init()
         initRcView()
-        dbManager.readDataFromDb()
+        initViewModel()
+        firebaseViewModel.loadAllAds()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -84,6 +86,12 @@ ReadDataCallback {
         toggle.syncState()
         navView.setNavigationItemSelectedListener(this@MainActivity)
         tvAccount = navView.getHeaderView(0).findViewById(R.id.tvAccountEmail)
+    }
+
+    private fun initViewModel() {
+        firebaseViewModel.liveAdsData.observe(this) {
+            adsRcAdapter.updateAdapter(it)
+        }
     }
 
     private fun initRcView() = with(binding) {
@@ -129,9 +137,5 @@ ReadDataCallback {
         } else {
             user.email
         }
-    }
-
-    override fun readData(list: List<AdModel>) {
-        adsRcAdapter.updateAdapter(list)
     }
 }
