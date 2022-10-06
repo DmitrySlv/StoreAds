@@ -1,5 +1,7 @@
 package com.ds_create.storeads.models
 
+import java.io.Serializable
+
 data class AdModel(
     val country: String? = null,
     val city: String? = null,
@@ -12,4 +14,4 @@ data class AdModel(
     val description: String? = null,
     val key: String? = null,
     val uid: String? = null
-)
+): Serializable

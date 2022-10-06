@@ -35,6 +35,7 @@ class EditAdsActivity : AppCompatActivity(), FragmentCloseInterface {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         init()
+        checkEditState()
     }
 
     private fun init() {
@@ -42,6 +43,28 @@ class EditAdsActivity : AppCompatActivity(), FragmentCloseInterface {
         binding.vpImages.adapter = imageAdapter
         launcherMultiSelectImages = ImagePicker.getLauncherForMultiSelectImages(this)
         launcherSingleSelectImage = ImagePicker.getLauncherForSingleImage(this)
+    }
+
+    private fun checkEditState() {
+        if (isEditState()) {
+            fillViews(intent.getSerializableExtra(MainActivity.ADS_DATA) as AdModel)
+        }
+    }
+
+    private fun isEditState(): Boolean {
+        return intent.getBooleanExtra(MainActivity.EDIT_STATE, false)
+    }
+
+    private fun fillViews(ad: AdModel) = with(binding) {
+        tvCountry.text = ad.country
+        tvCity.text = ad.city
+        edPhone.setText(ad.phone)
+        edIndex.setText(ad.index)
+        checkBoxWithSend.isChecked = ad.withSend.toBoolean()
+        tvCat.text = ad.category
+        tvTitle.text = ad.title
+        edPrice.setText(ad.price)
+        edDescription.setText(ad.description)
     }
 
     override fun onRequestPermissionsResult(
