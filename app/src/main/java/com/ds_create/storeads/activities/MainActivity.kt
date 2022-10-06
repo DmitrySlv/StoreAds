@@ -102,11 +102,20 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
            R.id.my_ads -> {
                Toast.makeText(this, "Pressed id_my_ads", Toast.LENGTH_LONG).show()
            }
+           R.id.my_favourite -> {
+               Toast.makeText(this, "Pressed id_my_favourite", Toast.LENGTH_LONG).show()
+           }
            R.id.id_car -> {
                Toast.makeText(this, "Pressed id_car", Toast.LENGTH_LONG).show()
            }
            R.id.id_pc -> {
                Toast.makeText(this, "Pressed id_pc", Toast.LENGTH_LONG).show()
+           }
+           R.id.id_smart -> {
+               Toast.makeText(this, "Pressed id_smartphone", Toast.LENGTH_LONG).show()
+           }
+           R.id.id_dm -> {
+               Toast.makeText(this, "Pressed id_dm", Toast.LENGTH_LONG).show()
            }
            R.id.sign_up -> {
                dialogHelper.createSignDialog(DialogHelper.SIGN_UP_STATE)
@@ -140,13 +149,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     startActivity(intent)
                 }
                 R.id.id_my_ads -> {
-                    Toast.makeText(this@MainActivity, "id_my_ads", Toast.LENGTH_LONG).show()
+                    firebaseViewModel.loadMyAds()
+                    mainContent.toolbar.title = getString(R.string.my_ads_title)
                 }
                 R.id.id_favs -> {
                     Toast.makeText(this@MainActivity, "id_favs", Toast.LENGTH_LONG).show()
                 }
                 R.id.id_home -> {
-                    Toast.makeText(this@MainActivity, "id_home", Toast.LENGTH_LONG).show()
+                   firebaseViewModel.loadAllAds()
+                    mainContent.toolbar.title = getString(R.string.def_title)
                 }
             }
             true

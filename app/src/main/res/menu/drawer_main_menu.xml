@@ -8,6 +8,8 @@
 
             <item android:title="@string/ad_my_ads"
                 android:id="@+id/my_ads"/>
+            <item android:title="@string/ad_my_favourite"
+                android:id="@+id/my_favourite"/>
             <item android:title="@string/ad_car"
                 android:id="@+id/id_car"/>
             <item android:title="@string/ad_pc"

@@ -6,10 +6,13 @@
     <!-- Menu Drawer Strings -->
     <string name="ad_cat1">Объявления</string>
     <string name="ad_my_ads">Мои объявления</string>
+    <string name="ad_my_favourite">Избранное</string>
+    <string name="ad_def">Разное</string>
     <string name="ad_car">Машины</string>
     <string name="ad_pc">Компьютеры</string>
     <string name="ad_smartphone">Смартфоны</string>
     <string name="ad_dm">Бытовая техника</string>
+
     <string name="ad_cat2">Аккаунт</string>
     <string name="aс_sign_up">Регистрация</string>
     <string name="aс_sign_in">Вход</string>
@@ -66,9 +69,13 @@
     <!-- Ad List Item -->
     <string name="price_desc">Цена:</string>
     <string name="currency_rub">руб</string>
-    <!-- bottom_main_menu -->
+    <!-- Toolbar title-->
+    <string name="def_title">Разное</string>
+    <string name="my_ads_title">Мои объявления</string>
+    <!-- Bottom_main_menu -->
     <string name="new_ad">New Ad</string>
     <string name="my_ads">My Ads</string>
     <string name="favs">Favourites</string>
     <string name="home">Home</string>
+
 </resources>

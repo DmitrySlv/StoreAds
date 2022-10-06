@@ -4,6 +4,7 @@ import com.ds_create.storeads.models.AdModel
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.Query
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
@@ -19,8 +20,18 @@ class DbManager {
         }
     }
 
-    fun readDataFromDb(readCallback: ReadDataCallback?) {
-        database.addListenerForSingleValueEvent(object: ValueEventListener {
+    fun getMyAds(readCallback: ReadDataCallback?) {
+        val query = database.orderByChild(auth.uid + "/ad/uid").equalTo(auth.uid)
+        readDataFromDb(readCallback, query)
+    }
+
+    fun getAllAds(readCallback: ReadDataCallback?) {
+        val query = database.orderByChild(auth.uid + "/ad/price")
+        readDataFromDb(readCallback, query)
+    }
+
+   private fun readDataFromDb(readCallback: ReadDataCallback?, query: Query) {
+        query.addListenerForSingleValueEvent(object: ValueEventListener {
 
             override fun onDataChange(snapshot: DataSnapshot) {
                 val adArray = ArrayList<AdModel>()
