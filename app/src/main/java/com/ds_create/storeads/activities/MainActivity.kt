@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.ds_create.storeads.R
 import com.ds_create.storeads.adapters.AdsRcAdapter
 import com.ds_create.storeads.databinding.ActivityMainBinding
+import com.ds_create.storeads.models.AdModel
 import com.ds_create.storeads.utils.dialoghelper.DialogHelper
 import com.ds_create.storeads.utils.dialoghelper.GoogleAccConst
 import com.ds_create.storeads.viewModel.FirebaseViewModel
@@ -25,7 +26,8 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
-class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
+AdsRcAdapter.DeleteItemListener {
 
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
     private val firebaseViewModel by lazy {
@@ -162,6 +164,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
             true
         }
+    }
+
+    override fun onDeleteItem(ad: AdModel) {
+        firebaseViewModel.deleteItem(ad)
     }
 
     companion object {

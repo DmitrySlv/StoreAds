@@ -1,6 +1,5 @@
 package com.ds_create.storeads.data.database
 
-import android.widget.Toast
 import com.ds_create.storeads.R
 import com.ds_create.storeads.activities.EditAdsActivity
 import com.ds_create.storeads.models.AdModel
@@ -13,18 +12,18 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
-class DbManager() {
+class DbManager {
     val database = Firebase.database.getReference("main")
     val auth = Firebase.auth
     private val act: EditAdsActivity? = null
 
-    fun publishAd(ad: AdModel, finishWorkListener: FinishWorkListener) {
+    fun publishAd(ad: AdModel, listener: FinishWorkListener) {
         if (auth.uid != null) {
             database.child(ad.key ?: "empty")
                 .child(auth.uid!!).child("ad").setValue(ad)
                 .addOnCompleteListener {
                     if (it.isSuccessful) {
-                        finishWorkListener.onFinishWork()
+                        listener.onFinishWork()
                     } else {
                         throw FirebaseException(act?.getString(R.string.firebase_error_load_data).toString())
                     }
@@ -40,6 +39,19 @@ class DbManager() {
     fun getAllAds(readCallback: ReadDataCallback?) {
         val query = database.orderByChild(auth.uid + "/ad/price")
         readDataFromDb(readCallback, query)
+    }
+
+    fun deleteAd(ad: AdModel, listener: FinishWorkListener) {
+        if (ad.key == null || ad.uid == null) {
+            return
+        }
+        database.child(ad.key).child(ad.uid).removeValue().addOnCompleteListener {
+            if (it.isSuccessful) {
+                listener.onFinishWork()
+            } else {
+                throw FirebaseException(act?.getString(R.string.firebase_error_remove_ad).toString())
+            }
+        }
     }
 
    private fun readDataFromDb(readCallback: ReadDataCallback?, query: Query) {

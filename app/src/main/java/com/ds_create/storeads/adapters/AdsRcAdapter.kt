@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.View.OnClickListener
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.ds_create.storeads.activities.EditAdsActivity
@@ -32,9 +33,10 @@ class AdsRcAdapter(private val activity: MainActivity): RecyclerView.Adapter<Ads
     }
 
     fun updateAdapter(newList: List<AdModel>) {
+        val diffResult = DiffUtil.calculateDiff(DiffUtilCallback(adsArray, newList))
+        diffResult.dispatchUpdatesTo(this)
         adsArray.clear()
         adsArray.addAll(newList)
-        notifyDataSetChanged()
     }
 
     class AdsHolder(
@@ -49,6 +51,9 @@ class AdsRcAdapter(private val activity: MainActivity): RecyclerView.Adapter<Ads
             showEditPanel(isOwner(ad))
 
             ibEditAd.setOnClickListener(onClickEdit(ad))
+            ibDeleteAd.setOnClickListener {
+                activity.onDeleteItem(ad)
+            }
         }
 
         private fun onClickEdit(ad: AdModel): OnClickListener {
@@ -72,5 +77,9 @@ class AdsRcAdapter(private val activity: MainActivity): RecyclerView.Adapter<Ads
                 binding.editPanel.visibility = View.GONE
             }
         }
+    }
+
+    interface DeleteItemListener {
+        fun onDeleteItem(ad: AdModel)
     }
 }
