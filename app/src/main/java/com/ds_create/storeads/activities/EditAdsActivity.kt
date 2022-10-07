@@ -30,6 +30,8 @@ class EditAdsActivity : AppCompatActivity(), FragmentCloseInterface {
     private val dbManager = DbManager()
     var launcherMultiSelectImages: ActivityResultLauncher<Intent>? = null
     var launcherSingleSelectImage: ActivityResultLauncher<Intent>? = null
+    private var isEditState = false
+    private var ad: AdModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,8 +48,12 @@ class EditAdsActivity : AppCompatActivity(), FragmentCloseInterface {
     }
 
     private fun checkEditState() {
-        if (isEditState()) {
-            fillViews(intent.getSerializableExtra(MainActivity.ADS_DATA) as AdModel)
+        isEditState = isEditState()
+        if (isEditState) {
+            ad = intent.getSerializableExtra(MainActivity.ADS_DATA) as AdModel
+            ad?.let {
+                fillViewsFromFirebase(ad!!)
+            }
         }
     }
 
@@ -55,14 +61,14 @@ class EditAdsActivity : AppCompatActivity(), FragmentCloseInterface {
         return intent.getBooleanExtra(MainActivity.EDIT_STATE, false)
     }
 
-    private fun fillViews(ad: AdModel) = with(binding) {
+    private fun fillViewsFromFirebase(ad: AdModel) = with(binding) {
         tvCountry.text = ad.country
         tvCity.text = ad.city
         edPhone.setText(ad.phone)
         edIndex.setText(ad.index)
         checkBoxWithSend.isChecked = ad.withSend.toBoolean()
         tvCat.text = ad.category
-        tvTitle.text = ad.title
+        edTitle.setText(ad.title)
         edPrice.setText(ad.price)
         edDescription.setText(ad.description)
     }
@@ -124,8 +130,20 @@ class EditAdsActivity : AppCompatActivity(), FragmentCloseInterface {
     }
 
     fun onClickPublish(view: View) {
+        val adTemp = fillAd()
+        if (isEditState){
+            dbManager.publishAd(adTemp.copy(key = ad?.key), onPublishFinish())
+        } else {
+            dbManager.publishAd(adTemp, onPublishFinish())
+        }
+    }
 
-        dbManager.publishAd(fillAd())
+    private fun onPublishFinish(): DbManager.FinishWorkListener {
+        return object : DbManager.FinishWorkListener {
+            override fun onFinishWork() {
+                finish()
+            }
+        }
     }
 
     private fun fillAd(): AdModel {

@@ -66,6 +66,9 @@
     <string name="with_send">С отправкой</string>
     <string name="send">Отправка</string>
     <string name="publish">Опубликовать</string>
+    <!-- Db Manager -->
+    <string name="firebase_error_load_data">Не удалось загрузить данные.
+        Пожалуйста, попробуйте еще раз позднее</string>
     <!-- Ad List Item -->
     <string name="price_desc">Цена:</string>
     <string name="currency_rub">руб</string>

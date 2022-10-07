@@ -1,6 +1,10 @@
 package com.ds_create.storeads.data.database
 
+import android.widget.Toast
+import com.ds_create.storeads.R
+import com.ds_create.storeads.activities.EditAdsActivity
 import com.ds_create.storeads.models.AdModel
+import com.google.firebase.FirebaseException
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -9,14 +13,22 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
-class DbManager {
+class DbManager() {
     val database = Firebase.database.getReference("main")
     val auth = Firebase.auth
+    private val act: EditAdsActivity? = null
 
-    fun publishAd(ad: AdModel) {
+    fun publishAd(ad: AdModel, finishWorkListener: FinishWorkListener) {
         if (auth.uid != null) {
             database.child(ad.key ?: "empty")
                 .child(auth.uid!!).child("ad").setValue(ad)
+                .addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        finishWorkListener.onFinishWork()
+                    } else {
+                        throw FirebaseException(act?.getString(R.string.firebase_error_load_data).toString())
+                    }
+                }
         }
     }
 
@@ -52,5 +64,9 @@ class DbManager {
 
     interface ReadDataCallback {
         fun readData(list: ArrayList<AdModel>)
+    }
+
+    interface FinishWorkListener {
+        fun onFinishWork()
     }
 }
