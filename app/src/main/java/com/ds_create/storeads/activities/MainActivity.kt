@@ -3,7 +3,6 @@ package com.ds_create.storeads.activities
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
 import android.widget.Toast
@@ -27,7 +26,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
-AdsRcAdapter.DeleteItemListener {
+AdsRcAdapter.Listener {
 
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
     private val firebaseViewModel by lazy {
@@ -168,6 +167,10 @@ AdsRcAdapter.DeleteItemListener {
 
     override fun onDeleteItem(ad: AdModel) {
         firebaseViewModel.deleteItem(ad)
+    }
+
+    override fun onAdViewed(ad: AdModel) {
+        firebaseViewModel.adViewed(ad)
     }
 
     companion object {

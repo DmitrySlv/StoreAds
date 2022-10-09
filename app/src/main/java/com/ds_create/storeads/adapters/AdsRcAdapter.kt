@@ -12,19 +12,18 @@ import com.ds_create.storeads.activities.EditAdsActivity
 import com.ds_create.storeads.activities.MainActivity
 import com.ds_create.storeads.databinding.AdListItemBinding
 import com.ds_create.storeads.models.AdModel
-import com.google.firebase.auth.FirebaseAuth
 
-class AdsRcAdapter(private val activity: MainActivity): RecyclerView.Adapter<AdsRcAdapter.AdsHolder>() {
+class AdsRcAdapter(private val activity: MainActivity): RecyclerView.Adapter<AdsRcAdapter.AdHolder>() {
 
     private val adsArray = ArrayList<AdModel>()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AdsHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AdHolder {
         val binding = AdListItemBinding.inflate(
             LayoutInflater.from(parent.context), parent, false)
-        return AdsHolder(binding, activity)
+        return AdHolder(binding, activity)
     }
 
-    override fun onBindViewHolder(holder: AdsHolder, position: Int) {
+    override fun onBindViewHolder(holder: AdHolder, position: Int) {
         holder.setData(adsArray[position])
     }
 
@@ -39,7 +38,7 @@ class AdsRcAdapter(private val activity: MainActivity): RecyclerView.Adapter<Ads
         adsArray.addAll(newList)
     }
 
-    class AdsHolder(
+    class AdHolder(
         private val binding: AdListItemBinding,
         private val activity: MainActivity
         ): ViewHolder(binding.root) {
@@ -48,8 +47,12 @@ class AdsRcAdapter(private val activity: MainActivity): RecyclerView.Adapter<Ads
             tvDescription.text = ad.description
             tvPrice.text = ad.price
             tvTitle.text = ad.title
+            tvViewCounter.text = ad.viewsCounter
             showEditPanel(isOwner(ad))
 
+            itemView.setOnClickListener {
+                activity.onAdViewed(ad)
+            }
             ibEditAd.setOnClickListener(onClickEdit(ad))
             ibDeleteAd.setOnClickListener {
                 activity.onDeleteItem(ad)
@@ -79,7 +82,8 @@ class AdsRcAdapter(private val activity: MainActivity): RecyclerView.Adapter<Ads
         }
     }
 
-    interface DeleteItemListener {
+    interface Listener {
         fun onDeleteItem(ad: AdModel)
+        fun onAdViewed(ad: AdModel)
     }
 }

@@ -3,6 +3,7 @@ package com.ds_create.storeads.data.database
 import com.ds_create.storeads.R
 import com.ds_create.storeads.activities.EditAdsActivity
 import com.ds_create.storeads.models.AdModel
+import com.ds_create.storeads.models.InfoItemModel
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
@@ -13,14 +14,14 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
 class DbManager {
-    val database = Firebase.database.getReference("main")
+    val database = Firebase.database.getReference(MAIN_NODE)
     val auth = Firebase.auth
     private val act: EditAdsActivity? = null
 
     fun publishAd(ad: AdModel, listener: FinishWorkListener) {
         if (auth.uid != null) {
             database.child(ad.key ?: "empty")
-                .child(auth.uid!!).child("ad").setValue(ad)
+                .child(auth.uid!!).child(AD_NODE).setValue(ad)
                 .addOnCompleteListener {
                     if (it.isSuccessful) {
                         listener.onFinishWork()
@@ -28,6 +29,17 @@ class DbManager {
                         throw FirebaseException(act?.getString(R.string.firebase_error_load_data).toString())
                     }
                 }
+        }
+    }
+
+    fun adViewed(ad: AdModel) {
+        var counter = ad.viewsCounter.toInt()
+        counter++
+        if (auth.uid != null) {
+            database.child(ad.key ?: "empty")
+                .child(INFO_NODE).setValue(InfoItemModel(
+                    counter.toString(), ad.emailCounter, ad.callsCounter
+                ))
         }
     }
 
@@ -60,11 +72,19 @@ class DbManager {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val adArray = ArrayList<AdModel>()
                 for (item in snapshot.children) {
-                    val ad = item.children.iterator().next()
-                            .child("ad")
-                            .getValue(AdModel::class.java)
+
+                    var ad: AdModel? = null
+                    item.children.forEach{
+                        if (ad == null) {
+                          ad = it.child(AD_NODE).getValue(AdModel::class.java)
+                        }
+                    }
+                    val infoItem = item.child(INFO_NODE).getValue(InfoItemModel::class.java)
+                    ad?.viewsCounter = infoItem?.viewsCounter ?: "0"
+                    ad?.emailCounter = infoItem?.emailsCounter ?: "0"
+                    ad?.callsCounter = infoItem?.callsCounter ?: "0"
                     if (ad != null) {
-                        adArray.add(ad)
+                        adArray.add(ad!!)
                     }
                 }
                 readCallback?.readData(adArray)
@@ -81,4 +101,13 @@ class DbManager {
     interface FinishWorkListener {
         fun onFinishWork()
     }
+
+    companion object {
+        const val AD_NODE = "ad"
+        const val MAIN_NODE = "main"
+        const val INFO_NODE = "info"
+    }
+
+
 }
+
