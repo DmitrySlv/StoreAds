@@ -173,6 +173,10 @@ AdsRcAdapter.Listener {
         firebaseViewModel.adViewed(ad)
     }
 
+    override fun onFavouriteClicked(ad: AdModel) {
+        firebaseViewModel.onFavouritesClick(ad)
+    }
+
     companion object {
         const val EDIT_STATE = "edit_state"
         const val ADS_DATA = "ads_data"

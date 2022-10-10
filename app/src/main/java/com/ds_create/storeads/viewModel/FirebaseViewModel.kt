@@ -39,4 +39,19 @@ class FirebaseViewModel: ViewModel() {
     fun adViewed(ad: AdModel) {
         dbManager.adViewed(ad)
     }
+
+    fun onFavouritesClick(ad: AdModel) {
+        dbManager.onFavClick(ad, object : DbManager.FinishWorkListener {
+            override fun onFinishWork() {
+                val updatedList = liveAdsData.value
+                val position = updatedList?.indexOf(ad)
+                if (position != -1) {
+                    position?.let {
+                        updatedList[position] = updatedList[position].copy(isFavourite = !ad.isFavourite)
+                    }
+                }
+                liveAdsData.postValue(updatedList)
+            }
+        })
+    }
 }

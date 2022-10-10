@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import com.ds_create.storeads.R
 import com.ds_create.storeads.activities.EditAdsActivity
 import com.ds_create.storeads.activities.MainActivity
 import com.ds_create.storeads.databinding.AdListItemBinding
@@ -48,10 +49,18 @@ class AdsRcAdapter(private val activity: MainActivity): RecyclerView.Adapter<Ads
             tvPrice.text = ad.price
             tvTitle.text = ad.title
             tvViewCounter.text = ad.viewsCounter
+            if (ad.isFavourite) {
+                ibFav.setImageResource(R.drawable.ic_fav_pressed)
+            } else {
+                ibFav.setImageResource(R.drawable.ic_fav_normal)
+            }
             showEditPanel(isOwner(ad))
 
             itemView.setOnClickListener {
                 activity.onAdViewed(ad)
+            }
+            ibFav.setOnClickListener {
+                activity.onFavouriteClicked(ad)
             }
             ibEditAd.setOnClickListener(onClickEdit(ad))
             ibDeleteAd.setOnClickListener {
@@ -85,5 +94,6 @@ class AdsRcAdapter(private val activity: MainActivity): RecyclerView.Adapter<Ads
     interface Listener {
         fun onDeleteItem(ad: AdModel)
         fun onAdViewed(ad: AdModel)
+        fun onFavouriteClicked(ad: AdModel)
     }
 }

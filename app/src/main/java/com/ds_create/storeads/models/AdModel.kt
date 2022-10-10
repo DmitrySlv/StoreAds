@@ -14,6 +14,7 @@ data class AdModel(
     val description: String? = null,
     val key: String? = null,
     val uid: String? = null,
+    val isFavourite: Boolean = false,
 
     var viewsCounter: String = "0",
     var emailCounter: String = "0",

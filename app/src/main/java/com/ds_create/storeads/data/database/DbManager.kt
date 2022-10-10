@@ -43,6 +43,40 @@ class DbManager {
         }
     }
 
+    fun onFavClick(ad: AdModel, finishWorkListener: FinishWorkListener) {
+        if (ad.isFavourite) {
+            removeFromFavourites(ad, finishWorkListener)
+        } else {
+            addToFavourites(ad, finishWorkListener)
+        }
+    }
+
+    fun addToFavourites(ad: AdModel, finishWorkListener: FinishWorkListener) {
+        ad.key?.let { key ->
+            auth.uid?.let { uid ->
+                database.child(key).child(FAVOURITES_NODE).child(uid).setValue(uid)
+                    .addOnCompleteListener {
+                        if (it.isSuccessful) {
+                            finishWorkListener.onFinishWork()
+                        }
+                    }
+            }
+        }
+    }
+
+   private fun removeFromFavourites(ad: AdModel, finishWorkListener: FinishWorkListener) {
+        ad.key?.let { key ->
+            auth.uid?.let { uid ->
+                database.child(key).child(FAVOURITES_NODE).child(uid).removeValue()
+                    .addOnCompleteListener {
+                        if (it.isSuccessful) {
+                            finishWorkListener.onFinishWork()
+                        }
+                    }
+            }
+        }
+    }
+
     fun getMyAds(readCallback: ReadDataCallback?) {
         val query = database.orderByChild(auth.uid + "/ad/uid").equalTo(auth.uid)
         readDataFromDb(readCallback, query)
@@ -106,6 +140,7 @@ class DbManager {
         const val AD_NODE = "ad"
         const val MAIN_NODE = "main"
         const val INFO_NODE = "info"
+        const val FAVOURITES_NODE = "favourites"
     }
 
 
