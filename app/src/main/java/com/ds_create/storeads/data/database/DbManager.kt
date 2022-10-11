@@ -1,5 +1,6 @@
 package com.ds_create.storeads.data.database
 
+import android.util.Log
 import com.ds_create.storeads.R
 import com.ds_create.storeads.activities.EditAdsActivity
 import com.ds_create.storeads.models.AdModel
@@ -114,6 +115,14 @@ class DbManager {
                         }
                     }
                     val infoItem = item.child(INFO_NODE).getValue(InfoItemModel::class.java)
+
+                    val favouriteCounter = item.child(FAVOURITES_NODE).childrenCount
+                    val isFavourite = auth.uid?.let {
+                        item.child(FAVOURITES_NODE).child(it).getValue(String::class.java)
+                    }
+                    ad?.isFavourite = isFavourite != null
+                    ad?.favouriteCounter = favouriteCounter.toString()
+
                     ad?.viewsCounter = infoItem?.viewsCounter ?: "0"
                     ad?.emailCounter = infoItem?.emailsCounter ?: "0"
                     ad?.callsCounter = infoItem?.callsCounter ?: "0"

@@ -47,7 +47,15 @@ class FirebaseViewModel: ViewModel() {
                 val position = updatedList?.indexOf(ad)
                 if (position != -1) {
                     position?.let {
-                        updatedList[position] = updatedList[position].copy(isFavourite = !ad.isFavourite)
+                        val favouriteCounter = if (ad.isFavourite) {
+                            ad.favouriteCounter.toInt() - 1
+                        } else {
+                            ad.favouriteCounter.toInt() + 1
+                        }
+                        updatedList[position] = updatedList[position].copy(
+                            isFavourite = !ad.isFavourite,
+                            favouriteCounter = favouriteCounter.toString()
+                        )
                     }
                 }
                 liveAdsData.postValue(updatedList)
