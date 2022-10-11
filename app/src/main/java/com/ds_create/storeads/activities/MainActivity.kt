@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -60,7 +61,6 @@ AdsRcAdapter.Listener {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == GoogleAccConst.GOOGLE_SIGN_IN_REQUEST_CODE) {
-//            Log.d("MyLog", "Sign in result")
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             try {
                 val account = task.getResult(ApiException::class.java)
@@ -90,6 +90,11 @@ AdsRcAdapter.Listener {
     private fun initViewModel() {
         firebaseViewModel.liveAdsData.observe(this) {
             adsRcAdapter.updateAdapter(it)
+            binding.mainContent.tvEmpty.visibility = if (it.isEmpty()) {
+                View.VISIBLE
+            } else {
+                View.GONE
+            }
         }
     }
 
@@ -154,7 +159,7 @@ AdsRcAdapter.Listener {
                     mainContent.toolbar.title = getString(R.string.my_ads_title)
                 }
                 R.id.id_favs -> {
-                    Toast.makeText(this@MainActivity, "id_favs", Toast.LENGTH_LONG).show()
+                    firebaseViewModel.loadMyFavourites()
                 }
                 R.id.id_home -> {
                    firebaseViewModel.loadAllAds()

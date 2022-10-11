@@ -1,6 +1,5 @@
 package com.ds_create.storeads.data.database
 
-import android.util.Log
 import com.ds_create.storeads.R
 import com.ds_create.storeads.activities.EditAdsActivity
 import com.ds_create.storeads.models.AdModel
@@ -80,6 +79,11 @@ class DbManager {
 
     fun getMyAds(readCallback: ReadDataCallback?) {
         val query = database.orderByChild(auth.uid + "/ad/uid").equalTo(auth.uid)
+        readDataFromDb(readCallback, query)
+    }
+
+    fun getMyFavourites(readCallback: ReadDataCallback?) {
+        val query = database.orderByChild("/favourites/${auth.uid}").equalTo(auth.uid)
         readDataFromDb(readCallback, query)
     }
 

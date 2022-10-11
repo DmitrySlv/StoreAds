@@ -81,5 +81,7 @@
     <string name="my_ads">My Ads</string>
     <string name="favs">Favourites</string>
     <string name="home">Home</string>
+    <!-- main_content-->
+    <string name="empty">Пусто</string>
 
 </resources>
