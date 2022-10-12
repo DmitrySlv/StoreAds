@@ -40,9 +40,10 @@
     <string name="link_done">Ваш email успешно связан с Google аккаунтом</string>
     <string name="enter_to_google">Аккаунт с таким email адресом уже существует.
         Пожалуйста, войдите по Google аккаунту и зарегистрируйте ваш email.</string>
-    <!-- Account Helper Toast errors & exceptions -->
+    <!-- Account Helper, Toast errors & exceptions -->
     <string name="error_invalid_email_or_password">Введен некорректный email или пароль! Пожалуйста,
     проверьте корректность email или пароля. Пароль должен содежать от 3 до 9 символов.</string>
+    <string name="guest">Вы вошли как гость</string>
     <!-- City Helper -->
     <string name="no_result">Нет результата</string>
     <!-- Edit Activity -->

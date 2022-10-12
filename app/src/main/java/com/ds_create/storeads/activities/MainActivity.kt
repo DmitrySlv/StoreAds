@@ -16,6 +16,7 @@ import com.ds_create.storeads.R
 import com.ds_create.storeads.adapters.AdsRcAdapter
 import com.ds_create.storeads.databinding.ActivityMainBinding
 import com.ds_create.storeads.models.AdModel
+import com.ds_create.storeads.utils.accounthelper.AccountHelper
 import com.ds_create.storeads.utils.dialoghelper.DialogHelper
 import com.ds_create.storeads.utils.dialoghelper.GoogleAccConst
 import com.ds_create.storeads.viewModel.FirebaseViewModel
@@ -130,6 +131,10 @@ AdsRcAdapter.Listener {
                dialogHelper.createSignDialog(DialogHelper.SIGN_IN_STATE)
            }
            R.id.id_sign_out -> {
+               if (mAuth.currentUser?.isAnonymous == true) {
+                   binding.drawerLayout.closeDrawer(GravityCompat.START)
+                   return true
+               }
                uiUpdate(null)
                mAuth.signOut()
                dialogHelper.accHelper.signOutGoogle()
@@ -140,10 +145,16 @@ AdsRcAdapter.Listener {
     }
 
     fun uiUpdate(user: FirebaseUser?) {
-        tvAccount.text = if (user == null) {
-            resources.getString(R.string.not_reg)
-        } else {
-            user.email
+        if (user == null) {
+            dialogHelper.accHelper.signInAnonymously(object : AccountHelper.AccHelperListener {
+                override fun onComplete() {
+                    tvAccount.text = getString(R.string.guest)
+                }
+            })
+        } else if (user.isAnonymous) {
+            tvAccount.text = getString(R.string.guest)
+        } else if (!user.isAnonymous) {
+            tvAccount.text = user.email
         }
     }
 

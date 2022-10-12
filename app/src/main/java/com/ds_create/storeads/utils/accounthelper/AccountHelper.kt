@@ -132,13 +132,32 @@ class AccountHelper(private val act: MainActivity) {
 
     fun signInFirebaseWithGoogle(token: String) {
         val credential = GoogleAuthProvider.getCredential(token, null)
-        act.mAuth.signInWithCredential(credential).addOnCompleteListener { task ->
+        act.mAuth.currentUser?.delete()?.addOnCompleteListener { task->
             if (task.isSuccessful) {
-                act.uiUpdate(task.result.user)
-                Toast.makeText(act, act.getString(R.string.sign_in_done), Toast.LENGTH_LONG).show()
-            } else {
-                Log.d("MyLog", "Google Sign In Exception: ${task.exception}")
+                act.mAuth.signInWithCredential(credential).addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        act.uiUpdate(task.result.user)
+                        Toast.makeText(act, act.getString(R.string.sign_in_done), Toast.LENGTH_LONG).show()
+                    } else {
+                        Log.d("MyLog", "Google Sign In Exception: ${task.exception}")
+                    }
+                }
             }
         }
+    }
+
+    fun signInAnonymously(accHelperListener: AccHelperListener) {
+        act.mAuth.signInAnonymously().addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                accHelperListener.onComplete()
+                Toast.makeText(act, "Вы вошли как гость", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(act, "Не удалось войти как гость", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    interface AccHelperListener {
+        fun onComplete()
     }
 }
