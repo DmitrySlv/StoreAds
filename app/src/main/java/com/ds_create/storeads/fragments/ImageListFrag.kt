@@ -1,6 +1,7 @@
 package com.ds_create.storeads.fragments
 
 import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -26,7 +27,7 @@ import kotlinx.coroutines.launch
 
 class ImageListFrag(
     private val fragCloseInterface: FragmentCloseInterface,
-    private val newList: ArrayList<String>?
+    private val newList: ArrayList<Uri>?
     ): BaseAdsFrag(), AdapterCallback {
 
     private val adapter = SelectImageRvAdapter(this)
@@ -84,10 +85,10 @@ class ImageListFrag(
         addImageItem?.isVisible = true
     }
 
-    private fun resizeSelectedImages(newList: ArrayList<String>, needClear: Boolean) {
+    private fun resizeSelectedImages(newList: ArrayList<Uri>, needClear: Boolean) {
         job = CoroutineScope(Dispatchers.Main).launch {
             val dialog =  ProgressDialog.createProgressDialog(requireActivity())
-            val bitmapList = ImageManager.imageResize(newList)
+            val bitmapList = ImageManager.imageResize(newList, requireActivity())
             dialog.dismiss()
             adapter.updateAdapter(bitmapList, needClear)
             if (adapter.mainArray.size > 2) {
@@ -115,14 +116,13 @@ class ImageListFrag(
             val imageCount = ImagePicker.MAX_IMAGE_COUNT - adapter.mainArray.size
             ImagePicker.launcher(
                 activity as EditAdsActivity,
-                (activity as EditAdsActivity).launcherMultiSelectImages,
                 imageCount
             )
             true
         }
     }
 
-    fun updateAdapter(newList: ArrayList<String>) {
+    fun updateAdapter(newList: ArrayList<Uri>) {
         resizeSelectedImages(newList, false)
     }
 
@@ -130,11 +130,11 @@ class ImageListFrag(
         adapter.updateAdapter(bitmapList, true)
     }
 
-    fun setSingleImage(uri: String, position: Int) {
+    fun setSingleImage(uri: Uri, position: Int) {
         val pBar = binding.rcViewSelectImage[position].findViewById<ProgressBar>(R.id.pBar)
         job = CoroutineScope(Dispatchers.Main).launch {
             pBar.visibility = View.VISIBLE
-            val bitmapList = ImageManager.imageResize(listOf(uri))
+            val bitmapList = ImageManager.imageResize(arrayListOf(uri), requireActivity())
             pBar.visibility = View.GONE
             adapter.mainArray[position] = bitmapList[0]
             adapter.notifyItemChanged(position)
