@@ -18,7 +18,6 @@ import com.ds_create.storeads.fragments.ImageListFrag
 import com.ds_create.storeads.models.AdModel
 import com.ds_create.storeads.utils.CityHelper
 import com.ds_create.storeads.utils.ImagePicker
-import com.fxn.utility.PermUtil
 
 class EditAdsActivity : AppCompatActivity(), FragmentCloseInterface {
 
@@ -71,28 +70,6 @@ class EditAdsActivity : AppCompatActivity(), FragmentCloseInterface {
         edTitle.setText(ad.title)
         edPrice.setText(ad.price)
         edDescription.setText(ad.description)
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        when (requestCode) {
-            PermUtil.REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS -> {
-
-                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                   // ImagePicker.getOptions(this, 3, ImagePicker.REQUEST_CODE_GET_IMAGES)
-                } else {
-                    Toast.makeText(this,
-                        "Approve permissions to open Pix ImagePicker",
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
-                return
-            }
-        }
     }
 
     //OnClicks
