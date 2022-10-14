@@ -18,40 +18,12 @@ object ImageManager {
 
     fun getImageSize(uri: Uri, act: Activity): List<Int> {
         val inputStream = act.contentResolver.openInputStream(uri)
-        val fileTemp = File(act.cacheDir, "temp.tmp")
-        inputStream?.let { fileTemp.copyInStreamToFile(it) }
         val options = BitmapFactory.Options().apply {
             inJustDecodeBounds = true
         }
-        BitmapFactory.decodeFile(fileTemp.path, options)
-        return if (imageRotation(fileTemp) == 90) {
-            listOf(options.outHeight, options.outWidth)
-        } else {
-            listOf(options.outWidth, options.outHeight)
-        }
+        BitmapFactory.decodeStream(inputStream, null, options)
+        return listOf(options.outWidth, options.outHeight)
     }
-
-    private fun File.copyInStreamToFile(inputStream: InputStream) {
-        this.outputStream().use {
-                out-> inputStream.copyTo(out)
-        }
-    }
-
-   private fun imageRotation(imageFile: File): Int {
-       val rotation: Int
-       val exif = ExifInterface(imageFile.absolutePath)
-       val orientation = exif.getAttributeInt(
-           ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL
-       )
-       rotation = if (orientation == ExifInterface.ORIENTATION_ROTATE_90 ||
-           orientation == ExifInterface.ORIENTATION_ROTATE_270
-       ) {
-           90
-       } else {
-           0
-       }
-       return rotation
-   }
 
     fun chooseScaleType(imageView: ImageView, bitmap: Bitmap) {
         if (bitmap.width > bitmap.height) {
