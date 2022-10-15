@@ -38,9 +38,22 @@ object ImagePicker {
             when (result.status) {
                 PixEventCallback.Status.SUCCESS -> {
                     getMultiSelectImages(edAct, result.data)
-                    closePixFragment(edAct)
                 }
                PixEventCallback.Status.BACK_PRESSED -> {}
+            }
+        }
+    }
+
+    fun addImages(edAct: EditAdsActivity, imageCounter: Int) {
+        val fragOld = edAct.chooseImageFrag
+        edAct.addPixToActivity(R.id.placeHolder, getOptions(imageCounter)) { result->
+            when (result.status) {
+                PixEventCallback.Status.SUCCESS -> {
+                    edAct.chooseImageFrag = fragOld
+                    openChooseImageFrag(edAct, fragOld!!)
+                        edAct.chooseImageFrag?.updateAdapter(result.data as ArrayList<Uri>, edAct)
+                }
+                PixEventCallback.Status.BACK_PRESSED -> {}
             }
         }
     }
@@ -75,8 +88,6 @@ object ImagePicker {
     fun getMultiSelectImages(edAct: EditAdsActivity, uris: List<Uri>) {
         if (uris.size > 1 && edAct.chooseImageFrag == null) {
             edAct.openChooseImageFrag(uris as ArrayList<Uri>)
-        } else if (edAct.chooseImageFrag != null) {
-            edAct.chooseImageFrag?.updateAdapter(uris as ArrayList<Uri>)
         } else if (uris.size == 1 && edAct.chooseImageFrag == null) {
             CoroutineScope(Dispatchers.Main).launch {
                 edAct.binding.pBarLoad.visibility = View.VISIBLE
@@ -84,6 +95,7 @@ object ImagePicker {
                     ImageManager.imageResize(uris, edAct) as ArrayList<Bitmap>
                 edAct.binding.pBarLoad.visibility = View.GONE
                 edAct.imageAdapter.update(bitmapArray)
+                closePixFragment(edAct)
             }
         }
     }

@@ -98,6 +98,9 @@ class ImageListFrag(
         toolbar.inflateMenu(R.menu.menu_choose_image)
         val deleteItem = toolbar.menu.findItem(R.id.id_delete_image)
         addImageItem = toolbar.menu.findItem(R.id.id_add_image)
+        if (adapter.mainArray.size > 2) {
+            addImageItem?.isVisible = false
+        }
 
         toolbar.setNavigationOnClickListener {
             showInterAd()
@@ -111,7 +114,7 @@ class ImageListFrag(
 
         addImageItem?.setOnMenuItemClickListener {
             val imageCount = ImagePicker.MAX_IMAGE_COUNT - adapter.mainArray.size
-            ImagePicker.getMultiImages(
+            ImagePicker.addImages(
                 activity as EditAdsActivity,
                 imageCount
             )
@@ -119,8 +122,8 @@ class ImageListFrag(
         }
     }
 
-    fun updateAdapter(newList: ArrayList<Uri>) {
-        resizeSelectedImages(newList, false, requireActivity())
+    fun updateAdapter(newList: ArrayList<Uri>, activity: Activity) {
+        resizeSelectedImages(newList, false, activity)
     }
 
     fun updateAdapterFromEdit(bitmapList: List<Bitmap>) {
