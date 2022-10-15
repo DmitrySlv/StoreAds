@@ -51,10 +51,7 @@ ItemTouchMoveCallback.ItemTouchAdapter {
         fun setData(bitmap: Bitmap) = with(binding) {
 
             imEditImage.setOnClickListener {
-                ImagePicker.launcher(
-                    context as EditAdsActivity,
-                    ImagePicker.SINGLE_IMAGE_COUNTER
-                )
+                ImagePicker.getSingleImage(context as EditAdsActivity)
                 context.editImagePos = adapterPosition
             }
 

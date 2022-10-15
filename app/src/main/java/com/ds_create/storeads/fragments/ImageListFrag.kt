@@ -1,5 +1,6 @@
 package com.ds_create.storeads.fragments
 
+import android.app.Activity
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
@@ -27,7 +28,6 @@ import kotlinx.coroutines.launch
 
 class ImageListFrag(
     private val fragCloseInterface: FragmentCloseInterface,
-    private val newList: ArrayList<Uri>?
     ): BaseAdsFrag(), AdapterCallback {
 
     private val adapter = SelectImageRvAdapter(this)
@@ -58,9 +58,6 @@ class ImageListFrag(
             rcViewSelectImage.layoutManager = LinearLayoutManager(activity)
             rcViewSelectImage.adapter = adapter
             }
-        if (newList != null) {
-            resizeSelectedImages(newList, true)
-        }
     }
 
     override fun onDestroy() {
@@ -85,10 +82,10 @@ class ImageListFrag(
         addImageItem?.isVisible = true
     }
 
-    private fun resizeSelectedImages(newList: ArrayList<Uri>, needClear: Boolean) {
+    fun resizeSelectedImages(newList: ArrayList<Uri>, needClear: Boolean, activity: Activity) {
         job = CoroutineScope(Dispatchers.Main).launch {
-            val dialog =  ProgressDialog.createProgressDialog(requireActivity())
-            val bitmapList = ImageManager.imageResize(newList, requireActivity())
+            val dialog =  ProgressDialog.createProgressDialog(activity)
+            val bitmapList = ImageManager.imageResize(newList, activity)
             dialog.dismiss()
             adapter.updateAdapter(bitmapList, needClear)
             if (adapter.mainArray.size > 2) {
@@ -114,7 +111,7 @@ class ImageListFrag(
 
         addImageItem?.setOnMenuItemClickListener {
             val imageCount = ImagePicker.MAX_IMAGE_COUNT - adapter.mainArray.size
-            ImagePicker.launcher(
+            ImagePicker.getMultiImages(
                 activity as EditAdsActivity,
                 imageCount
             )
@@ -123,7 +120,7 @@ class ImageListFrag(
     }
 
     fun updateAdapter(newList: ArrayList<Uri>) {
-        resizeSelectedImages(newList, false)
+        resizeSelectedImages(newList, false, requireActivity())
     }
 
     fun updateAdapterFromEdit(bitmapList: List<Bitmap>) {

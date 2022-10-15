@@ -1,13 +1,10 @@
 package com.ds_create.storeads.activities
 
-import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import androidx.activity.result.ActivityResultLauncher
 import androidx.appcompat.app.AppCompatActivity
 import com.ds_create.storeads.R
 import com.ds_create.storeads.adapters.ImageAdapter
@@ -96,7 +93,7 @@ class EditAdsActivity : AppCompatActivity(), FragmentCloseInterface {
 
     fun onClickGetImages(view: View) {
         if (imageAdapter.mainArray.size == 0) {
-        ImagePicker.launcher(this, ImagePicker.MULTI_IMAGE_COUNTER)
+        ImagePicker.getMultiImages(this, ImagePicker.MULTI_IMAGE_COUNTER)
     } else {
         openChooseImageFrag(null)
             chooseImageFrag?.updateAdapterFromEdit(imageAdapter.mainArray)
@@ -148,7 +145,10 @@ class EditAdsActivity : AppCompatActivity(), FragmentCloseInterface {
     }
 
     fun openChooseImageFrag(newList: ArrayList<Uri>?) {
-        chooseImageFrag = ImageListFrag(this, newList)
+        chooseImageFrag = ImageListFrag(this)
+        if (newList != null) {
+            chooseImageFrag?.resizeSelectedImages(newList, true, this)
+        }
         binding.scrollViewMain.visibility = View.GONE
         val fm = supportFragmentManager.beginTransaction()
         fm.replace(R.id.placeHolder, chooseImageFrag!!)

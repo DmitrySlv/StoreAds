@@ -1,13 +1,10 @@
 package com.ds_create.storeads.utils
 
-import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.view.View
 import android.widget.Toast
-import androidx.activity.result.ActivityResult
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
+import androidx.fragment.app.Fragment
 import com.ds_create.storeads.R
 import com.ds_create.storeads.activities.EditAdsActivity
 import io.ak1.pix.helpers.PixEventCallback
@@ -36,18 +33,35 @@ object ImagePicker {
         return options
     }
 
-    fun launcher(edAct: EditAdsActivity, imageCounter: Int) {
+    fun getMultiImages(edAct: EditAdsActivity, imageCounter: Int) {
         edAct.addPixToActivity(R.id.placeHolder, getOptions(imageCounter)) { result->
             when (result.status) {
                 PixEventCallback.Status.SUCCESS -> {
                     getMultiSelectImages(edAct, result.data)
                     closePixFragment(edAct)
                 }
-               PixEventCallback.Status.BACK_PRESSED -> {
-                   Toast.makeText(edAct, "BACK_PRESSED", Toast.LENGTH_SHORT).show()
-               }
+               PixEventCallback.Status.BACK_PRESSED -> {}
             }
         }
+    }
+
+    fun getSingleImage(edAct: EditAdsActivity) {
+        edAct.addPixToActivity(R.id.placeHolder, getOptions(SINGLE_IMAGE_COUNTER)) { result->
+            val fragOld = edAct.chooseImageFrag
+            when (result.status) {
+                PixEventCallback.Status.SUCCESS -> {
+                    edAct.chooseImageFrag = fragOld
+                    openChooseImageFrag(edAct, fragOld!!)
+                    singleImage(edAct, result.data[0])
+                }
+                PixEventCallback.Status.BACK_PRESSED -> {}
+            }
+        }
+    }
+
+    private fun openChooseImageFrag(edAct: EditAdsActivity, frag: Fragment) {
+        edAct.supportFragmentManager.beginTransaction()
+            .replace(R.id.placeHolder, frag).commit()
     }
 
     private fun closePixFragment(edAct: EditAdsActivity) {
@@ -59,31 +73,22 @@ object ImagePicker {
     }
 
     fun getMultiSelectImages(edAct: EditAdsActivity, uris: List<Uri>) {
-                    if (uris.size > 1 && edAct.chooseImageFrag == null) {
-                        edAct.openChooseImageFrag(uris as ArrayList<Uri>)
-                    } else if (uris.size == 1 && edAct.chooseImageFrag == null) {
-                        CoroutineScope(Dispatchers.Main).launch {
-                            edAct.binding.pBarLoad.visibility = View.VISIBLE
-                            val bitmapArray =
-                                ImageManager.imageResize(uris, edAct) as ArrayList<Bitmap>
-                            edAct.binding.pBarLoad.visibility = View.GONE
-                            edAct.imageAdapter.update(bitmapArray)
-                        }
-                    } else if (edAct.chooseImageFrag != null) {
-                        edAct.chooseImageFrag?.updateAdapter(uris as ArrayList<Uri>)
-                    }
-                }
-
-    fun getLauncherForSingleImage(edAct: EditAdsActivity): ActivityResultLauncher<Intent> {
-        return edAct.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-                result: ActivityResult ->
-//            if (result.resultCode == AppCompatActivity.RESULT_OK
-//            ) {
-//                if (result.data != null) {
-//                    val uris = result.data?.getStringArrayListExtra(Pix.IMAGE_RESULTS)
-//                    edAct.chooseImageFrag?.setSingleImage(uris?.get(0)!!, edAct.editImagePos)
-//                }
-//            }
+        if (uris.size > 1 && edAct.chooseImageFrag == null) {
+            edAct.openChooseImageFrag(uris as ArrayList<Uri>)
+        } else if (edAct.chooseImageFrag != null) {
+            edAct.chooseImageFrag?.updateAdapter(uris as ArrayList<Uri>)
+        } else if (uris.size == 1 && edAct.chooseImageFrag == null) {
+            CoroutineScope(Dispatchers.Main).launch {
+                edAct.binding.pBarLoad.visibility = View.VISIBLE
+                val bitmapArray =
+                    ImageManager.imageResize(uris, edAct) as ArrayList<Bitmap>
+                edAct.binding.pBarLoad.visibility = View.GONE
+                edAct.imageAdapter.update(bitmapArray)
+            }
         }
     }
+
+   private fun singleImage(edAct: EditAdsActivity, uri: Uri) {
+       edAct.chooseImageFrag?.setSingleImage(uri, edAct.editImagePos)
+   }
 }
