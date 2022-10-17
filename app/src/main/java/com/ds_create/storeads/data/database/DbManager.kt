@@ -1,10 +1,7 @@
 package com.ds_create.storeads.data.database
 
-import com.ds_create.storeads.R
-import com.ds_create.storeads.activities.EditAdsActivity
 import com.ds_create.storeads.models.AdModel
 import com.ds_create.storeads.models.InfoItemModel
-import com.google.firebase.FirebaseException
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -12,11 +9,12 @@ import com.google.firebase.database.Query
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 
 class DbManager {
     val database = Firebase.database.getReference(MAIN_NODE)
+    val databaseStorage = Firebase.storage.getReference(MAIN_NODE)
     val auth = Firebase.auth
-    private val act: EditAdsActivity? = null
 
     fun publishAd(ad: AdModel, listener: FinishWorkListener) {
         if (auth.uid != null) {
@@ -25,8 +23,6 @@ class DbManager {
                 .addOnCompleteListener {
                     if (it.isSuccessful) {
                         listener.onFinishWork()
-                    } else {
-                        throw FirebaseException(act?.getString(R.string.firebase_error_load_data).toString())
                     }
                 }
         }
@@ -99,8 +95,6 @@ class DbManager {
         database.child(ad.key).child(ad.uid).removeValue().addOnCompleteListener {
             if (it.isSuccessful) {
                 listener.onFinishWork()
-            } else {
-                throw FirebaseException(act?.getString(R.string.firebase_error_remove_ad).toString())
             }
         }
     }

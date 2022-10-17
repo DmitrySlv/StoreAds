@@ -12,6 +12,7 @@ data class AdModel(
     val title: String? = null,
     val price: String? = null,
     val description: String? = null,
+    val mainImage: String? = null,
     val key: String? = null,
     val uid: String? = null,
     var favouriteCounter: String = "0",

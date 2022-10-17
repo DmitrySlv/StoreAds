@@ -65,17 +65,12 @@ class ImageListFrag(
         _binding = null
     }
 
-    override fun onDetach() {
-        super.onDetach()
-        fragCloseInterface.onFragClose(adapter.mainArray)
-        job?.cancel()
-    }
-
     override fun onClose() {
         super.onClose()
         requireActivity().supportFragmentManager.beginTransaction()
-            .remove(this@ImageListFrag)
-            .commit()
+            .remove(this@ImageListFrag).commit()
+        fragCloseInterface.onFragClose(adapter.mainArray)
+        job?.cancel()
     }
 
     override fun onItemDelete() {
