@@ -35,4 +35,9 @@
         <item name="colorControlNormal">@color/green_main</item>
         <item name="fontFamily">sans-serif-condensed</item>
     </style>
+
+    <!-- Description Activity фон для items кнопок -->
+    <style name="ColorItems">
+        <item name="colorOnSecondary">@color/white</item>
+    </style>
 </resources>

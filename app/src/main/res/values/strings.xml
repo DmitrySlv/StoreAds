@@ -82,7 +82,14 @@
     <string name="my_ads">My Ads</string>
     <string name="favs">Favourites</string>
     <string name="home">Home</string>
-    <!-- main_content-->
+    <!-- main_content -->
     <string name="empty">Пусто</string>
-
+    <!-- Description Activity -->
+    <string name="price_desc_act">Цена:</string>
+    <string name="phone_desc_act">Телефрон:</string>
+    <string name="email_desc_act">Email адрес:</string>
+    <string name="country_desc_act">Страна:</string>
+    <string name="city_desc_act">Город:</string>
+    <string name="index_desc_act">Индекс:</string>
+    <string name="with_send_desc_act">С отправкой?</string>
 </resources>
