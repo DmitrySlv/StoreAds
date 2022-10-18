@@ -33,7 +33,8 @@ object ImageManager {
         }
     }
 
-   suspend fun imageResize(uris: List<Uri>, act: Activity): List<Bitmap> = withContext(Dispatchers.IO) {
+   suspend fun imageResize(uris: List<Uri>, act: Activity)
+   : List<Bitmap> = withContext(Dispatchers.IO) {
         val tempList = ArrayList<List<Int>>()
         val bitmapList = ArrayList<Bitmap>()
         for (n in uris.indices) {
@@ -67,6 +68,20 @@ object ImageManager {
            Log.d("MyLog", "Bitmap load done: ${e.isSuccess}")
        }
        return@withContext bitmapList
+    }
+
+    suspend fun getBitmapFromUris(uris: List<String?>)
+    : List<Bitmap> = withContext(Dispatchers.IO) {
+
+        val bitmapList = ArrayList<Bitmap>()
+
+        for (i in uris.indices) {
+            kotlin.runCatching {
+                bitmapList.add(
+                    Picasso.get().load(uris[i]).get())
+            }
+        }
+        return@withContext bitmapList
     }
 
    private const val MAX_IMAGE_SIZE = 1000

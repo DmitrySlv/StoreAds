@@ -9,10 +9,12 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.ds_create.storeads.R
+import com.ds_create.storeads.activities.DescriptionActivity
 import com.ds_create.storeads.activities.EditAdsActivity
 import com.ds_create.storeads.activities.MainActivity
 import com.ds_create.storeads.databinding.AdListItemBinding
 import com.ds_create.storeads.models.AdModel
+import com.ds_create.storeads.utils.ImageManager
 import com.squareup.picasso.Picasso
 
 class AdsRcAdapter(private val activity: MainActivity): RecyclerView.Adapter<AdsRcAdapter.AdHolder>() {
@@ -61,6 +63,10 @@ class AdsRcAdapter(private val activity: MainActivity): RecyclerView.Adapter<Ads
         private fun mainOnClicks(ad: AdModel) = with(binding) {
             itemView.setOnClickListener {
                 activity.onAdViewed(ad)
+
+                val i = Intent(binding.root.context, DescriptionActivity::class.java)
+                i.putExtra(DescriptionActivity.AD_NODE, ad)
+                binding.root.context.startActivity(i)
             }
             ibFav.setOnClickListener {
                 if (activity.mAuth.currentUser?.isAnonymous == false) {
