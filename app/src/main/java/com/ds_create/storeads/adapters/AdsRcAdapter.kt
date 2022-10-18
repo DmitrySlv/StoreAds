@@ -13,6 +13,7 @@ import com.ds_create.storeads.activities.EditAdsActivity
 import com.ds_create.storeads.activities.MainActivity
 import com.ds_create.storeads.databinding.AdListItemBinding
 import com.ds_create.storeads.models.AdModel
+import com.squareup.picasso.Picasso
 
 class AdsRcAdapter(private val activity: MainActivity): RecyclerView.Adapter<AdsRcAdapter.AdHolder>() {
 
@@ -50,13 +51,14 @@ class AdsRcAdapter(private val activity: MainActivity): RecyclerView.Adapter<Ads
             tvTitle.text = ad.title
             tvViewCounter.text = ad.viewsCounter
             tvFavCounter.text = ad.favouriteCounter
-            if (ad.isFavourite) {
-                ibFav.setImageResource(R.drawable.ic_fav_pressed)
-            } else {
-                ibFav.setImageResource(R.drawable.ic_fav_normal)
-            }
-            showEditPanel(isOwner(ad))
+            Picasso.get().load(ad.mainImage).into(mainImage)
 
+            isFavourite(ad)
+            showEditPanel(isOwner(ad))
+            mainOnClicks(ad)
+        }
+
+        private fun mainOnClicks(ad: AdModel) = with(binding) {
             itemView.setOnClickListener {
                 activity.onAdViewed(ad)
             }
@@ -68,6 +70,14 @@ class AdsRcAdapter(private val activity: MainActivity): RecyclerView.Adapter<Ads
             ibEditAd.setOnClickListener(onClickEdit(ad))
             ibDeleteAd.setOnClickListener {
                 activity.onDeleteItem(ad)
+            }
+        }
+
+        private fun isFavourite(ad: AdModel) = with(binding) {
+            if (ad.isFavourite) {
+                ibFav.setImageResource(R.drawable.ic_fav_pressed)
+            } else {
+                ibFav.setImageResource(R.drawable.ic_fav_normal)
             }
         }
 
