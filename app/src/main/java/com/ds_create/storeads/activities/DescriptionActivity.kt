@@ -31,7 +31,31 @@ class DescriptionActivity : AppCompatActivity() {
 
     private fun getIntentFromMainAct() {
         val ad = intent.getSerializableExtra(AD_NODE) as AdModel
+        updateUI(ad)
+    }
+
+    private fun updateUI(ad: AdModel) {
         fillImageArray(ad)
+        fillTextViews(ad)
+    }
+
+    private fun fillTextViews(ad: AdModel) = with(binding) {
+        tvTitle.text = ad.title
+        tvDescription.text = ad.description
+        tvPrice.text = ad.price
+        tvPhone.text = ad.phone
+        tvCountry.text = ad.country
+        tvCity.text = ad.city
+        tvIndex.text = ad.index
+        tvWithSent.text = isWithSent(ad.withSend.toBoolean())
+    }
+
+    private fun isWithSent(withSent: Boolean): String {
+        return if (withSent) {
+            getString(R.string.with_sent_yes)
+        } else {
+            getString(R.string.with_sent_no)
+        }
     }
 
     private fun fillImageArray(ad: AdModel) {
