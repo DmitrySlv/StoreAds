@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.viewpager2.widget.ViewPager2
 import com.ds_create.storeads.R
 import com.ds_create.storeads.adapters.ImageAdapter
 import com.ds_create.storeads.data.database.DbManager
@@ -37,6 +38,7 @@ class EditAdsActivity : AppCompatActivity(), FragmentCloseInterface {
         setContentView(binding.root)
         init()
         checkEditState()
+        imageChangeCounter()
     }
 
     private fun init() {
@@ -204,5 +206,15 @@ class EditAdsActivity : AppCompatActivity(), FragmentCloseInterface {
         uploadTask.continueWithTask{
                 task-> imStorageReference.downloadUrl
         }.addOnCompleteListener (listener)
+    }
+
+    private fun imageChangeCounter() {
+        binding.vpImages.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                val imageCounter = "${position + 1}/${binding.vpImages.adapter?.itemCount}"
+                binding.tvImageCounter.text = imageCounter
+            }
+        })
     }
 }
