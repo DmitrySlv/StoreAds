@@ -187,6 +187,9 @@ AdsRcAdapter.Listener {
 
     override fun onAdViewed(ad: AdModel) {
         firebaseViewModel.adViewed(ad)
+        val i = Intent(this, DescriptionActivity::class.java)
+        i.putExtra(DescriptionActivity.AD_NODE, ad)
+        startActivity(i)
     }
 
     override fun onFavouriteClicked(ad: AdModel) {

@@ -7,10 +7,10 @@ import android.net.Uri
 import android.util.Log
 import android.widget.ImageView
 import androidx.exifinterface.media.ExifInterface
+import com.ds_create.storeads.adapters.ImageAdapter
+import com.ds_create.storeads.models.AdModel
 import com.squareup.picasso.Picasso
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import java.io.File
 import java.io.InputStream
 
@@ -70,7 +70,7 @@ object ImageManager {
        return@withContext bitmapList
     }
 
-    suspend fun getBitmapFromUris(uris: List<String?>)
+    private suspend fun getBitmapFromUris(uris: List<String?>)
     : List<Bitmap> = withContext(Dispatchers.IO) {
 
         val bitmapList = ArrayList<Bitmap>()
@@ -82,6 +82,14 @@ object ImageManager {
             }
         }
         return@withContext bitmapList
+    }
+
+    fun fillImageArray(ad: AdModel, imageAdapter: ImageAdapter) {
+        val listUris = listOf(ad.mainImage, ad.image2, ad.image3)
+        CoroutineScope(Dispatchers.Main).launch {
+            val bitmapList = getBitmapFromUris(listUris)
+            imageAdapter.update(bitmapList as ArrayList<Bitmap>)
+        }
     }
 
    private const val MAX_IMAGE_SIZE = 1000

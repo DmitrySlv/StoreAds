@@ -15,6 +15,7 @@ import com.ds_create.storeads.fragments.FragmentCloseInterface
 import com.ds_create.storeads.fragments.ImageListFrag
 import com.ds_create.storeads.models.AdModel
 import com.ds_create.storeads.utils.CityHelper
+import com.ds_create.storeads.utils.ImageManager
 import com.ds_create.storeads.utils.ImagePicker
 import com.google.android.gms.tasks.OnCompleteListener
 import java.io.ByteArrayOutputStream
@@ -67,6 +68,7 @@ class EditAdsActivity : AppCompatActivity(), FragmentCloseInterface {
         edTitle.setText(ad.title)
         edPrice.setText(ad.price)
         edDescription.setText(ad.description)
+        ImageManager.fillImageArray(ad, imageAdapter)
     }
 
     //OnClicks

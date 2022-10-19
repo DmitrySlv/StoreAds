@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.core.net.toUri
+import androidx.viewpager2.widget.ViewPager2
 import com.ds_create.storeads.R
 import com.ds_create.storeads.adapters.ImageAdapter
 import com.ds_create.storeads.databinding.ActivityDescriptionBinding
@@ -39,6 +40,7 @@ class DescriptionActivity : AppCompatActivity() {
         imageAdapter = ImageAdapter()
         viewPager.adapter = imageAdapter
         getIntentFromMainAct()
+        imageChangeCounter()
     }
 
     private fun getIntentFromMainAct() {
@@ -49,7 +51,7 @@ class DescriptionActivity : AppCompatActivity() {
     }
 
     private fun updateUI(ad: AdModel) {
-        fillImageArray(ad)
+       ImageManager.fillImageArray(ad, imageAdapter)
         fillTextViews(ad)
     }
 
@@ -73,14 +75,6 @@ class DescriptionActivity : AppCompatActivity() {
         }
     }
 
-    private fun fillImageArray(ad: AdModel) {
-        val listUris = listOf(ad.mainImage, ad.image2, ad.image3)
-        CoroutineScope(Dispatchers.Main).launch {
-            val bitmapList = ImageManager.getBitmapFromUris(listUris)
-            imageAdapter.update(bitmapList as ArrayList<Bitmap>)
-        }
-    }
-
     private fun call() {
         val callUri = getString(R.string.tel_for_intent) + ad?.phone
         val intentCall = Intent(Intent.ACTION_DIAL)
@@ -101,6 +95,16 @@ class DescriptionActivity : AppCompatActivity() {
         } catch (e: ActivityNotFoundException) {
             Toast.makeText(this, getString(R.string.text_intent_exception_email), Toast.LENGTH_LONG).show()
         }
+    }
+
+    private fun imageChangeCounter() {
+        binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                val imageCounter = "${position + 1}/${binding.viewPager.adapter?.itemCount}"
+                binding.tvImageCounter.text = imageCounter
+            }
+        })
     }
 
     companion object {

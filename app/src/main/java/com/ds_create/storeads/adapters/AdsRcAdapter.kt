@@ -63,10 +63,6 @@ class AdsRcAdapter(private val activity: MainActivity): RecyclerView.Adapter<Ads
         private fun mainOnClicks(ad: AdModel) = with(binding) {
             itemView.setOnClickListener {
                 activity.onAdViewed(ad)
-
-                val i = Intent(binding.root.context, DescriptionActivity::class.java)
-                i.putExtra(DescriptionActivity.AD_NODE, ad)
-                binding.root.context.startActivity(i)
             }
             ibFav.setOnClickListener {
                 if (activity.mAuth.currentUser?.isAnonymous == false) {
