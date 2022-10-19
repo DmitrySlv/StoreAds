@@ -134,6 +134,7 @@ class EditAdsActivity : AppCompatActivity(), FragmentCloseInterface {
                 edTitle.text.toString(),
                 edPrice.text.toString(),
                 edDescription.text.toString(),
+                edEmail.text.toString(),
                 "empty",
                 "empty",
                 "empty",

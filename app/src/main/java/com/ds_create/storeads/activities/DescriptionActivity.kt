@@ -1,8 +1,13 @@
 package com.ds_create.storeads.activities
 
+
+import android.content.ActivityNotFoundException
+import android.content.Intent
 import android.graphics.Bitmap
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
+import androidx.core.net.toUri
 import com.ds_create.storeads.R
 import com.ds_create.storeads.adapters.ImageAdapter
 import com.ds_create.storeads.databinding.ActivityDescriptionBinding
@@ -16,22 +21,31 @@ class DescriptionActivity : AppCompatActivity() {
 
     private val binding by lazy { ActivityDescriptionBinding.inflate(layoutInflater) }
     private lateinit var imageAdapter: ImageAdapter
+    private var ad: AdModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         init()
+        binding.fbPhone.setOnClickListener {
+            call()
+        }
+        binding.fbEmail.setOnClickListener {
+            sendEmail()
+        }
     }
 
-    private fun init()= with(binding) {
+    private fun init() = with(binding) {
         imageAdapter = ImageAdapter()
         viewPager.adapter = imageAdapter
         getIntentFromMainAct()
     }
 
     private fun getIntentFromMainAct() {
-        val ad = intent.getSerializableExtra(AD_NODE) as AdModel
-        updateUI(ad)
+        ad = intent.getSerializableExtra(AD_NODE) as AdModel
+        ad?.let {
+            updateUI(ad!!)
+        }
     }
 
     private fun updateUI(ad: AdModel) {
@@ -42,6 +56,7 @@ class DescriptionActivity : AppCompatActivity() {
     private fun fillTextViews(ad: AdModel) = with(binding) {
         tvTitle.text = ad.title
         tvDescription.text = ad.description
+        tvEmail.text = ad.email
         tvPrice.text = ad.price
         tvPhone.text = ad.phone
         tvCountry.text = ad.country
@@ -66,7 +81,33 @@ class DescriptionActivity : AppCompatActivity() {
         }
     }
 
+    private fun call() {
+        val callUri = getString(R.string.tel_for_intent) + ad?.phone
+        val intentCall = Intent(Intent.ACTION_DIAL)
+        intentCall.data = callUri.toUri()
+        startActivity(intentCall)
+    }
+
+    private fun sendEmail() {
+        val intentSendEmail = Intent(Intent.ACTION_SEND)
+        intentSendEmail.type = SEND_EMAIL_TYPE
+        intentSendEmail.apply {
+            putExtra(Intent.EXTRA_EMAIL, arrayOf(ad?.email))
+            putExtra(Intent.EXTRA_SUBJECT, SUBJECT_TEXT)
+            putExtra(Intent.EXTRA_TEXT, TEXT)
+        }
+        try {
+            startActivity(Intent.createChooser(intentSendEmail, OPEN_WITH_TEXT))
+        } catch (e: ActivityNotFoundException) {
+            Toast.makeText(this, getString(R.string.text_intent_exception_email), Toast.LENGTH_LONG).show()
+        }
+    }
+
     companion object {
         const val AD_NODE = "ad"
+        private const val SEND_EMAIL_TYPE = "message/rfc822"
+        private const val SUBJECT_TEXT = "Объявление"
+        private const val TEXT = "Здравствуйте! Меня заинтересовало ваше объявление."
+        private const val OPEN_WITH_TEXT = "Открыть с помощью"
     }
 }

@@ -55,6 +55,8 @@
     <string name="index_hint">Введите индекс</string>
     <string name="phone">*Телефон</string>
     <string name="phone_number">Введите номер телефона</string>
+    <string name="email_desc_ed_act">Email адрес</string>
+    <string name="email_input_ed_act">Введите ваш email адрес</string>
     <string name="no_country_selected">Страна не выбрана! Пожалуйста, выберите страну.</string>
     <string name="category">*Категория</string>
     <string name="title">*Заголовок объявления</string>
@@ -94,4 +96,7 @@
     <string name="with_send_desc_act">С отправкой?</string>
     <string name="with_sent_yes">Да</string>
     <string name="with_sent_no">Нет</string>
+    <string name="tel_for_intent">tel:</string>
+    <string name="text_intent_exception_email">На вашем устройстве нет приложения для отправки
+        email. Пожалуйста установите приложение для отправки email и попробуйте снова.</string>
 </resources>
