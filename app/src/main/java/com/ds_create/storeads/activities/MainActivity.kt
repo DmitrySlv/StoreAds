@@ -2,15 +2,19 @@ package com.ds_create.storeads.activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -28,6 +32,7 @@ import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.squareup.picasso.Picasso
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
 AdsRcAdapter.Listener {
@@ -40,6 +45,7 @@ AdsRcAdapter.Listener {
     private val dialogHelper = DialogHelper(this)
     val mAuth = Firebase.auth
     private lateinit var tvAccount: TextView
+    private lateinit var imAccount: ImageView
     private val adsRcAdapter = AdsRcAdapter(this)
     lateinit var googleSignInLauncher: ActivityResultLauncher<Intent>
 
@@ -81,6 +87,7 @@ AdsRcAdapter.Listener {
     private fun init() = with(binding) {
         setSupportActionBar(mainContent.toolbar)
         onActivityResult()
+        navViewSettings()
         val toggle = ActionBarDrawerToggle(
             this@MainActivity,
            drawerLayout, mainContent.toolbar, R.string.open, R.string.close
@@ -89,6 +96,7 @@ AdsRcAdapter.Listener {
         toggle.syncState()
         navView.setNavigationItemSelectedListener(this@MainActivity)
         tvAccount = navView.getHeaderView(0).findViewById(R.id.tvAccountEmail)
+        imAccount = navView.getHeaderView(0).findViewById(R.id.imAccountImage)
     }
 
     private fun initViewModel() {
@@ -152,12 +160,15 @@ AdsRcAdapter.Listener {
             dialogHelper.accHelper.signInAnonymously(object : AccountHelper.AccHelperListener {
                 override fun onComplete() {
                     tvAccount.text = getString(R.string.guest)
+                    imAccount.setImageResource(R.drawable.ic_account_def)
                 }
             })
         } else if (user.isAnonymous) {
             tvAccount.text = getString(R.string.guest)
+            imAccount.setImageResource(R.drawable.ic_account_def)
         } else if (!user.isAnonymous) {
             tvAccount.text = user.email
+            Picasso.get().load(user.photoUrl).into(imAccount)
         }
     }
 
@@ -197,6 +208,32 @@ AdsRcAdapter.Listener {
 
     override fun onFavouriteClicked(ad: AdModel) {
         firebaseViewModel.onFavouritesClick(ad)
+    }
+
+    private fun navViewSettings() = with(binding) {
+        val menu = navView.menu
+        val adsCat = menu.findItem(R.id.ads_cat)
+        val spanAdsCat = SpannableString(adsCat.title)
+        adsCat.title?.let {
+            spanAdsCat.setSpan(ForegroundColorSpan(
+                ContextCompat.getColor(this@MainActivity, R.color.color_red)),
+                0,
+                it.length,
+                0
+            )
+            adsCat.title = spanAdsCat
+        }
+        val adsAcc = menu.findItem(R.id.ads_acc)
+        val spanAdsAcc = SpannableString(adsAcc.title)
+        adsAcc.title?.let {
+            spanAdsAcc.setSpan(ForegroundColorSpan(
+                ContextCompat.getColor(this@MainActivity, R.color.color_red)),
+                0,
+                it.length,
+                0
+            )
+            adsAcc.title = spanAdsAcc
+        }
     }
 
     companion object {
