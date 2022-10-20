@@ -18,6 +18,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.ds_create.storeads.R
 import com.ds_create.storeads.adapters.AdsRcAdapter
 import com.ds_create.storeads.databinding.ActivityMainBinding
@@ -57,6 +58,7 @@ AdsRcAdapter.Listener {
         initViewModel()
         firebaseViewModel.loadAllAds()
         bottomMenuOnClick()
+        scrollListener()
     }
 
     override fun onStart() {
@@ -236,8 +238,22 @@ AdsRcAdapter.Listener {
         }
     }
 
+    private fun scrollListener() = with(binding.mainContent) {
+        rcViewItems.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if (!rcViewItems.canScrollVertically(SCROLL_DOWN) &&
+                    newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    Log.d("MyLog", "не может скролиться вниз")
+                }
+            }
+        })
+    }
+
     companion object {
         const val EDIT_STATE = "edit_state"
         const val ADS_DATA = "ads_data"
+        private const val SCROLL_DOWN = 1
     }
 }
