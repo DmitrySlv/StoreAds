@@ -18,6 +18,7 @@ data class AdModel(
     val image3: String? = null,
     val key: String? = null,
     val uid: String? = null,
+    var time: String = "0",
     var favouriteCounter: String = "0",
     var isFavourite: Boolean = false,
 

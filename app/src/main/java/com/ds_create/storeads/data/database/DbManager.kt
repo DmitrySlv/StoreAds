@@ -83,8 +83,9 @@ class DbManager {
         readDataFromDb(readCallback, query)
     }
 
-    fun getAllAds(readCallback: ReadDataCallback?) {
-        val query = database.orderByChild(auth.uid + "/ad/price")
+    fun getAllAds(lasTime: String, readCallback: ReadDataCallback?) {
+        val query = database.orderByChild(auth.uid + "/ad/time")
+            .startAfter(lasTime).limitToFirst(ADS_LIMIT)
         readDataFromDb(readCallback, query)
     }
 
@@ -144,10 +145,11 @@ class DbManager {
     }
 
     companion object {
-        const val AD_NODE = "ad"
-        const val MAIN_NODE = "main"
-        const val INFO_NODE = "info"
-        const val FAVOURITES_NODE = "favourites"
+        private const val AD_NODE = "ad"
+        private const val MAIN_NODE = "main"
+        private const val INFO_NODE = "info"
+        private const val FAVOURITES_NODE = "favourites"
+        private const val ADS_LIMIT = 2
     }
 
 

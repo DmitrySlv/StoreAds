@@ -56,7 +56,6 @@ AdsRcAdapter.Listener {
         init()
         initRcView()
         initViewModel()
-        firebaseViewModel.loadAllAds()
         bottomMenuOnClick()
         scrollListener()
     }
@@ -189,7 +188,7 @@ AdsRcAdapter.Listener {
                     firebaseViewModel.loadMyFavourites()
                 }
                 R.id.id_home -> {
-                   firebaseViewModel.loadAllAds()
+                   firebaseViewModel.loadAllAds(FIRST_PAGE)
                     mainContent.toolbar.title = getString(R.string.def_title)
                 }
             }
@@ -219,10 +218,7 @@ AdsRcAdapter.Listener {
         adsCat.title?.let {
             spanAdsCat.setSpan(ForegroundColorSpan(
                 ContextCompat.getColor(this@MainActivity, R.color.color_red)),
-                0,
-                it.length,
-                0
-            )
+                START_SPAN, it.length, 0)
             adsCat.title = spanAdsCat
         }
         val adsAcc = menu.findItem(R.id.ads_acc)
@@ -230,10 +226,7 @@ AdsRcAdapter.Listener {
         adsAcc.title?.let {
             spanAdsAcc.setSpan(ForegroundColorSpan(
                 ContextCompat.getColor(this@MainActivity, R.color.color_red)),
-                0,
-                it.length,
-                0
-            )
+                START_SPAN, it.length, 0)
             adsAcc.title = spanAdsAcc
         }
     }
@@ -245,7 +238,11 @@ AdsRcAdapter.Listener {
                 super.onScrollStateChanged(recyclerView, newState)
                 if (!rcViewItems.canScrollVertically(SCROLL_DOWN) &&
                     newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    Log.d("MyLog", "не может скролиться вниз")
+                   val adsList = firebaseViewModel.liveAdsData.value!!
+                        if (adsList.isNotEmpty()) {
+                            adsList[adsList.size -1].let { firebaseViewModel.loadAllAds(it.time) }
+                    }
+
                 }
             }
         })
@@ -254,6 +251,8 @@ AdsRcAdapter.Listener {
     companion object {
         const val EDIT_STATE = "edit_state"
         const val ADS_DATA = "ads_data"
+        private const val START_SPAN = 0
         private const val SCROLL_DOWN = 1
+        private const val FIRST_PAGE = "0"
     }
 }
