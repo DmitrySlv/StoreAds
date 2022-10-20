@@ -7,6 +7,8 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
@@ -39,6 +41,7 @@ AdsRcAdapter.Listener {
     val mAuth = Firebase.auth
     private lateinit var tvAccount: TextView
     private val adsRcAdapter = AdsRcAdapter(this)
+    lateinit var googleSignInLauncher: ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,9 +63,9 @@ AdsRcAdapter.Listener {
         binding.mainContent.bNavView.selectedItemId = R.id.id_home
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == GoogleAccConst.GOOGLE_SIGN_IN_REQUEST_CODE) {
-            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+    private fun onActivityResult() {
+        googleSignInLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            val task = GoogleSignIn.getSignedInAccountFromIntent(it.data)
             try {
                 val account = task.getResult(ApiException::class.java)
                 account?.let {
@@ -73,11 +76,11 @@ AdsRcAdapter.Listener {
                 Log.d("MyLog", "Api error: ${e.message}")
             }
         }
-        super.onActivityResult(requestCode, resultCode, data)
     }
 
     private fun init() = with(binding) {
         setSupportActionBar(mainContent.toolbar)
+        onActivityResult()
         val toggle = ActionBarDrawerToggle(
             this@MainActivity,
            drawerLayout, mainContent.toolbar, R.string.open, R.string.close
