@@ -89,15 +89,26 @@ class DbManager {
         readDataFromDb(readCallback, query)
     }
 
-    fun getAllAds(lasTime: String, readCallback: ReadDataCallback?) {
-        val query = database.orderByChild(AD_FILTER_TIME_PATH)
-            .startAfter(lasTime).limitToFirst(ADS_LIMIT)
+    fun getAllAdsFirstPage(readCallback: ReadDataCallback?) {
+        val query = database.orderByChild(AD_FILTER_TIME_PATH).limitToLast(ADS_LIMIT)
         readDataFromDb(readCallback, query)
     }
 
-    fun getAllAdsFromCat(lasCatTime: String, readCallback: ReadDataCallback?) {
+    fun getAllAdsNextPage(time: String, readCallback: ReadDataCallback?) {
+        val query = database.orderByChild(AD_FILTER_TIME_PATH)
+            .endBefore(time).limitToLast(ADS_LIMIT)
+        readDataFromDb(readCallback, query)
+    }
+
+    fun getAllAdsFromCatFirstPage(cat: String, readCallback: ReadDataCallback?) {
         val query = database.orderByChild(AD_FILTER_CAT_TIME_PATH)
-            .startAfter(lasCatTime).limitToFirst(ADS_LIMIT)
+            .startAt(cat).endAt(cat + END_AT_TIME).limitToLast(ADS_LIMIT)
+        readDataFromDb(readCallback, query)
+    }
+
+    fun getAllAdsFromCatNextPage(catTime: String, readCallback: ReadDataCallback?) {
+        val query = database.orderByChild(AD_FILTER_CAT_TIME_PATH)
+           .endBefore(catTime).limitToLast(ADS_LIMIT)
         readDataFromDb(readCallback, query)
     }
 
@@ -169,6 +180,7 @@ class DbManager {
         private const val FAVOURITES_NODE = "favourites"
         private const val ADS_LIMIT = 2
         private const val DEF_COUNT_INFO_ITEM = "0"
+        private const val END_AT_TIME = "_\uf8ff"
     }
 
 

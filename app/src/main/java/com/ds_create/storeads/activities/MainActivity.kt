@@ -25,7 +25,6 @@ import com.ds_create.storeads.databinding.ActivityMainBinding
 import com.ds_create.storeads.models.AdModel
 import com.ds_create.storeads.utils.accounthelper.AccountHelper
 import com.ds_create.storeads.utils.dialoghelper.DialogHelper
-import com.ds_create.storeads.utils.dialoghelper.GoogleAccConst
 import com.ds_create.storeads.viewModel.FirebaseViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.common.api.ApiException
@@ -50,6 +49,7 @@ AdsRcAdapter.Listener {
     private val adsRcAdapter = AdsRcAdapter(this)
     lateinit var googleSignInLauncher: ActivityResultLauncher<Intent>
     private var clearUpdate: Boolean = true
+    private var currentCategory: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -86,7 +86,9 @@ AdsRcAdapter.Listener {
         }
     }
 
+
     private fun init() = with(binding) {
+        currentCategory = getString(R.string.ad_def)
         setSupportActionBar(mainContent.toolbar)
         onActivityResult()
         navViewSettings()
@@ -103,10 +105,11 @@ AdsRcAdapter.Listener {
 
     private fun initViewModel() {
         firebaseViewModel.liveAdsData.observe(this) {
+            val list = getAdsByCategory(it)
             if (!clearUpdate) {
-                adsRcAdapter.updateAdapter(it)
+                adsRcAdapter.updateAdapter(list)
             } else {
-                adsRcAdapter.updateAdapterWithClear(it)
+                adsRcAdapter.updateAdapterWithClear(list)
             }
             binding.mainContent.tvEmpty.visibility = if (adsRcAdapter.itemCount == 0) {
                 View.VISIBLE
@@ -162,9 +165,24 @@ AdsRcAdapter.Listener {
         return true
     }
 
+    private fun getAdsByCategory(list: ArrayList<AdModel>): ArrayList<AdModel> {
+        val tempList = ArrayList<AdModel>()
+        tempList.addAll(list)
+        if (currentCategory != getString(R.string.ad_def)) {
+            tempList.clear()
+            list.forEach {
+                if (currentCategory == it.category) {
+                    tempList.add(it)
+                }
+            }
+        }
+        tempList.reverse()
+        return tempList
+    }
+
     private fun getAdsFromCat(cat: String) {
-        val catTime ="${cat}_0"
-        firebaseViewModel.loadAllAdsFromCat(catTime)
+        currentCategory = cat
+        firebaseViewModel.loadAllAdsFromCat(cat)
     }
 
     fun uiUpdate(user: FirebaseUser?) {
@@ -200,7 +218,8 @@ AdsRcAdapter.Listener {
                     firebaseViewModel.loadMyFavourites()
                 }
                 R.id.id_home -> {
-                   firebaseViewModel.loadAllAds(FIRST_PAGE)
+                    currentCategory = getString(R.string.ad_def)
+                   firebaseViewModel.loadAllAdsFirstPage()
                     mainContent.toolbar.title = getString(R.string.def_title)
                 }
             }
@@ -237,7 +256,7 @@ AdsRcAdapter.Listener {
         val spanAdsAcc = SpannableString(adsAcc.title)
         adsAcc.title?.let {
             spanAdsAcc.setSpan(ForegroundColorSpan(
-                ContextCompat.getColor(this@MainActivity, R.color.color_red)),
+                ContextCompat.getColor(this@MainActivity, R.color.green)),
                 START_SPAN, it.length, 0)
             adsAcc.title = spanAdsAcc
         }
@@ -262,12 +281,12 @@ AdsRcAdapter.Listener {
     }
 
     private fun getAdsFromCat(adsList: ArrayList<AdModel>) {
-        adsList[adsList.size - 1].let {
-            if (it.category == getString(R.string.ad_def)) {
-                firebaseViewModel.loadAllAds(it.time)
+        adsList[0].let {
+            if (currentCategory == getString(R.string.ad_def)) {
+                firebaseViewModel.loadAllAdsNextPage(it.time)
             } else {
                 val catTime = "${it.category}_${it.time}"
-                firebaseViewModel.loadAllAdsFromCat(catTime)
+                firebaseViewModel.loadAllAdsFromCatNextPage(catTime)
             }
         }
     }
