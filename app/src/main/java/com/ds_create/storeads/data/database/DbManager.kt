@@ -1,5 +1,6 @@
 package com.ds_create.storeads.data.database
 
+import com.ds_create.storeads.models.AdFilterModel
 import com.ds_create.storeads.models.AdModel
 import com.ds_create.storeads.models.InfoItemModel
 import com.google.firebase.auth.ktx.auth
@@ -18,12 +19,17 @@ class DbManager {
 
     fun publishAd(ad: AdModel, listener: FinishWorkListener) {
         if (auth.uid != null) {
-            database.child(ad.key ?: "empty")
+            database.child(ad.key ?: EMPTY_NODE)
                 .child(auth.uid!!).child(AD_NODE).setValue(ad)
                 .addOnCompleteListener {
-                    if (it.isSuccessful) {
-                        listener.onFinishWork()
-                    }
+
+                    val adFilter = AdFilterModel(ad.time, "${ad.category}_${ad.time}")
+                    database.child(ad.key ?: EMPTY_NODE).child(FILTER_NODE).setValue(adFilter)
+                        .addOnCompleteListener {
+                            if (it.isSuccessful) {
+                                listener.onFinishWork()
+                            }
+                        }
                 }
         }
     }
@@ -32,7 +38,7 @@ class DbManager {
         var counter = ad.viewsCounter.toInt()
         counter++
         if (auth.uid != null) {
-            database.child(ad.key ?: "empty")
+            database.child(ad.key ?: EMPTY_NODE)
                 .child(INFO_NODE).setValue(InfoItemModel(
                     counter.toString(), ad.emailCounter, ad.callsCounter
                 ))
@@ -74,18 +80,24 @@ class DbManager {
     }
 
     fun getMyAds(readCallback: ReadDataCallback?) {
-        val query = database.orderByChild(auth.uid + "/ad/uid").equalTo(auth.uid)
+        val query = database.orderByChild(auth.uid + AD_UID_PATH).equalTo(auth.uid)
         readDataFromDb(readCallback, query)
     }
 
     fun getMyFavourites(readCallback: ReadDataCallback?) {
-        val query = database.orderByChild("/favourites/${auth.uid}").equalTo(auth.uid)
+        val query = database.orderByChild(AD_FAVOURITES_PATH + auth.uid).equalTo(auth.uid)
         readDataFromDb(readCallback, query)
     }
 
     fun getAllAds(lasTime: String, readCallback: ReadDataCallback?) {
-        val query = database.orderByChild(auth.uid + "/ad/time")
+        val query = database.orderByChild(AD_FILTER_TIME_PATH)
             .startAfter(lasTime).limitToFirst(ADS_LIMIT)
+        readDataFromDb(readCallback, query)
+    }
+
+    fun getAllAdsFromCat(lasCatTime: String, readCallback: ReadDataCallback?) {
+        val query = database.orderByChild(AD_FILTER_CAT_TIME_PATH)
+            .startAfter(lasCatTime).limitToFirst(ADS_LIMIT)
         readDataFromDb(readCallback, query)
     }
 
@@ -122,9 +134,9 @@ class DbManager {
                     ad?.isFavourite = isFavourite != null
                     ad?.favouriteCounter = favouriteCounter.toString()
 
-                    ad?.viewsCounter = infoItem?.viewsCounter ?: "0"
-                    ad?.emailCounter = infoItem?.emailsCounter ?: "0"
-                    ad?.callsCounter = infoItem?.callsCounter ?: "0"
+                    ad?.viewsCounter = infoItem?.viewsCounter ?: DEF_COUNT_INFO_ITEM
+                    ad?.emailCounter = infoItem?.emailsCounter ?: DEF_COUNT_INFO_ITEM
+                    ad?.callsCounter = infoItem?.callsCounter ?: DEF_COUNT_INFO_ITEM
                     if (ad != null) {
                         adArray.add(ad!!)
                     }
@@ -146,10 +158,17 @@ class DbManager {
 
     companion object {
         private const val AD_NODE = "ad"
+        private const val FILTER_NODE = "adFilter"
         private const val MAIN_NODE = "main"
         private const val INFO_NODE = "info"
+        private const val EMPTY_NODE = "empty"
+        private const val AD_UID_PATH = "/ad/uid"
+        private const val AD_FAVOURITES_PATH = "/favourites/"
+        private const val AD_FILTER_TIME_PATH = "/adFilter/time"
+        private const val AD_FILTER_CAT_TIME_PATH = "/adFilter/catTime"
         private const val FAVOURITES_NODE = "favourites"
         private const val ADS_LIMIT = 2
+        private const val DEF_COUNT_INFO_ITEM = "0"
     }
 
 
