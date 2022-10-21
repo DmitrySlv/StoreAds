@@ -46,6 +46,14 @@ class AdsRcAdapter(private val activity: MainActivity): RecyclerView.Adapter<Ads
         adsArray.addAll(tempArray)
     }
 
+    fun updateAdapterWithClear(newList: List<AdModel>) {
+
+        val diffResult = DiffUtil.calculateDiff(DiffUtilCallback(adsArray, newList))
+        diffResult.dispatchUpdatesTo(this)
+        adsArray.clear()
+        adsArray.addAll(newList)
+    }
+
     class AdHolder(
         private val binding: AdListItemBinding,
         private val activity: MainActivity
