@@ -99,4 +99,6 @@
     <string name="tel_for_intent">tel:</string>
     <string name="text_intent_exception_email">На вашем устройстве нет приложения для отправки
         email. Пожалуйста установите приложение для отправки email и попробуйте снова.</string>
+    <!-- Filter Activity -->
+    <string name="filter_done">Применить фильтр</string>
 </resources>
