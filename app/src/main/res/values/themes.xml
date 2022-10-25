@@ -40,4 +40,13 @@
     <style name="ColorItems">
         <item name="colorOnSecondary">@color/white</item>
     </style>
+
+    <!-- Filter Activity фон для items кнопок -->
+    <style name="AppTheme.Filter" parent="Theme.MaterialComponents.Light">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/white</item>
+        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="android:windowFullscreen">true</item>
+    </style>
 </resources>
