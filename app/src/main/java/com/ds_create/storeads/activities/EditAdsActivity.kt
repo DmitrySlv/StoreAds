@@ -39,6 +39,11 @@ class EditAdsActivity : AppCompatActivity(), FragmentCloseInterface {
         init()
         checkEditState()
         imageChangeCounter()
+        onClickSelectCountry()
+        onClickSelectCity()
+        onClickSelectCat()
+        onClickGetImages()
+        onClickPublish()
     }
 
     private fun init() {
@@ -74,46 +79,58 @@ class EditAdsActivity : AppCompatActivity(), FragmentCloseInterface {
     }
 
     //OnClicks
-    fun onClickSelectCountry(view: View) {
-        val listCountry = CityHelper.getAllCountries(this)
-        dialog.showSpinnerDialog(this, listCountry, binding.tvCountry)
-        if (binding.tvCity.text.toString() != getString(R.string.select_city)) {
-            binding.tvCity.text = getString(R.string.select_city)
+    fun onClickSelectCountry() = with(binding) {
+        tvCountry.setOnClickListener {
+            val listCountry = CityHelper.getAllCountries(this@EditAdsActivity)
+            dialog.showSpinnerDialog(this@EditAdsActivity, listCountry, tvCountry)
+            if (tvCity.text.toString() != getString(R.string.select_city)) {
+                tvCity.text = getString(R.string.select_city)
+            }
+        }
+
+    }
+
+    fun onClickSelectCity() = with(binding) {
+        tvCity.setOnClickListener {
+            val selectedCountry = tvCountry.text.toString()
+            if (selectedCountry != getString(R.string.select_country)) {
+                val listCity = CityHelper.getAllCities(this@EditAdsActivity, selectedCountry)
+                dialog.showSpinnerDialog(this@EditAdsActivity, listCity, tvCity)
+            } else {
+                Toast.makeText(this@EditAdsActivity,
+                    getString(R.string.no_country_selected), Toast.LENGTH_LONG).show()
+            }
         }
     }
 
-    fun onClickSelectCity(view: View) {
-        val selectedCountry = binding.tvCountry.text.toString()
-        if (selectedCountry != getString(R.string.select_country)) {
-            val listCity = CityHelper.getAllCities(this, selectedCountry)
-            dialog.showSpinnerDialog(this, listCity, binding.tvCity)
-        } else {
-            Toast.makeText(this,
-                getString(R.string.no_country_selected), Toast.LENGTH_LONG).show()
+    fun onClickSelectCat() = with(binding) {
+        tvCat.setOnClickListener {
+            val listCategory = resources.getStringArray(R.array.category).toMutableList() as ArrayList
+            dialog.showSpinnerDialog(this@EditAdsActivity, listCategory, tvCat)
+        }
+
+    }
+
+    fun onClickGetImages() {
+        binding.ibEditImageAd.setOnClickListener {
+            if (imageAdapter.mainArray.size == 0) {
+                ImagePicker.getMultiImages(this@EditAdsActivity, ImagePicker.MULTI_IMAGE_COUNTER)
+            } else {
+                openChooseImageFrag(null)
+                chooseImageFrag?.updateAdapterFromEdit(imageAdapter.mainArray)
+            }
         }
     }
 
-    fun onClickSelectCat(view: View) {
-        val listCategory = resources.getStringArray(R.array.category).toMutableList() as ArrayList
-        dialog.showSpinnerDialog(this, listCategory, binding.tvCat)
-    }
-
-    fun onClickGetImages(view: View) {
-        if (imageAdapter.mainArray.size == 0) {
-        ImagePicker.getMultiImages(this, ImagePicker.MULTI_IMAGE_COUNTER)
-    } else {
-        openChooseImageFrag(null)
-            chooseImageFrag?.updateAdapterFromEdit(imageAdapter.mainArray)
-        }
-    }
-
-    fun onClickPublish(view: View) {
-        ad = fillAd()
-        if (isEditState){
-            ad?.copy(key = ad?.key)?.let { dbManager.publishAd(it, onPublishFinish()) }
-        } else {
-           // dbManager.publishAd(adTemp, onPublishFinish())
-            uploadImages()
+    fun onClickPublish() {
+        binding.btPublish.setOnClickListener {
+            ad = fillAd()
+            if (isEditState){
+                ad?.copy(key = ad?.key)?.let { dbManager.publishAd(it, onPublishFinish()) }
+            } else {
+                // dbManager.publishAd(adTemp, onPublishFinish())
+                uploadImages()
+            }
         }
     }
 
