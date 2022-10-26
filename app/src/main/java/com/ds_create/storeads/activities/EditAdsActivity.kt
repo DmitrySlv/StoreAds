@@ -70,7 +70,7 @@ class EditAdsActivity : AppCompatActivity(), FragmentCloseInterface {
         tvCity.text = ad.city
         edPhone.setText(ad.phone)
         edIndex.setText(ad.index)
-        checkBoxWithSend.isChecked = ad.withSend.toBoolean()
+        checkBoxWithSend.isChecked = ad.withSent.toBoolean()
         tvCat.text = ad.category
         edTitle.setText(ad.title)
         edPrice.setText(ad.price)

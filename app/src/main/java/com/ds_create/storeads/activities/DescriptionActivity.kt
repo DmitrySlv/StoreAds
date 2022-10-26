@@ -3,7 +3,6 @@ package com.ds_create.storeads.activities
 
 import android.content.ActivityNotFoundException
 import android.content.Intent
-import android.graphics.Bitmap
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -14,9 +13,6 @@ import com.ds_create.storeads.adapters.ImageAdapter
 import com.ds_create.storeads.databinding.ActivityDescriptionBinding
 import com.ds_create.storeads.models.AdModel
 import com.ds_create.storeads.utils.ImageManager
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class DescriptionActivity : AppCompatActivity() {
 
@@ -64,7 +60,7 @@ class DescriptionActivity : AppCompatActivity() {
         tvCountry.text = ad.country
         tvCity.text = ad.city
         tvIndex.text = ad.index
-        tvWithSent.text = isWithSent(ad.withSend.toBoolean())
+        tvWithSent.text = isWithSent(ad.withSent.toBoolean())
     }
 
     private fun isWithSent(withSent: Boolean): String {

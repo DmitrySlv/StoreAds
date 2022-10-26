@@ -7,7 +7,7 @@ data class AdModel(
     val city: String? = null,
     val phone: String? = null,
     val index: String? = null,
-    val withSend: String? = null,
+    val withSent: String? = null,
     val category: String? = null,
     val title: String? = null,
     val price: String? = null,

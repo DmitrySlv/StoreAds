@@ -1,8 +1,8 @@
 package com.ds_create.storeads.data.database
 
-import com.ds_create.storeads.models.AdFilterModel
 import com.ds_create.storeads.models.AdModel
 import com.ds_create.storeads.models.InfoItemModel
+import com.ds_create.storeads.utils.FilterManager
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -23,8 +23,9 @@ class DbManager {
                 .child(auth.uid!!).child(AD_NODE).setValue(ad)
                 .addOnCompleteListener {
 
-                    val adFilter = AdFilterModel(ad.time, "${ad.category}_${ad.time}")
-                    database.child(ad.key ?: EMPTY_NODE).child(FILTER_NODE).setValue(adFilter)
+                    val adFilter = FilterManager.createFilter(ad)
+                    database.child(ad.key ?: EMPTY_NODE).child(FILTER_NODE)
+                        .setValue(adFilter)
                         .addOnCompleteListener {
                             if (it.isSuccessful) {
                                 listener.onFinishWork()
@@ -176,7 +177,7 @@ class DbManager {
         private const val AD_UID_PATH = "/ad/uid"
         private const val AD_FAVOURITES_PATH = "/favourites/"
         private const val AD_FILTER_TIME_PATH = "/adFilter/time"
-        private const val AD_FILTER_CAT_TIME_PATH = "/adFilter/catTime"
+        private const val AD_FILTER_CAT_TIME_PATH = "/adFilter/cat_time"
         private const val FAVOURITES_NODE = "favourites"
         private const val ADS_LIMIT = 2
         private const val DEF_COUNT_INFO_ITEM = "0"
