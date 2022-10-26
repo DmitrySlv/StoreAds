@@ -24,6 +24,7 @@ import com.ds_create.storeads.R
 import com.ds_create.storeads.adapters.AdsRcAdapter
 import com.ds_create.storeads.databinding.ActivityMainBinding
 import com.ds_create.storeads.models.AdModel
+import com.ds_create.storeads.utils.FilterManager
 import com.ds_create.storeads.utils.accounthelper.AccountHelper
 import com.ds_create.storeads.utils.dialoghelper.DialogHelper
 import com.ds_create.storeads.viewModel.FirebaseViewModel
@@ -114,6 +115,7 @@ AdsRcAdapter.Listener {
             if (it.resultCode == RESULT_OK) {
                 filter = it.data?.getStringExtra(FilterActivity.FILTER_KEY)!!
                 Log.d("MyLog", "Filter: $filter")
+                Log.d("MyLog", "getFilter: ${FilterManager.getFilter(filter)}")
             }
         }
     }
