@@ -1,5 +1,6 @@
 package com.ds_create.storeads.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
@@ -22,6 +23,7 @@ class FilterActivity : AppCompatActivity() {
         onClickSelectCountry()
         onClickSelectCity()
         onClickDone()
+        getFilter()
     }
 
     private fun actionBarSettings() {
@@ -34,6 +36,17 @@ class FilterActivity : AppCompatActivity() {
             finish()
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun getFilter() = with(binding) {
+        val filter = intent.getStringExtra(FILTER_KEY)
+        if (filter != null && filter != EMPTY) {
+            val filterArray = filter.split(UNDERSCORE)
+            if (filterArray[0] != getString(R.string.select_country)) tvCountry.text = filterArray[0]
+            if (filterArray[1] != getString(R.string.select_city)) tvCity.text = filterArray[1]
+            if (filterArray[2] != EMPTY) edIndex.setText(filterArray[2])
+            checkBoxWithSend.isChecked = filterArray[3].toBoolean()
+        }
     }
 
     //OnClicks
@@ -64,7 +77,11 @@ class FilterActivity : AppCompatActivity() {
 
     private fun onClickDone() = with(binding) {
         btDone.setOnClickListener {
-            Log.d("MyLog", "Filter: ${createFilter()}")
+           val intent = Intent().apply {
+               putExtra(FILTER_KEY, createFilter())
+           }
+            setResult(RESULT_OK, intent)
+            finish()
         }
     }
 
@@ -78,15 +95,20 @@ class FilterActivity : AppCompatActivity() {
                 string != getString(R.string.select_city) &&
                     string.isNotEmpty()) {
                 stringBuilder.append(string)
-                if (index != arrayTempFilter.size - 1) {
-                    stringBuilder.append(PROBEL)
-                }
+                if (index != arrayTempFilter.size - 1)
+                    stringBuilder.append(UNDERSCORE)
+            } else {
+                stringBuilder.append(EMPTY)
+                if (index != arrayTempFilter.size - 1)
+                    stringBuilder.append(UNDERSCORE)
             }
         }
         return stringBuilder.toString()
     }
 
     companion object {
-        private const val PROBEL = "_"
+        private const val UNDERSCORE = "_"
+        private const val EMPTY = "empty"
+        const val FILTER_KEY = "filter_key"
     }
 }

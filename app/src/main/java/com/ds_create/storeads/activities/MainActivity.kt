@@ -49,8 +49,10 @@ AdsRcAdapter.Listener {
     private lateinit var imAccount: ImageView
     private val adsRcAdapter = AdsRcAdapter(this)
     lateinit var googleSignInLauncher: ActivityResultLauncher<Intent>
+    lateinit var filterLauncher: ActivityResultLauncher<Intent>
     private var clearUpdate: Boolean = true
     private var currentCategory: String? = null
+    private var filter: String = "empty"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,6 +62,7 @@ AdsRcAdapter.Listener {
         initViewModel()
         bottomMenuOnClick()
         scrollListener()
+        onActivityResultFilter()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -69,7 +72,10 @@ AdsRcAdapter.Listener {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.id_filter) {
-            startActivity(Intent(this@MainActivity, FilterActivity::class.java))
+            val intent = Intent(this@MainActivity, FilterActivity::class.java).apply {
+                putExtra(FilterActivity.FILTER_KEY, filter)
+            }
+            filterLauncher.launch(intent)
         }
         return super.onOptionsItemSelected(item)
     }
@@ -85,7 +91,9 @@ AdsRcAdapter.Listener {
     }
 
     private fun onActivityResult() {
-        googleSignInLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        googleSignInLauncher = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(it.data)
             try {
                 val account = task.getResult(ApiException::class.java)
@@ -95,6 +103,17 @@ AdsRcAdapter.Listener {
                 }
             } catch (e: ApiException) {
                 Log.d("MyLog", "Api error: ${e.message}")
+            }
+        }
+    }
+
+    private fun onActivityResultFilter() {
+        filterLauncher = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) {
+            if (it.resultCode == RESULT_OK) {
+                filter = it.data?.getStringExtra(FilterActivity.FILTER_KEY)!!
+                Log.d("MyLog", "Filter: $filter")
             }
         }
     }
@@ -309,6 +328,5 @@ AdsRcAdapter.Listener {
         const val ADS_DATA = "ads_data"
         private const val START_SPAN = 0
         private const val SCROLL_DOWN = 1
-        private const val FIRST_PAGE = "0"
     }
 }
