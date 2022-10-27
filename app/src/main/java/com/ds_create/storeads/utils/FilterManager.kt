@@ -25,13 +25,24 @@ object FilterManager {
     }
 
     fun getFilter(filter: String): String {
-        val stringBuilder = StringBuilder()
+        val stringBuilderNode = StringBuilder()
+        val stringBuilderFilter = StringBuilder()
         val tempArray = filter.split(UNDERSCORE)
-        if (tempArray[0] != EMPTY) stringBuilder.append(COUNTRY_)
-        if (tempArray[1] != EMPTY) stringBuilder.append(CITY_)
-        if (tempArray[2] != EMPTY) stringBuilder.append(INDEX_)
-        stringBuilder.append(WITH_SENT_TIME)
-        return stringBuilder.toString()
+        if (tempArray[0] != EMPTY) {
+            stringBuilderNode.append(COUNTRY_)
+            stringBuilderFilter.append("${tempArray[0]}_")
+        }
+        if (tempArray[1] != EMPTY) {
+            stringBuilderNode.append(CITY_)
+            stringBuilderFilter.append("${tempArray[1]}_")
+        }
+        if (tempArray[2] != EMPTY) {
+            stringBuilderNode.append(INDEX_)
+            stringBuilderFilter.append("${tempArray[2]}_")
+        }
+        stringBuilderFilter.append(tempArray[3])
+        stringBuilderNode.append(WITH_SENT_TIME)
+        return "$stringBuilderNode|$stringBuilderFilter"
     }
 
     private const val UNDERSCORE = "_"
