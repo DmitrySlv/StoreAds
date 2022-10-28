@@ -167,10 +167,19 @@
                 android:id="@+id/btDone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
+                android:layout_marginTop="5dp"
                 android:text="@string/filter_done"
                 android:textColor="@color/white"
                 app:backgroundTint="@color/green_main" />
+
+            <Button
+                android:id="@+id/btClearFilter"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:text="@string/filter_clear"
+                android:textColor="@color/black"
+                app:backgroundTint="@color/yellow" />
 
         </LinearLayout>
     </ScrollView>

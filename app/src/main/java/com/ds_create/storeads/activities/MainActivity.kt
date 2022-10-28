@@ -118,6 +118,9 @@ AdsRcAdapter.Listener {
                // Log.d("MyLog", "Filter: $filter")
                // Log.d("MyLog", "getFilter: ${FilterManager.getFilter(filter)}")
                 filterDbManager = FilterManager.getFilter(filter)
+            } else if (it.resultCode == RESULT_CANCELED) {
+                filter = "empty"
+                filterDbManager = ""
             }
         }
     }

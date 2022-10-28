@@ -101,4 +101,5 @@
         email. Пожалуйста установите приложение для отправки email и попробуйте снова.</string>
     <!-- Filter Activity -->
     <string name="filter_done">Применить фильтр</string>
+    <string name="filter_clear">Очистить фильтр</string>
 </resources>
