@@ -90,9 +90,20 @@ class DbManager {
         readDataFromDb(readCallback, query)
     }
 
-    fun getAllAdsFirstPage(readCallback: ReadDataCallback?) {
-        val query = database.orderByChild(AD_FILTER_TIME_PATH).limitToLast(ADS_LIMIT)
+    fun getAllAdsFirstPage(filter: String, readCallback: ReadDataCallback?) {
+        val query = if (filter.isEmpty()) {
+            database.orderByChild(AD_FILTER_TIME_PATH).limitToLast(ADS_LIMIT)
+        } else {
+            getAllAdsByFilterFirstPage(filter)
+        }
         readDataFromDb(readCallback, query)
+    }
+
+    fun getAllAdsByFilterFirstPage(tempFilter: String): Query {
+        val orderBy = tempFilter.split(VERTICAL_BAR)[0]
+        val filter = tempFilter.split(VERTICAL_BAR)[1]
+        return database.orderByChild("/adFilter/$orderBy")
+            .startAt(filter).endAt(filter + END_AT_TIME_WITHOUT_).limitToLast(ADS_LIMIT)
     }
 
     fun getAllAdsNextPage(time: String, readCallback: ReadDataCallback?) {
@@ -182,6 +193,8 @@ class DbManager {
         private const val ADS_LIMIT = 2
         private const val DEF_COUNT_INFO_ITEM = "0"
         private const val END_AT_TIME = "_\uf8ff"
+        private const val END_AT_TIME_WITHOUT_ = "\uf8ff"
+        private const val VERTICAL_BAR = "|"
     }
 
 

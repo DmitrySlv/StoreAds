@@ -54,6 +54,7 @@ AdsRcAdapter.Listener {
     private var clearUpdate: Boolean = true
     private var currentCategory: String? = null
     private var filter: String = "empty"
+    private var filterDbManager: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -114,8 +115,9 @@ AdsRcAdapter.Listener {
         ) {
             if (it.resultCode == RESULT_OK) {
                 filter = it.data?.getStringExtra(FilterActivity.FILTER_KEY)!!
-                Log.d("MyLog", "Filter: $filter")
-                Log.d("MyLog", "getFilter: ${FilterManager.getFilter(filter)}")
+               // Log.d("MyLog", "Filter: $filter")
+               // Log.d("MyLog", "getFilter: ${FilterManager.getFilter(filter)}")
+                filterDbManager = FilterManager.getFilter(filter)
             }
         }
     }
@@ -253,7 +255,7 @@ AdsRcAdapter.Listener {
                 }
                 R.id.id_home -> {
                     currentCategory = getString(R.string.ad_def)
-                   firebaseViewModel.loadAllAdsFirstPage()
+                   firebaseViewModel.loadAllAdsFirstPage(filterDbManager)
                     mainContent.toolbar.title = getString(R.string.def_title)
                 }
             }
