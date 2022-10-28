@@ -218,7 +218,7 @@ AdsRcAdapter.Listener {
 
     private fun getAdsFromCat(cat: String) {
         currentCategory = cat
-        firebaseViewModel.loadAllAdsFromCat(cat)
+        firebaseViewModel.loadAllAdsFromCat(cat, filterDbManager)
     }
 
     fun uiUpdate(user: FirebaseUser?) {
