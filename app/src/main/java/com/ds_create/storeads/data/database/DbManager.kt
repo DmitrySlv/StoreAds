@@ -54,7 +54,7 @@ class DbManager {
         }
     }
 
-    fun addToFavourites(ad: AdModel, finishWorkListener: FinishWorkListener) {
+   private fun addToFavourites(ad: AdModel, finishWorkListener: FinishWorkListener) {
         ad.key?.let { key ->
             auth.uid?.let { uid ->
                 database.child(key).child(FAVOURITES_NODE).child(uid).setValue(uid)
@@ -106,10 +106,24 @@ class DbManager {
             .startAt(filter).endAt(filter + END_AT_TIME_WITHOUT_).limitToLast(ADS_LIMIT)
     }
 
-    fun getAllAdsNextPage(time: String, readCallback: ReadDataCallback?) {
-        val query = database.orderByChild(AD_FILTER_TIME_PATH)
-            .endBefore(time).limitToLast(ADS_LIMIT)
-        readDataFromDb(readCallback, query)
+   private fun getAllAdsByFilterNextPage(
+       tempFilter: String, time: String, readCallback: ReadDataCallback?
+   ) {
+        val orderBy = tempFilter.split(VERTICAL_BAR)[0]
+        val filter = tempFilter.split(VERTICAL_BAR)[1]
+        val query = database.orderByChild("/adFilter/$orderBy")
+            .endBefore(filter + "_$time").limitToLast(ADS_LIMIT)
+       readDataNextPageFromDb(readCallback, filter, orderBy, query)
+    }
+
+    fun getAllAdsNextPage(time: String, filter: String, readCallback: ReadDataCallback?) {
+       if (filter.isEmpty()) {
+           val query = database.orderByChild(AD_FILTER_TIME_PATH)
+           readDataFromDb(readCallback, query)
+        } else {
+            getAllAdsByFilterNextPage(filter, time,readCallback)
+        }
+
     }
 
     fun getAllAdsFromCatFirstPage(cat: String, filter: String, readCallback: ReadDataCallback?) {
@@ -172,6 +186,46 @@ class DbManager {
                     ad?.emailCounter = infoItem?.emailsCounter ?: DEF_COUNT_INFO_ITEM
                     ad?.callsCounter = infoItem?.callsCounter ?: DEF_COUNT_INFO_ITEM
                     if (ad != null) {
+                        adArray.add(ad!!)
+                    }
+                }
+                readCallback?.readData(adArray)
+            }
+            override fun onCancelled(error: DatabaseError) {
+            }
+        })
+    }
+
+    private fun readDataNextPageFromDb(
+        readCallback: ReadDataCallback?, filter: String, orderBy: String, query: Query
+    ) {
+        query.addListenerForSingleValueEvent(object: ValueEventListener {
+
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val adArray = ArrayList<AdModel>()
+                for (item in snapshot.children) {
+
+                    var ad: AdModel? = null
+                    item.children.forEach{
+                        if (ad == null) {
+                            ad = it.child(AD_NODE).getValue(AdModel::class.java)
+                        }
+                    }
+                    val infoItem = item.child(INFO_NODE).getValue(InfoItemModel::class.java)
+                    val filterNodeValue = item.child(FILTER_NODE)
+                        .child(orderBy).value.toString()
+
+                    val favouriteCounter = item.child(FAVOURITES_NODE).childrenCount
+                    val isFavourite = auth.uid?.let {
+                        item.child(FAVOURITES_NODE).child(it).getValue(String::class.java)
+                    }
+                    ad?.isFavourite = isFavourite != null
+                    ad?.favouriteCounter = favouriteCounter.toString()
+
+                    ad?.viewsCounter = infoItem?.viewsCounter ?: DEF_COUNT_INFO_ITEM
+                    ad?.emailCounter = infoItem?.emailsCounter ?: DEF_COUNT_INFO_ITEM
+                    ad?.callsCounter = infoItem?.callsCounter ?: DEF_COUNT_INFO_ITEM
+                    if (ad != null && filterNodeValue.startsWith(filter)) {
                         adArray.add(ad!!)
                     }
                 }

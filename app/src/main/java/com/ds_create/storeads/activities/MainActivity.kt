@@ -322,7 +322,7 @@ AdsRcAdapter.Listener {
     private fun getAdsFromCat(adsList: ArrayList<AdModel>) {
         adsList[0].let {
             if (currentCategory == getString(R.string.ad_def)) {
-                firebaseViewModel.loadAllAdsNextPage(it.time)
+                firebaseViewModel.loadAllAdsNextPage(it.time, filterDbManager)
             } else {
                 val catTime = "${it.category}_${it.time}"
                 firebaseViewModel.loadAllAdsFromCatNextPage(catTime)
