@@ -102,4 +102,6 @@
     <!-- Filter Activity -->
     <string name="filter_done">Применить фильтр</string>
     <string name="filter_clear">Очистить фильтр</string>
+    <!-- AdsRcAdapter -->
+    <string name="publish_time">Дата публикации:</string>
 </resources>

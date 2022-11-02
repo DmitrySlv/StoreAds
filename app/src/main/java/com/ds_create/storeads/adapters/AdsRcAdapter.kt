@@ -16,15 +16,23 @@ import com.ds_create.storeads.databinding.AdListItemBinding
 import com.ds_create.storeads.models.AdModel
 import com.ds_create.storeads.utils.ImageManager
 import com.squareup.picasso.Picasso
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class AdsRcAdapter(private val activity: MainActivity): RecyclerView.Adapter<AdsRcAdapter.AdHolder>() {
 
     private val adsArray = ArrayList<AdModel>()
+    private var timeFormatter: SimpleDateFormat? = null
+
+    init {
+        timeFormatter = SimpleDateFormat(TIME_FORMAT, Locale.getDefault())
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AdHolder {
         val binding = AdListItemBinding.inflate(
             LayoutInflater.from(parent.context), parent, false)
-        return AdHolder(binding, activity)
+        return AdHolder(binding, activity, timeFormatter!!)
     }
 
     override fun onBindViewHolder(holder: AdHolder, position: Int) {
@@ -56,7 +64,8 @@ class AdsRcAdapter(private val activity: MainActivity): RecyclerView.Adapter<Ads
 
     class AdHolder(
         private val binding: AdListItemBinding,
-        private val activity: MainActivity
+        private val activity: MainActivity,
+        private val formatter: SimpleDateFormat
         ): ViewHolder(binding.root) {
 
         fun setData(ad: AdModel) = with(binding) {
@@ -65,11 +74,20 @@ class AdsRcAdapter(private val activity: MainActivity): RecyclerView.Adapter<Ads
             tvTitle.text = ad.title
             tvViewCounter.text = ad.viewsCounter
             tvFavCounter.text = ad.favouriteCounter
+            val publishTime = activity.getString(R.string.publish_time) +
+                    getTimeFromMillis(ad.time)
+            tvPublishTime.text = publishTime
             Picasso.get().load(ad.mainImage).into(mainImage)
 
             isFavourite(ad)
             showEditPanel(isOwner(ad))
             mainOnClicks(ad)
+        }
+
+        private fun getTimeFromMillis(timeMillis: String): String {
+            val calendar = Calendar.getInstance()
+            calendar.timeInMillis = timeMillis.toLong()
+            return formatter.format(calendar.time)
         }
 
         private fun mainOnClicks(ad: AdModel) = with(binding) {
@@ -122,5 +140,9 @@ class AdsRcAdapter(private val activity: MainActivity): RecyclerView.Adapter<Ads
         fun onDeleteItem(ad: AdModel)
         fun onAdViewed(ad: AdModel)
         fun onFavouriteClicked(ad: AdModel)
+    }
+
+    companion object {
+        private const val TIME_FORMAT = "dd/MM/yyyy - hh:mm"
     }
 }
