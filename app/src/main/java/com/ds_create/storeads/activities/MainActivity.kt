@@ -28,6 +28,8 @@ import com.ds_create.storeads.utils.FilterManager
 import com.ds_create.storeads.utils.accounthelper.AccountHelper
 import com.ds_create.storeads.utils.dialoghelper.DialogHelper
 import com.ds_create.storeads.viewModel.FirebaseViewModel
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.common.api.ApiException
 import com.google.android.material.navigation.NavigationView
@@ -59,12 +61,34 @@ AdsRcAdapter.Listener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+        initAds()
         init()
         initRcView()
         initViewModel()
         bottomMenuOnClick()
         scrollListener()
         onActivityResultFilter()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        uiUpdate(mAuth.currentUser)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        binding.mainContent.adView2.pause()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.mainContent.bNavView.selectedItemId = R.id.id_home
+        binding.mainContent.adView2.resume()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        binding.mainContent.adView2.destroy()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -82,14 +106,10 @@ AdsRcAdapter.Listener {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onStart() {
-        super.onStart()
-        uiUpdate(mAuth.currentUser)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        binding.mainContent.bNavView.selectedItemId = R.id.id_home
+    private fun initAds() {
+        MobileAds.initialize(this)
+        val adRequest = AdRequest.Builder().build()
+        binding.mainContent.adView2.loadAd(adRequest)
     }
 
     private fun onActivityResult() {
