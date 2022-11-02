@@ -24,6 +24,7 @@ import com.ds_create.storeads.R
 import com.ds_create.storeads.adapters.AdsRcAdapter
 import com.ds_create.storeads.databinding.ActivityMainBinding
 import com.ds_create.storeads.models.AdModel
+import com.ds_create.storeads.utils.AppMainState
 import com.ds_create.storeads.utils.FilterManager
 import com.ds_create.storeads.utils.accounthelper.AccountHelper
 import com.ds_create.storeads.utils.dialoghelper.DialogHelper
@@ -61,6 +62,9 @@ AdsRcAdapter.Listener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+        (application as AppMainState).showAdIfAvailable(this) {
+            //Если реклама была перекрыта каким-либо другим диалог окном, запустить это диалогов окно тут
+        }
         initAds()
         init()
         initRcView()
