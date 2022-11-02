@@ -143,10 +143,26 @@ class DbManager {
             .startAt(filter).endAt(filter + END_AT_TIME_WITHOUT_).limitToLast(ADS_LIMIT)
     }
 
-    fun getAllAdsFromCatNextPage(catTime: String, readCallback: ReadDataCallback?) {
-        val query = database.orderByChild(AD_FILTER_CAT_TIME_PATH)
-           .endBefore(catTime).limitToLast(ADS_LIMIT)
-        readDataFromDb(readCallback, query)
+    fun getAllAdsFromCatNextPage(
+        cat: String, time: String, filter: String, readCallback: ReadDataCallback?
+    ) {
+        if (filter.isEmpty()) {
+            val query = database.orderByChild(AD_FILTER_CAT_TIME_PATH)
+                .endBefore(cat + UNDERSCORE + time).limitToLast(ADS_LIMIT)
+            readDataFromDb(readCallback, query)
+        } else {
+            getAllAdsFromCatByFilterNextPage(cat, time, filter, readCallback)
+        }
+    }
+
+   private fun getAllAdsFromCatByFilterNextPage(
+        cat: String, time: String, tempFilter: String, readCallback: ReadDataCallback?
+    ) {
+        val orderBy = CAT_ + tempFilter.split(VERTICAL_BAR)[0]
+        val filter = cat + UNDERSCORE + tempFilter.split(VERTICAL_BAR)[1]
+        val query = database.orderByChild("/adFilter/$orderBy")
+            .endBefore(filter + UNDERSCORE + time).limitToLast(ADS_LIMIT)
+        readDataNextPageFromDb(readCallback,filter, orderBy, query)
     }
 
     fun deleteAd(ad: AdModel, listener: FinishWorkListener) {

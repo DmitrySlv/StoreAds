@@ -324,8 +324,7 @@ AdsRcAdapter.Listener {
             if (currentCategory == getString(R.string.ad_def)) {
                 firebaseViewModel.loadAllAdsNextPage(it.time, filterDbManager)
             } else {
-                val catTime = "${it.category}_${it.time}"
-                firebaseViewModel.loadAllAdsFromCatNextPage(catTime)
+                firebaseViewModel.loadAllAdsFromCatNextPage(it.category!!, it.time, filterDbManager)
             }
         }
     }
