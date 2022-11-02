@@ -75,5 +75,8 @@ dependencies {
     def lifecycle_version = "2.2.0"
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.5.1"
+
     annotationProcessor "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
+
+    implementation "com.android.billingclient:billing:5.0.0"
 }
