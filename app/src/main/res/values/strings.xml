@@ -104,4 +104,8 @@
     <string name="filter_clear">Очистить фильтр</string>
     <!-- AdsRcAdapter -->
     <string name="publish_time">Дата публикации:</string>
+    <!-- BillingManager -->
+    <string name="thanks_for_purchase">Спасибо за покупку!</string>
+    <string name="not_released_purchase">Не удалось реализовать покупку!
+        Пожалуйста попробуйте еще раз позже</string>
 </resources>
