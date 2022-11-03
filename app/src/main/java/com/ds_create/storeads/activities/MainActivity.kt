@@ -62,6 +62,7 @@ AdsRcAdapter.Listener {
     private var filterDbManager: String = ""
     private var pref: SharedPreferences? = null
     private var isPremiumUser = false
+    private var billingManager: BillingManager? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -103,6 +104,7 @@ AdsRcAdapter.Listener {
     override fun onDestroy() {
         super.onDestroy()
         binding.mainContent.adView2.destroy()
+        billingManager?.closeConnection()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -218,6 +220,10 @@ AdsRcAdapter.Listener {
            R.id.id_dm -> {
                getAdsFromCat(getString(R.string.ad_dm))
            }
+           R.id.remove_ads -> {
+               billingManager = BillingManager(this)
+               billingManager?.startConnection()
+           }
            R.id.sign_up -> {
                dialogHelper.createSignDialog(DialogHelper.SIGN_UP_STATE)
            }
@@ -317,6 +323,7 @@ AdsRcAdapter.Listener {
 
     private fun navViewSettings() = with(binding) {
         val menu = navView.menu
+
         val adsCat = menu.findItem(R.id.ads_cat)
         val spanAdsCat = SpannableString(adsCat.title)
         adsCat.title?.let {
@@ -325,13 +332,23 @@ AdsRcAdapter.Listener {
                 START_SPAN, it.length, 0)
             adsCat.title = spanAdsCat
         }
+
         val adsAcc = menu.findItem(R.id.ads_acc)
         val spanAdsAcc = SpannableString(adsAcc.title)
         adsAcc.title?.let {
             spanAdsAcc.setSpan(ForegroundColorSpan(
-                ContextCompat.getColor(this@MainActivity, R.color.green)),
+                ContextCompat.getColor(this@MainActivity, R.color.color_red)),
                 START_SPAN, it.length, 0)
             adsAcc.title = spanAdsAcc
+        }
+
+        val removeAdsCat = menu.findItem(R.id.remove_ads)
+        val spanRemoveAdsCat = SpannableString(removeAdsCat.title)
+        removeAdsCat.title?.let {
+            spanRemoveAdsCat.setSpan(ForegroundColorSpan(
+                ContextCompat.getColor(this@MainActivity, R.color.green)),
+                START_SPAN, it.length, 0)
+            removeAdsCat.title = spanRemoveAdsCat
         }
     }
 

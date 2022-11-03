@@ -27,6 +27,8 @@
         android:id="@+id/ads_acc">
         <menu>
 
+            <item android:title="@string/remove_ads"
+                android:id="@+id/remove_ads"/>
             <item android:title="@string/aс_sign_up"
                 android:id="@+id/sign_up"/>
             <item android:title="@string/aс_sign_in"

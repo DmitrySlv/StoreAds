@@ -92,6 +92,10 @@ class BillingManager(private val act: AppCompatActivity) {
         })
     }
 
+    fun closeConnection() {
+        billingClient?.endConnection()
+    }
+
     companion object {
         const val REMOVE_ADS = "remove_ads"
         const val REMOVE_ADS_PREF = "remove_ads_pref"
