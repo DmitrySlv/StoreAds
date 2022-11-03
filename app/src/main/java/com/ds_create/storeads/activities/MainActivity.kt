@@ -1,6 +1,7 @@
 package com.ds_create.storeads.activities
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
@@ -25,6 +26,7 @@ import com.ds_create.storeads.adapters.AdsRcAdapter
 import com.ds_create.storeads.databinding.ActivityMainBinding
 import com.ds_create.storeads.models.AdModel
 import com.ds_create.storeads.utils.AppMainState
+import com.ds_create.storeads.utils.BillingManager
 import com.ds_create.storeads.utils.FilterManager
 import com.ds_create.storeads.utils.accounthelper.AccountHelper
 import com.ds_create.storeads.utils.dialoghelper.DialogHelper
@@ -58,14 +60,22 @@ AdsRcAdapter.Listener {
     private var currentCategory: String? = null
     private var filter: String = "empty"
     private var filterDbManager: String = ""
+    private var pref: SharedPreferences? = null
+    private var isPremiumUser = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        (application as AppMainState).showAdIfAvailable(this) {
-            //Если реклама была перекрыта каким-либо другим диалог окном, запустить это диалогов окно тут
+        pref = getSharedPreferences(BillingManager.MAIN_PREF, MODE_PRIVATE)
+        isPremiumUser = pref?.getBoolean(BillingManager.REMOVE_ADS_PREF, false)!!
+        if(!isPremiumUser) {
+            (application as AppMainState).showAdIfAvailable(this) {
+                //Если реклама была перекрыта каким-либо другим диалог окном, запустить это диалогов окно тут
+            }
+            initAds()
+        } else {
+            binding.mainContent.adView2.visibility = View.GONE
         }
-        initAds()
         init()
         initRcView()
         initViewModel()

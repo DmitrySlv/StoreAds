@@ -1,9 +1,12 @@
 package com.ds_create.storeads.fragments
 
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.ds_create.storeads.R
+import com.ds_create.storeads.utils.BillingManager
 import com.google.android.gms.ads.*
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
@@ -12,6 +15,8 @@ open class BaseAdsFrag: Fragment(), InterAdsClose {
 
     lateinit var adView: AdView
     var interAd: InterstitialAd? = null
+    private var pref: SharedPreferences? = null
+    private var isPremiumUser = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,7 +25,14 @@ open class BaseAdsFrag: Fragment(), InterAdsClose {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initAds()
+        pref = activity?.getSharedPreferences(BillingManager.MAIN_PREF, AppCompatActivity.MODE_PRIVATE)
+        isPremiumUser = pref?.getBoolean(BillingManager.REMOVE_ADS_PREF, false)!!
+        if (!isPremiumUser) {
+            initAds()
+            loadInterAd()
+        } else {
+            adView.visibility = View.GONE
+        }
     }
 
     override fun onPause() {
