@@ -79,7 +79,7 @@ class EditAdsActivity : AppCompatActivity(), FragmentCloseInterface {
     }
 
     //OnClicks
-    fun onClickSelectCountry() = with(binding) {
+   private fun onClickSelectCountry() = with(binding) {
         tvCountry.setOnClickListener {
             val listCountry = CityHelper.getAllCountries(this@EditAdsActivity)
             dialog.showSpinnerDialog(this@EditAdsActivity, listCountry, tvCountry)
@@ -90,7 +90,7 @@ class EditAdsActivity : AppCompatActivity(), FragmentCloseInterface {
 
     }
 
-    fun onClickSelectCity() = with(binding) {
+   private fun onClickSelectCity() = with(binding) {
         tvCity.setOnClickListener {
             val selectedCountry = tvCountry.text.toString()
             if (selectedCountry != getString(R.string.select_country)) {
@@ -103,7 +103,7 @@ class EditAdsActivity : AppCompatActivity(), FragmentCloseInterface {
         }
     }
 
-    fun onClickSelectCat() = with(binding) {
+   private fun onClickSelectCat() = with(binding) {
         tvCat.setOnClickListener {
             val listCategory = resources.getStringArray(R.array.category).toMutableList() as ArrayList
             dialog.showSpinnerDialog(this@EditAdsActivity, listCategory, tvCat)
@@ -126,7 +126,7 @@ class EditAdsActivity : AppCompatActivity(), FragmentCloseInterface {
         binding.btPublish.setOnClickListener {
             ad = fillAd()
             if (isEditState){
-                ad?.copy(key = ad?.key)?.let { dbManager.publishAd(it, onPublishFinish()) }
+                 dbManager.publishAd(ad!!, onPublishFinish())
             } else {
                 // dbManager.publishAd(adTemp, onPublishFinish())
                 uploadImages()
@@ -143,9 +143,9 @@ class EditAdsActivity : AppCompatActivity(), FragmentCloseInterface {
     }
 
     private fun fillAd(): AdModel {
-        val ad: AdModel
+        val adTemp: AdModel
         binding.apply {
-            ad = AdModel(
+            adTemp = AdModel(
                 tvCountry.text.toString(),
                 tvCity.text.toString(),
                 edPhone.text.toString(),
@@ -156,16 +156,16 @@ class EditAdsActivity : AppCompatActivity(), FragmentCloseInterface {
                 edPrice.text.toString(),
                 edDescription.text.toString(),
                 edEmail.text.toString(),
-                "empty",
-                "empty",
-                "empty",
-                dbManager.database.push().key,
+                ad?.mainImage ?: "empty",
+                ad?.image2 ?: "empty",
+                ad?.image3 ?: "empty",
+                ad?.key ?: dbManager.database.push().key,
                 dbManager.auth.uid,
-                System.currentTimeMillis().toString(),
+                ad?.time ?: System.currentTimeMillis().toString(),
                 "0"
             )
         }
-        return ad
+        return adTemp
     }
 
     override fun onFragClose(list: ArrayList<Bitmap>) {
