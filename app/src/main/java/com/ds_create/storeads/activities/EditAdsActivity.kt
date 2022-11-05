@@ -123,8 +123,9 @@ class EditAdsActivity : AppCompatActivity(), FragmentCloseInterface {
         }
     }
 
-    fun onClickPublish() {
-        binding.btPublish.setOnClickListener {
+    fun onClickPublish() = with(binding) {
+        btPublish.setOnClickListener {
+            progressLayout.visibility = View.VISIBLE
             ad = fillAd()
             uploadImages()
         }
@@ -132,8 +133,11 @@ class EditAdsActivity : AppCompatActivity(), FragmentCloseInterface {
 
     private fun onPublishFinish(): DbManager.FinishWorkListener {
         return object : DbManager.FinishWorkListener {
-            override fun onFinishWork() {
-                finish()
+            override fun onFinishWork(isDone: Boolean) {
+              binding.progressLayout.visibility = View.GONE
+               if (isDone) {
+                   finish()
+               }
             }
         }
     }
