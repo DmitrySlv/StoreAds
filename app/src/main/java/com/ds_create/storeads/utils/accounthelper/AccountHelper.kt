@@ -169,13 +169,15 @@ class AccountHelper(private val act: MainActivity) {
         val credential = GoogleAuthProvider.getCredential(token, null)
         act.mAuth.currentUser?.delete()?.addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                act.mAuth.signInWithCredential(credential).addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        act.uiUpdate(task.result.user)
+                act.mAuth.signInWithCredential(credential).addOnCompleteListener { task2 ->
+                    if (task2.isSuccessful) {
+                        act.uiUpdate(task2.result.user)
                         Toast.makeText(act, act.getString(R.string.sign_in_done), Toast.LENGTH_LONG)
                             .show()
                     } else {
-                        Log.d("MyLog", "Google Sign In Exception: ${task.exception}")
+                        Toast.makeText(act, act.getString(R.string.google_sign_in_exception) +
+                                task2.exception, Toast.LENGTH_LONG).show()
+                        Log.d("MyLog", "Google Sign In Exception: ${task2.exception}")
                     }
                 }
             }
@@ -186,9 +188,11 @@ class AccountHelper(private val act: MainActivity) {
         act.mAuth.signInAnonymously().addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 accHelperListener.onComplete()
-                Toast.makeText(act, "Вы вошли как гость", Toast.LENGTH_SHORT).show()
+                Toast.makeText(act, act.getString(R.string.enter_guest_successfully),
+                    Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(act, "Не удалось войти как гость", Toast.LENGTH_SHORT).show()
+                Toast.makeText(act, act.getString(R.string.enter_guest_is_not_successfully),
+                    Toast.LENGTH_SHORT).show()
             }
         }
     }

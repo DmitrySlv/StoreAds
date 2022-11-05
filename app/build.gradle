@@ -6,11 +6,15 @@ plugins {
 }
 
 android {
+    lint {
+        baseline = file("lint-baseline.xml")
+    }
+
     signingConfigs {
         release {
             storeFile file('D:\\StoreAds.jks')
             storePassword 'z35D1297'
-            keyAlias 'keyMain'
+            keyAlias 'SoA'
             keyPassword 'z35D1297'
         }
     }

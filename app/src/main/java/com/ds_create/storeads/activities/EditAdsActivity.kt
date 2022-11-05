@@ -126,8 +126,8 @@ class EditAdsActivity : AppCompatActivity(), FragmentCloseInterface {
     fun onClickPublish() {
         binding.btPublish.setOnClickListener {
             ad = fillAd()
-                uploadImages()
-            }
+            uploadImages()
+        }
     }
 
     private fun onPublishFinish(): DbManager.FinishWorkListener {
@@ -152,9 +152,9 @@ class EditAdsActivity : AppCompatActivity(), FragmentCloseInterface {
                 edPrice.text.toString(),
                 edDescription.text.toString(),
                 edEmail.text.toString(),
-                ad?.mainImage ?: "empty",
-                ad?.image2 ?: "empty",
-                ad?.image3 ?: "empty",
+                ad?.mainImage ?: EMPTY,
+                ad?.image2 ?: EMPTY,
+                ad?.image3 ?: EMPTY,
                 ad?.key ?: dbManager.database.push().key,
                 dbManager.auth.uid,
                 ad?.time ?: System.currentTimeMillis().toString(),
@@ -190,7 +190,7 @@ class EditAdsActivity : AppCompatActivity(), FragmentCloseInterface {
         val oldUrl = getUrlFromAd()
         if (imageAdapter.mainArray.size > imageIndex) {
             val byteArray = prepareImageByteArray(imageAdapter.mainArray[imageIndex])
-            if (oldUrl.startsWith("http")) {
+            if (oldUrl.startsWith(HTTP)) {
                 updateImage(byteArray, oldUrl) {
                     nextImage(it.result.toString())
                 }
@@ -201,12 +201,12 @@ class EditAdsActivity : AppCompatActivity(), FragmentCloseInterface {
                 }
             }
         } else {
-            if (oldUrl.startsWith("http")) {
+            if (oldUrl.startsWith(HTTP)) {
                 deleteImageByUrl(oldUrl) {
-                    nextImage("empty")
+                    nextImage(EMPTY)
                 }
             } else {
-                nextImage("empty")
+                nextImage(EMPTY)
             }
         }
     }
@@ -272,5 +272,10 @@ class EditAdsActivity : AppCompatActivity(), FragmentCloseInterface {
         if (itemCount == 0) index = 0
         val imageCounter = "${counter + index}/$itemCount"
         binding.tvImageCounter.text = imageCounter
+    }
+
+    companion object {
+        private const val HTTP = "http"
+        private const val EMPTY = "empty"
     }
 }

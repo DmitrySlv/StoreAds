@@ -45,8 +45,13 @@
     <string name="error_invalid_email_or_password">Введен некорректный email или пароль! Пожалуйста,
     проверьте корректность email или пароля. Пароль должен содежать от 3 до 9 символов.</string>
     <string name="guest">Гость</string>
+    <string name="google_sign_in_exception">Google Sign In Exception:</string>
+    <string name="enter_guest_successfully">Вы вошли как гость</string>
+    <string name="enter_guest_is_not_successfully">Не удалось войти как гость</string>
     <!-- City Helper -->
     <string name="no_result">Нет результата</string>
+    <!-- Main Activity -->
+    <string name="main_act_exception">Main Activity exception:</string>
     <!-- Edit Activity -->
     <string name="select_country">Выберите страну</string>
     <string name="select_city">Выберите город</string>

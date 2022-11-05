@@ -40,6 +40,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.squareup.picasso.Picasso
+import io.ak1.pix.helpers.toast
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
 AdsRcAdapter.Listener {
@@ -140,6 +141,8 @@ AdsRcAdapter.Listener {
                     dialogHelper.accHelper.signInFirebaseWithGoogle(account.idToken.toString())
                 }
             } catch (e: ApiException) {
+                Toast.makeText(this, getString(R.string.main_act_exception) + e.message,
+                    Toast.LENGTH_LONG).show()
                 Log.d("MyLog", "Api error: ${e.message}")
             }
         }
