@@ -125,13 +125,8 @@ class EditAdsActivity : AppCompatActivity(), FragmentCloseInterface {
     fun onClickPublish() {
         binding.btPublish.setOnClickListener {
             ad = fillAd()
-            if (isEditState){
-                 dbManager.publishAd(ad!!, onPublishFinish())
-            } else {
-                // dbManager.publishAd(adTemp, onPublishFinish())
                 uploadImages()
             }
-        }
     }
 
     private fun onPublishFinish(): DbManager.FinishWorkListener {
@@ -186,14 +181,31 @@ class EditAdsActivity : AppCompatActivity(), FragmentCloseInterface {
     }
 
     private fun uploadImages() {
-        if (imageAdapter.mainArray.size == imageIndex) {
+        if (imageIndex == 3) {
             dbManager.publishAd(ad!!, onPublishFinish())
             return
         }
-        val byteArray = prepareImageByteArray(imageAdapter.mainArray[imageIndex])
-        uploadImage(byteArray) {
-          //  dbManager.publishAd(ad!!, onPublishFinish())
-            nextImage(it.result.toString())
+        val oldUrl = getUrlFromAd()
+        if (imageAdapter.mainArray.size > imageIndex) {
+            val byteArray = prepareImageByteArray(imageAdapter.mainArray[imageIndex])
+            if (oldUrl.startsWith("http")) {
+                updateImage(byteArray, oldUrl) {
+                    nextImage(it.result.toString())
+                }
+            } else {
+                uploadImage(byteArray) {
+                    //  dbManager.publishAd(ad!!, onPublishFinish())
+                    nextImage(it.result.toString())
+                }
+            }
+        } else {
+            if (oldUrl.startsWith("http")) {
+                deleteImageByUrl(oldUrl) {
+                    nextImage("empty")
+                }
+            } else {
+                nextImage("empty")
+            }
         }
     }
 
@@ -211,6 +223,10 @@ class EditAdsActivity : AppCompatActivity(), FragmentCloseInterface {
         }
     }
 
+    private fun getUrlFromAd(): String {
+        return listOf(ad?.mainImage!!, ad?.image2!!, ad?.image3!!)[imageIndex]
+    }
+
     private fun prepareImageByteArray(bitmap: Bitmap): ByteArray {
         val outputStream = ByteArrayOutputStream()
         bitmap.compress(Bitmap.CompressFormat.JPEG, 20, outputStream)
@@ -223,7 +239,20 @@ class EditAdsActivity : AppCompatActivity(), FragmentCloseInterface {
         val uploadTask = imStorageReference.putBytes(byteArray)
         uploadTask.continueWithTask{
                 task-> imStorageReference.downloadUrl
-        }.addOnCompleteListener (listener)
+        }.addOnCompleteListener(listener)
+    }
+
+    private fun deleteImageByUrl(oldUrl: String, listener: OnCompleteListener<Void>) {
+       dbManager.databaseStorage.storage.getReferenceFromUrl(oldUrl).delete()
+           .addOnCompleteListener(listener)
+    }
+
+    private fun updateImage(byteArray: ByteArray, url: String, listener: OnCompleteListener<Uri>) {
+        val imStorageReference = dbManager.databaseStorage.storage.getReferenceFromUrl(url)
+        val uploadTask = imStorageReference.putBytes(byteArray)
+        uploadTask.continueWithTask{
+                task-> imStorageReference.downloadUrl
+        }.addOnCompleteListener(listener)
     }
 
     private fun imageChangeCounter() {
