@@ -75,6 +75,7 @@
     <string name="with_send">С отправкой</string>
     <string name="send">Отправка</string>
     <string name="publish">Опубликовать</string>
+    <string name="need_fill_all_fields">Внимание! Все поля должны быть заполнены!</string>
     <!-- Db Manager -->
     <string name="firebase_error_load_data">Не удалось загрузить данные.
         Пожалуйста, попробуйте еще раз позднее</string>

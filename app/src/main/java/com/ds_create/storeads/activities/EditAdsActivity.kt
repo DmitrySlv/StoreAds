@@ -125,10 +125,26 @@ class EditAdsActivity : AppCompatActivity(), FragmentCloseInterface {
 
     fun onClickPublish() = with(binding) {
         btPublish.setOnClickListener {
+            if (isFieldsEmpty()) {
+                showToast(getString(R.string.need_fill_all_fields))
+                return@setOnClickListener
+            }
             progressLayout.visibility = View.VISIBLE
             ad = fillAd()
             uploadImages()
         }
+    }
+
+    private fun isFieldsEmpty(): Boolean = with(binding) {
+        return tvCountry.text.toString() == getString(R.string.select_country) ||
+                tvCity.text.toString() == getString(R.string.select_city) ||
+                tvCat.text.toString() == getString(R.string.select_category) ||
+                edTitle.text.isEmpty() ||
+                edPrice.text.isEmpty() ||
+                edIndex.text.isEmpty() ||
+                edDescription.text.isEmpty() ||
+                edPhone.text.isEmpty() ||
+                imageAdapter.mainArray.size == 0
     }
 
     private fun onPublishFinish(): DbManager.FinishWorkListener {
