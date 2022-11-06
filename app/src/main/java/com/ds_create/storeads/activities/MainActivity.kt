@@ -285,12 +285,20 @@ AdsRcAdapter.Listener {
     }
 
     private fun bottomMenuOnClick() = with(binding) {
-        mainContent.bNavView.setOnNavigationItemSelectedListener { item->
+        mainContent.bNavView.setOnItemSelectedListener { item ->
             clearUpdate = true
             when (item.itemId) {
                 R.id.id_new_ads -> {
-                    val intent = Intent(this@MainActivity, EditAdsActivity::class.java)
-                    startActivity(intent)
+                    if (mAuth.currentUser != null) {
+                        if (!mAuth.currentUser?.isAnonymous!!) {
+                            val intent = Intent(this@MainActivity, EditAdsActivity::class.java)
+                            startActivity(intent)
+                        } else {
+                            showToast(getString(R.string.error_guest_publication))
+                        }
+                    } else {
+                        showToast(getString(R.string.error_by_registration))
+                    }
                 }
                 R.id.id_my_ads -> {
                     firebaseViewModel.loadMyAds()
@@ -301,7 +309,7 @@ AdsRcAdapter.Listener {
                 }
                 R.id.id_home -> {
                     currentCategory = getString(R.string.ad_def)
-                   firebaseViewModel.loadAllAdsFirstPage(filterDbManager)
+                    firebaseViewModel.loadAllAdsFirstPage(filterDbManager)
                     mainContent.toolbar.title = getString(R.string.def_title)
                 }
             }

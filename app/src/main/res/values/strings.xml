@@ -52,6 +52,8 @@
     <string name="no_result">Нет результата</string>
     <!-- Main Activity -->
     <string name="main_act_exception">Main Activity exception:</string>
+    <string name="error_by_registration">Ошибка регистрации. Пожалуйста, попробуйте еще раз.</string>
+    <string name="error_guest_publication">Пожалуйста, зарегистрируйтесь для публикации объявлений!</string>
     <!-- Edit Activity -->
     <string name="select_country">Выберите страну</string>
     <string name="select_city">Выберите город</string>

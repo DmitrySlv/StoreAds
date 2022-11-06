@@ -166,7 +166,13 @@ class DbManager {
         if (ad.key == null || ad.uid == null) {
             return
         }
-        database.child(ad.key).child(ad.uid).removeValue().addOnCompleteListener {
+        val map = mapOf(
+            "/adFilter" to null,
+            "/info" to null,
+            "/favourites" to null,
+            "/${ad.uid}" to null
+        )
+        database.child(ad.key).updateChildren(map).addOnCompleteListener {
             if (it.isSuccessful) {
                 listener.onFinishWork(true)
             }
