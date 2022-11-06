@@ -166,17 +166,39 @@ class DbManager {
         if (ad.key == null || ad.uid == null) {
             return
         }
-        val map = mapOf(
+        val deleteMap = mapOf(
             "/adFilter" to null,
             "/info" to null,
             "/favourites" to null,
             "/${ad.uid}" to null
         )
-        database.child(ad.key).updateChildren(map).addOnCompleteListener {
+        database.child(ad.key).updateChildren(deleteMap).addOnCompleteListener {
             if (it.isSuccessful) {
-                listener.onFinishWork(true)
+               deleteImagesFromStorage(ad,0, listener)
             }
         }
+    }
+
+    private fun deleteImagesFromStorage(ad: AdModel, index: Int, listener: FinishWorkListener) {
+        val imageList = listOf(ad.mainImage, ad.image2, ad.image3)
+        if (ad.mainImage == "empty") {
+            listener.onFinishWork(true)
+            return
+        }
+        databaseStorage.storage.getReferenceFromUrl(imageList[index]).delete()
+            .addOnCompleteListener {
+                if (it.isSuccessful) {
+                    if (imageList.size > index + 1) {
+                        if (imageList[index + 1] != "empty") {
+                            deleteImagesFromStorage(ad, index + 1, listener)
+                        } else {
+                            listener.onFinishWork(true)
+                        }
+                    } else {
+                        listener.onFinishWork(true)
+                    }
+                }
+            }
     }
 
    private fun readDataFromDb(readCallback: ReadDataCallback?, query: Query) {
